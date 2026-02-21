@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVXZ SYSTEM CLEAR | Official Site</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(0, 242, 255, 0.3);
+            --dark-bg: #050505;
+            --text-main: #ffffff;
+            --text-dim: #888888;
+        }
+
+        /* --- 基礎背景與動態網格 --- */
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        .bg-overlay {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at center, black, transparent 90%);
+            opacity: 0.2;
+        }
+
+        /* --- 頂部導航 (左上角固定的 H) --- */
+        header {
+            height: 70px; display: flex; align-items: center;
+            padding: 0 40px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .h-brand {
+            font-size: 24px; font-weight: 900; color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-right: 15px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem; font-weight: 800; letter-spacing: 3px;
+            color: var(--text-main); text-transform: uppercase;
+        }
+
+        /* --- 階梯式動畫系統 --- */
+        @keyframes fadeInUpBlur {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .hero {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 100px 20px; text-align: center;
+            max-width: 1100px; margin: 0 auto;
+        }
+
+        /* 初始隱藏，透過 JS 觸發 */
+        .stagger { opacity: 0; }
+
+        .animate .stagger {
+            animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* 階梯延遲設定 */
+        .animate .stagger:nth-child(1) { animation-delay: 0.2s; } /* Title */
+        .animate .stagger:nth-child(2) { animation-delay: 0.4s; } /* Subtitle */
+        .animate .stagger:nth-child(3) { animation-delay: 0.6s; } /* Image Frame */
+        .animate .stagger:nth-child(4) { animation-delay: 0.8s; } /* Download Section */
+        .animate .stagger:nth-child(5) { animation-delay: 1.0s; } /* Feature Cards */
+
+        h1 {
+            font-size: 4.5rem; margin: 0; font-weight: 800;
+            letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+        }
+
+        .subtitle {
+            font-size: 1.2rem; color: var(--text-dim);
+            margin: 15px 0 60px 0; letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* --- 極限玻璃質感框架 --- */
+        .glass-container {
+            width: 100%; max-width: 950px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 12px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
+                        inset 0 0 30px rgba(0, 242, 255, 0.05);
+            margin-bottom: 70px;
+            transition: 0.5s;
+        }
+
+        .glass-container:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
+        }
+
+        .glass-container img {
+            width: 100%; border-radius: 18px; display: block;
+            filter: brightness(1.05);
+        }
+
+        /* --- 下載按鈕 (WPF 霓虹風格) --- */
+        .download-btn {
+            background: transparent;
+            color: var(--neon-blue);
+            text-decoration: none;
+            padding: 22px 80px;
+            border: 2px solid var(--neon-blue);
+            font-weight: 900; font-size: 1.5rem;
+            letter-spacing: 5px;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+            display: inline-block;
+        }
+
+        .download-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 60px var(--neon-blue);
+            transform: translateY(-5px);
+        }
+
+        /* --- 功能卡片 --- */
+        .features-row {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; width: 100%; margin-top: 100px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 35px; border-radius: 15px; text-align: left;
+        }
+
+        .feature-card h3 { color: var(--neon-blue); margin-top: 0; letter-spacing: 1px; }
+        .feature-card p { color: var(--text-dim); line-height: 1.6; margin-bottom: 0; }
+
+        footer {
+            padding: 80px 20px; text-align: center; color: #333;
+            font-size: 0.8rem; letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body onload="startPage()">
+
+    <div class="bg-overlay"></div>
+
+    <header>
+        <div class="h-brand">H</div>
+        <div class="nav-title">HVXZ SYSTEM CLEAR</div>
+    </header>
+
+    <main class="hero" id="main-ui">
+        <h1 class="stagger">HVXZ SYSTEM CLEAR</h1>
+        <p class="subtitle stagger">ADVANCED WINDOWS OPTIMIZATION</p>
+
+        <div class="glass-container stagger">
+            <img src="preview.jpg" alt="SOFTWARE INTERFACE">
+        </div>
+
+        <div class="stagger">
+            <a href="https://linkvertise.com/1459750/X1XFslOMFdIj?o=sharing" target="_blank" class="download-btn">DOWNLOAD NOW</a>
+        </div>
+
+        <div class="features-row stagger">
+            <div class="feature-card">
+                <h3>High Performance</h3>
+                <p>Engineered for speed, removing deep system clutters instantly.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Privacy First</h3>
+                <p>Completely wipe caches and temporary logs without a trace.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Modern Engine</h3>
+                <p>Native WPF-inspired design with a fluid high-tech interface.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 HVXZ. LICENSED UNDER MIT.
+    </footer>
+
+    <script>
+        function startPage() {
+            // 進入頁面後直接觸發階梯顯現
+            setTimeout(() => {
+                document.getElementById('main-ui').classList.add('animate');
+            }, 300);
+        }
+    </script>
+</body>
+</html>

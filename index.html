@@ -8,143 +8,147 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(0, 242, 255, 0.3);
-            --dark-bg: #030303;
-            --card-bg: #0a0a0a;
+            --dark-bg: #050505;
             --text-main: #ffffff;
-            --text-dim: #777777;
-            --btn-border: rgb(80, 80, 80); /* 加亮邊框顏色 */
-            --radius-main: 15px; /* 統一圓角 */
+            --text-dim: #888888;
+            --radius-main: 20px;
+            --btn-border: rgb(80, 80, 80); /* 你要求的亮一點的邊框 */
         }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             background-color: var(--dark-bg);
             color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             overflow-x: hidden;
+            display: flex; flex-direction: column;
         }
 
-        /* 網格背景 */
         .bg-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
+            background-size: 60px 60px;
             mask-image: radial-gradient(circle at center, black, transparent 90%);
+            opacity: 0.2;
         }
 
         header {
             height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000;
+            padding: 0 40px; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+            margin: 0 20px; position: sticky; top: 0; z-index: 100;
         }
 
-        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        .header-left { display: flex; align-items: center; gap: 25px; }
+        .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* 語言切換 */
-        .custom-lang-dropdown { position: relative; margin-left: 20px; }
-        .lang-trigger { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--neon-blue);
-            padding: 6px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
+        .custom-lang-dropdown { position: relative; display: inline-block; }
+        .lang-trigger {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: var(--neon-blue); padding: 6px 15px; border-radius: 10px;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
-        .lang-options { 
-            position: absolute; top: 120%; left: 0; background: #0a0a0a; border: 1px solid var(--glass-border); 
-            border-radius: 10px; overflow: hidden; display: none; flex-direction: column; min-width: 130px;
+        .lang-trigger:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--neon-blue); }
+        .lang-options {
+            position: absolute; top: 120%; left: 0; background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden;
+            display: none; flex-direction: column; min-width: 120px;
         }
         .custom-lang-dropdown:hover .lang-options { display: flex; }
-        .lang-opt { padding: 10px 15px; color: #fff; cursor: pointer; transition: 0.2s; }
+        .lang-opt { padding: 10px 15px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
         .lang-opt:hover { background: var(--neon-blue); color: #000; }
 
-        .social-group { display: flex; gap: 15px; }
-        .social-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); transition: 0.3s; color: #fff; text-decoration: none; }
-        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
-        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; }
-
-        .hero { 
-            display: flex; flex-direction: column; align-items: center; padding: 60px 20px; text-align: center; max-width: 1200px; margin: 0 auto; 
-            transition: all 0.5s ease;
+        .social-group { display: flex; gap: 12px; }
+        .social-link {
+            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border);
+            font-size: 1.1rem;
         }
+        .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
+        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1); }
+        .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
+        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
+
+        /* --- 動態系統 --- */
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; transition: 0.5s ease; }
         .page-hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 100%; }
 
-        h1 { font-size: 3.5rem; letter-spacing: 8px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.2); margin: 0; }
-        .subtitle { color: var(--text-dim); margin: 10px 0 50px 0; letter-spacing: 4px; }
-
-        /* 版本卡片一行併排 */
-        .version-grid { display: flex; justify-content: center; gap: 20px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
-        .ver-card { 
-            background: #080808; border: 1px solid #1a1a1a; padding: 30px; border-radius: var(--radius-main);
-            width: 220px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
+        @keyframes fadeInUpBlur {
+            from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2); }
-        .ver-card h2 { margin: 0; font-size: 2.2rem; color: var(--neon-blue); margin-bottom: 15px; }
-        
-        /* 下載按鈕 - 圓角與加亮邊框 */
-        .dl-badge { 
-            font-size: 0.8rem; font-weight: bold; color: var(--neon-blue); 
-            border: 1px solid var(--btn-border); padding: 8px 20px; 
-            border-radius: 10px; /* 增加圓角 */
-            transition: 0.3s;
-            background: rgba(255,255,255,0.02);
+        .stagger { opacity: 0; }
+        .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
+        .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
+        .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
+
+        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
+        .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
+
+        /* --- 版本卡片一行併排 --- */
+        .version-row { display: flex; justify-content: center; gap: 20px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
+        .ver-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; 
+            border-radius: var(--radius-main); width: 180px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
         }
-        .ver-card:hover .dl-badge { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); background: rgba(0, 242, 255, 0.05); }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2); }
+        .ver-card h2 { margin: 0; font-size: 2.5rem; color: var(--neon-blue); margin-bottom: 15px; }
+        .dl-label { 
+            font-size: 0.85rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); 
+            padding: 8px 15px; border-radius: 12px; transition: 0.3s;
+        }
+        .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
 
-        /* 經驗數據區塊 */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; max-width: 900px; margin-bottom: 80px; }
-        .stat-item { background: rgba(255,255,255,0.01); border: 1px solid #111; padding: 30px; border-radius: var(--radius-main); }
-        .stat-item h4 { font-size: 2.5rem; color: var(--neon-blue); margin: 0; }
-        .stat-item p { color: var(--text-dim); margin: 10px 0 0 0; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* FAQ 區塊 */
-        .faq-section { width: 100%; max-width: 900px; text-align: left; margin-bottom: 50px; }
-        .faq-item { background: rgba(255,255,255,0.02); border: 1px solid #111; padding: 25px; border-radius: var(--radius-main); margin-bottom: 15px; transition: 0.3s; }
-        .faq-item:hover { border-color: var(--glass-border); }
-        .faq-item h3 { color: var(--neon-blue); margin-top: 0; font-size: 1.2rem; margin-bottom: 10px; }
-        .faq-item p { color: #888; margin-bottom: 0; line-height: 1.6; }
-
-        /* 廣告下載頁面 */
+        /* --- 廣告選擇頁面 --- */
         .ad-container { 
             position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; 
             background: #000; z-index: 2000; opacity: 0; transition: 0.5s ease;
         }
         .ad-container.show { display: flex; opacity: 1; }
-        .ad-grid { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+        .ad-box { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
         .ad-card { 
-            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 45px; border-radius: 24px; width: 320px; text-align: center; transition: 0.4s;
+            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; width: 280px; text-align: center; transition: 0.4s;
         }
         .ad-card:hover { border-color: #333; box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); }
-        .ad-card img { width: 80px; height: 80px; margin-bottom: 20px; border-radius: 15px; }
-        .ad-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
-        .ad-desc { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 25px; min-height: 40px; }
-        
-        .ad-features { text-align: left; display: inline-block; margin-bottom: 30px; color: #aaa; font-size: 0.9rem; width: 100%; }
-        .ad-features div { margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
-        .ad-features i { color: #555; font-size: 0.8rem; }
-
+        .ad-card img { width: 70px; height: 70px; margin-bottom: 20px; border-radius: 12px; }
+        .ad-card h3 { font-size: 1.5rem; margin-bottom: 20px; }
         .ad-btn { 
-            background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 14px; border-radius: 12px; 
+            background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 12px; 
             width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
             text-decoration: none; font-weight: bold; transition: 0.3s;
         }
-        .ad-btn:hover { background: #fff; color: #000; box-shadow: 0 0 25px #fff; border-color: #fff; }
-
+        .ad-btn:hover { background: #fff; color: #000; border-color: #fff; }
         .back-btn { margin-top: 40px; color: #555; cursor: pointer; transition: 0.3s; }
         .back-btn:hover { color: #fff; }
 
-        /* 頁尾小小字 */
-        footer { padding: 40px 0; color: #222; text-align: center; font-size: 0.8rem; letter-spacing: 2px; border-top: 1px solid rgba(255,255,255,0.02); margin-top: 50px; }
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
+        .feature-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; 
+            border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px);
+        }
+        .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
+
+        .faq-section { margin-top: 120px; width: 100%; max-width: 800px; text-align: left; }
+        .faq-title { font-size: 2rem; color: var(--neon-blue); margin-bottom: 40px; text-align: center; letter-spacing: 5px; }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
+        .faq-item h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
+        .faq-item p { margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+
+        footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
 </head>
-<body>
+<body onload="startPage()">
     <div class="bg-overlay"></div>
     <header>
-        <div class="h-brand">H</div>
-        <div style="display: flex; align-items: center;">
-            <div class="social-group">
-                <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
-            </div>
+        <div class="header-left">
+            <div class="h-brand">H</div>
             <div class="custom-lang-dropdown">
                 <div class="lang-trigger" id="current-lang"><i class="fa-solid fa-globe"></i> English</div>
                 <div class="lang-options">
@@ -153,131 +157,143 @@
                 </div>
             </div>
         </div>
+        <div class="social-group">
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
+        </div>
     </header>
 
     <main class="hero" id="main-ui">
-        <h1>HVXZ SYSTEM CLEAR</h1>
-        <p class="subtitle" id="main-subtitle">SELECT YOUR VERSION</p>
+        <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
+        <p class="subtitle stagger" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
 
-        <div class="version-grid">
-            <div class="ver-card" onclick="openAdMenu('1.0')"><h2>1.0</h2><div class="dl-badge" id="dl-1">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('2.0')"><h2>2.0</h2><div class="dl-badge" id="dl-2">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('3.0')"><h2>3.0</h2><div class="dl-badge" id="dl-3">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('3.5')"><h2>3.5</h2><div class="dl-badge" id="dl-4">DOWNLOAD</div></div>
+        <div class="version-row stagger">
+            <div class="ver-card" onclick="openAdMenu('1.0')"><h2>1.0</h2><div class="dl-label" id="dl-1">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('2.0')"><h2>2.0</h2><div class="dl-label" id="dl-2">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('3.0')"><h2>3.0</h2><div class="dl-label" id="dl-3">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('3.5')"><h2>3.5</h2><div class="dl-label" id="dl-4">DOWNLOAD</div></div>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-item"><h4>4+</h4><p id="stat-1">YEARS EXPERIENCE</p></div>
-            <div class="stat-item"><h4>500+</h4><p id="stat-2">SUCCESS PROJECTS</p></div>
-            <div class="stat-item"><h4>100%</h4><p id="stat-3">SECURE DESIGN</p></div>
+        <div class="features-row stagger">
+            <div class="feature-card">
+                <h3 id="f1-t">High Performance</h3>
+                <p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f2-t">Privacy First</h3>
+                <p id="f2-p">Completely wipe caches and temporary logs without a trace.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f3-t">Modern Engine</h3>
+                <p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f4-t">Expert Design</h3>
+                <p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p>
+            </div>
         </div>
 
-        <div class="faq-section">
-            <h2 id="faq-title" style="letter-spacing: 2px; margin-bottom: 25px;">F.A.Q</h2>
+        <div class="faq-section stagger">
+            <div class="faq-title" id="faq-main-title">F.A.Q</div>
             <div class="faq-item">
-                <h3 id="q1">Is it safe to use?</h3>
-                <p id="a1">Yes, HVXZ System Clear only targets redundant system logs and junk files safely.</p>
+                <h4 id="q1-t">Is it safe to use?</h4>
+                <p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p>
             </div>
             <div class="faq-item">
-                <h3 id="q2">Does it improve performance?</h3>
-                <p id="a2">It significantly clears background cache and junk, providing a smoother experience.</p>
+                <h4 id="q2-t">Which systems are supported?</h4>
+                <p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p>
             </div>
         </div>
-
-        <footer>&copy; 2026 HVXZ TEAM. ALL RIGHTS RESERVED.</footer>
     </main>
 
     <div id="ad-page" class="ad-container">
-        <h2 id="ad-title-text" style="margin-bottom: 40px;">CHOOSE DOWNLOAD METHOD</h2>
-        <div class="ad-grid">
+        <h2 id="ad-title" style="margin-bottom: 40px;">CHOOSE AD METHOD</h2>
+        <div class="ad-box">
             <div class="ad-card">
                 <img src="https://linkvertise.com/assets/img/logo/logo-blue.svg" alt="Linkvertise">
                 <h3>Linkvertise</h3>
-                <p class="ad-desc" id="p1">Quick and easy download through Linkvertise.</p>
-                <div class="ad-features">
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f1">Fast Download</span></div>
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f2">Secure Link</span></div>
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f3">Easy Process</span></div>
-                </div>
-                <a id="linkvertise-url" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a id="lv-link" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span></a>
             </div>
             <div class="ad-card">
                 <img src="https://work.ink/favicon.ico" alt="Work.ink">
                 <h3>Work.ink</h3>
-                <p class="ad-desc" id="p2">Fast and reliable download through Work.ink.</p>
-                <div class="ad-features">
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f4">Quick Download</span></div>
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f5">Reliable Service</span></div>
-                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f6">Simple Process</span></div>
-                </div>
-                <a id="workink-url" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a id="wi-link" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span></a>
             </div>
         </div>
-        <div class="back-btn" onclick="closeAdMenu()" id="back-text">← BACK TO VERSIONS</div>
+        <div class="back-btn" onclick="closeAdMenu()" id="back-text">← BACK TO HOME</div>
     </div>
+
+    <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
         const downloadLinks = {
-            "1.0": { linkvertise: "https://direct-link.net/1459750/wzIv98WbnfNx", workink: "https://work.ink/281n/hvxz-system-clear-10" },
-            "2.0": { linkvertise: "https://link-target.net/1459750/9dOY29nMsgsd", workink: "https://work.ink/281n/hvxz-system-clear-20" },
-            "3.0": { linkvertise: "https://direct-link.net/1459750/FTaQbx03GPCS", workink: "https://work.ink/281n/hvxz-system-clear-30" },
-            "3.5": { linkvertise: "https://link-center.net/1459750/X1XFslOMFdIj", workink: "https://work.ink/281n/hvxz-system-clear-35" }
+            "1.0": { lv: "https://direct-link.net/1459750/wzIv98WbnfNx", wi: "https://work.ink/281n/hvxz-system-clear-10" },
+            "2.0": { lv: "https://link-target.net/1459750/9dOY29nMsgsd", wi: "https://work.ink/281n/hvxz-system-clear-20" },
+            "3.0": { lv: "https://direct-link.net/1459750/FTaQbx03GPCS", wi: "https://work.ink/281n/hvxz-system-clear-30" },
+            "3.5": { lv: "https://link-center.net/1459750/X1XFslOMFdIj", wi: "https://work.ink/281n/hvxz-system-clear-35" }
         };
 
         const langData = {
             en: {
-                subtitle: "SELECT YOUR VERSION", dl: "DOWNLOAD",
-                stat1: "YEARS EXPERIENCE", stat2: "SUCCESS PROJECTS", stat3: "SECURE DESIGN",
-                q1: "Is it safe to use?", a1: "Yes, HVXZ System Clear only targets redundant system logs and junk files safely.",
-                q2: "Does it improve performance?", a2: "It significantly clears background cache and junk, providing a smoother experience.",
-                adTitle: "CHOOSE DOWNLOAD METHOD", back: "← BACK TO VERSIONS", dlBtn: "Download Now",
-                p1: "Quick and easy download through Linkvertise.", p2: "Fast and reliable download through Work.ink.",
-                f1: "Fast Download", f2: "Secure Link", f3: "Easy Process", f4: "Quick Download", f5: "Reliable Service", f6: "Simple Process"
+                display: "English", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
+                dl: "DOWNLOAD", adTitle: "CHOOSE AD METHOD", back: "← BACK TO HOME", adBtn: "Download Now",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
+                f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
+                faqTitle: "F.A.Q", q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.",
+                q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
             },
             zh: {
-                subtitle: "選擇您的版本", dl: "立即下載",
-                stat1: "年以上設計經驗", stat2: "個成功專案", stat3: "安全設計保證",
-                q1: "使用起來安全嗎？", a1: "是的，HVXZ System Clear 僅安全地針對冗餘的系統日誌與垃圾檔案。",
-                q2: "能提升效能嗎？", a2: "它能顯著清理背景快取與垃圾，提供更流暢的體驗。",
-                adTitle: "請選擇下載方式", back: "← 返回版本選擇", dlBtn: "立即下載",
-                p1: "透過 Linkvertise 快速且輕鬆地下載。", p2: "透過 Work.ink 快速且可靠地下載。",
-                f1: "極速下載", f2: "安全連結", f3: "簡單流程", f4: "快速下載", f5: "可靠服務", f6: "簡易流程"
+                display: "繁體中文", title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化",
+                dl: "立即下載", adTitle: "請選擇廣告下載方式", back: "← 返回首頁", adBtn: "立即下載",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                faqTitle: "常見問題解答", q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。",
+                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。"
             }
         };
 
         function changeLanguage(lang) {
-            const d = langData[lang];
-            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${lang === 'en' ? 'English' : '繁體中文'}`;
-            document.getElementById('main-subtitle').textContent = d.subtitle;
-            document.getElementById('stat-1').textContent = d.stat1;
-            document.getElementById('stat-2').textContent = d.stat2;
-            document.getElementById('stat-3').textContent = d.stat3;
-            document.getElementById('q1').textContent = d.q1; document.getElementById('a1').textContent = d.a1;
-            document.getElementById('q2').textContent = d.q2; document.getElementById('a2').textContent = d.a2;
-            document.getElementById('ad-title-text').textContent = d.adTitle;
-            document.getElementById('back-text').textContent = d.back;
-            document.getElementById('p1').textContent = d.p1; document.getElementById('p2').textContent = d.p2;
-            document.querySelectorAll('.dl-text').forEach(el => el.textContent = d.dlBtn);
-            for(let i=1; i<=6; i++) {
-                const el = document.getElementById('f'+i);
-                if(el) el.textContent = d['f'+i];
-            }
-            for(let i=1; i<=4; i++) {
-                const el = document.getElementById('dl-'+i);
-                if(el) el.textContent = d.dl;
-            }
+            const data = langData[lang];
+            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${data.display}`;
+            document.getElementById('main-title').textContent = data.title;
+            document.getElementById('main-subtitle').textContent = data.subtitle;
+            document.getElementById('ad-title').textContent = data.adTitle;
+            document.getElementById('back-text').textContent = data.back;
+            document.querySelectorAll('.dl-text').forEach(el => el.textContent = data.adBtn);
+            for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = data.dl;
+            document.getElementById('f1-t').textContent = data.f1t; document.getElementById('f1-p').textContent = data.f1p;
+            document.getElementById('f2-t').textContent = data.f2t; document.getElementById('f2-p').textContent = data.f2p;
+            document.getElementById('f3-t').textContent = data.f3t; document.getElementById('f3-p').textContent = data.f3p;
+            document.getElementById('f4-t').textContent = data.f4t; document.getElementById('f4-p').textContent = data.f4p;
+            document.getElementById('faq-main-title').textContent = data.faqTitle;
+            document.getElementById('q1-t').textContent = data.q1t; document.getElementById('q1-p').textContent = data.q1p;
+            document.getElementById('q2-t').textContent = data.q2t; document.getElementById('q2-p').textContent = data.q2p;
         }
 
-        function openAdMenu(version) {
+        function openAdMenu(ver) {
             document.getElementById('main-ui').classList.add('page-hidden');
-            document.getElementById('linkvertise-url').href = downloadLinks[version].linkvertise;
-            document.getElementById('workink-url').href = downloadLinks[version].workink;
-            setTimeout(() => { document.getElementById('ad-page').style.display = 'flex'; setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50); }, 400);
+            document.getElementById('lv-link').href = downloadLinks[ver].lv;
+            document.getElementById('wi-link').href = downloadLinks[ver].wi;
+            setTimeout(() => {
+                document.getElementById('ad-page').style.display = 'flex';
+                setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50);
+            }, 400);
         }
 
         function closeAdMenu() {
             document.getElementById('ad-page').classList.remove('show');
-            setTimeout(() => { document.getElementById('ad-page').style.display = 'none'; document.getElementById('main-ui').classList.remove('page-hidden'); }, 500);
+            setTimeout(() => {
+                document.getElementById('ad-page').style.display = 'none';
+                document.getElementById('main-ui').classList.remove('page-hidden');
+            }, 500);
+        }
+
+        function startPage() {
+            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
         }
     </script>
 </body>

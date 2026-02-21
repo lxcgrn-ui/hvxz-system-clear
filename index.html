@@ -35,7 +35,7 @@
             opacity: 0.2;
         }
 
-        /* --- Header: 左側 H + 語言切換 --- */
+        /* --- Header --- */
         header {
             height: 70px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 40px; background: rgba(255, 255, 255, 0.05);
@@ -44,23 +44,48 @@
             margin: 0 20px; position: sticky; top: 0; z-index: 100;
         }
 
-        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-left { display: flex; align-items: center; gap: 25px; }
         .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* 語言下拉選單樣式 */
-        .lang-select {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--neon-blue);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 4px 8px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            outline: none;
-            transition: 0.3s;
+        /* --- 高級語言切換器 UI --- */
+        .custom-lang-dropdown {
+            position: relative;
+            display: inline-block;
         }
-        .lang-select:hover { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
-        .lang-select option { background: #111; color: #fff; }
+        .lang-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--neon-blue);
+            padding: 6px 15px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .lang-trigger:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--neon-blue); }
+        
+        .lang-options {
+            position: absolute; top: 120%; left: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            min-width: 120px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .custom-lang-dropdown:hover .lang-options { display: flex; }
+        .lang-opt {
+            padding: 10px 15px;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+        .lang-opt:hover { background: var(--neon-blue); color: #000; }
 
         .social-group { display: flex; gap: 12px; }
         .social-link {
@@ -73,15 +98,26 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
 
-        /* --- Hero Section --- */
+        /* --- 動態系統修正 --- */
         .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; }
+        
         @keyframes fadeInUpBlur {
             from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        .stagger { opacity: 0; }
-        .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         
+        /* 確保元素初始透明 */
+        .stagger { opacity: 0; }
+        
+        .animate .stagger {
+            animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
+        .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
+        .animate .stagger:nth-child(3) { animation-delay: 0.4s; }
+        .animate .stagger:nth-child(4) { animation-delay: 0.6s; }
+        .animate .stagger:nth-child(5) { animation-delay: 0.8s; }
+
         h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
@@ -115,10 +151,13 @@
     <header>
         <div class="header-left">
             <div class="h-brand">H</div>
-            <select class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="en">English</option>
-                <option value="zh">繁體中文</option>
-            </select>
+            <div class="custom-lang-dropdown">
+                <div class="lang-trigger" id="current-lang"><i class="fa-solid fa-globe"></i> English</div>
+                <div class="lang-options">
+                    <div class="lang-opt" onclick="changeLanguage('en')">English</div>
+                    <div class="lang-opt" onclick="changeLanguage('zh')">繁體中文</div>
+                </div>
+            </div>
         </div>
         <div class="social-group">
             <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
@@ -169,9 +208,9 @@
     <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
-        // 語言資料庫
         const langData = {
             en: {
+                display: "English",
                 title: "HVXZ SYSTEM CLEAR",
                 subtitle: "ADVANCED WINDOWS OPTIMIZATION",
                 btn: "DOWNLOAD NOW",
@@ -184,21 +223,24 @@
                 q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
             },
             zh: {
-                title: "HVXZ 系統清理",
-                subtitle: "進階級 Windows 優化工具",
+                display: "繁體中文",
+                title: "HVXZ 系統清理器",
+                subtitle: "進階 Windows 系統優化",
                 btn: "立即下載",
-                f1t: "極致效能", f1p: "專為速度而生，瞬間清除系統深處的冗餘檔案。",
-                f2t: "隱私優先", f2p: "徹底清除快取與暫存日誌，不留任何痕跡。",
-                f3t: "現代引擎", f3p: "源自原生 WPF 設計靈感，具備流暢的高科技介面。",
-                f4t: "專業設計", f4p: "HVXZ 團隊擁有長達 2 年的專業 UI/UX 設計經驗。",
-                faqTitle: "常見問題",
-                q1t: "這軟體安全嗎？", q1p: "絕對安全。HVXZ 僅針對可安全刪除的暫存與快取資料夾，不會影響個人檔案。",
-                q2t: "支援哪些系統？", q2p: "我們的軟體針對 Windows 10 與 Windows 11 (x64 架構) 進行了完美優化。"
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                faqTitle: "常見問題解答",
+                q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。",
+                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。"
             }
         };
 
         function changeLanguage(lang) {
             const data = langData[lang];
+            // 更新 UI 文字
+            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${data.display}`;
             document.getElementById('main-title').textContent = data.title;
             document.getElementById('main-subtitle').textContent = data.subtitle;
             document.getElementById('btn-text').textContent = data.btn;
@@ -212,7 +254,10 @@
         }
 
         function startPage() {
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
+            // 觸發動畫
+            setTimeout(() => {
+                document.getElementById('main-ui').classList.add('animate');
+            }, 300);
         }
     </script>
 </body>

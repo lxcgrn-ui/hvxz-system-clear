@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HVXZ SYSTEM CLEAR | Official Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --neon-blue: #00f2ff;
@@ -12,9 +13,9 @@
             --dark-bg: #050505;
             --text-main: #ffffff;
             --text-dim: #888888;
+            --radius-main: 20px; /* 統一圓角設定 */
         }
 
-        /* --- 基礎背景與動態網格 --- */
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             background-color: var(--dark-bg);
@@ -34,153 +35,108 @@
             opacity: 0.2;
         }
 
-        /* --- 頂部導航 --- */
+        /* --- Header: 圓角化 --- */
         header {
-            height: 70px; display: flex; align-items: center;
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 40px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
+            border: 1px solid var(--glass-border);
+            border-top: none;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            margin: 0 20px;
             position: sticky; top: 0; z-index: 100;
         }
 
+        .header-left { display: flex; align-items: center; }
         .h-brand {
             font-size: 24px; font-weight: 900; color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            margin-right: 15px;
+            text-shadow: 0 0 10px var(--neon-blue); margin-right: 15px;
+        }
+        .nav-title { font-size: 0.8rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; }
+
+        .discord-link {
+            background: rgba(0, 242, 255, 0.1);
+            width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; /* 圓形 Discord 按鈕 */
+            color: var(--neon-blue); font-size: 1.2rem; text-decoration: none;
+            transition: 0.3s; border: 1px solid var(--glass-border);
+        }
+        .discord-link:hover { 
+            background: var(--neon-blue); color: #000; 
+            box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1);
         }
 
-        .nav-title {
-            font-size: 0.8rem; font-weight: 800; letter-spacing: 3px;
-            color: var(--text-main); text-transform: uppercase;
-        }
-
-        /* --- 階梯式動畫系統 --- */
+        /* --- 動態系統 --- */
         @keyframes fadeInUpBlur {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-                filter: blur(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                filter: blur(0);
-            }
+            from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-
-        .hero {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 100px 20px; text-align: center;
-            max-width: 1100px; margin: 0 auto;
-        }
-
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; }
         .stagger { opacity: 0; }
+        .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        
+        .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
+        .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
+        .animate .stagger:nth-child(3) { animation-delay: 0.4s; }
+        .animate .stagger:nth-child(4) { animation-delay: 0.6s; }
 
-        .animate .stagger {
-            animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
+        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
+        .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
-        .animate .stagger:nth-child(1) { animation-delay: 0.2s; }
-        .animate .stagger:nth-child(2) { animation-delay: 0.4s; }
-        .animate .stagger:nth-child(3) { animation-delay: 0.6s; }
-        .animate .stagger:nth-child(4) { animation-delay: 0.8s; }
-        .animate .stagger:nth-child(5) { animation-delay: 1.0s; }
-
-        h1 {
-            font-size: 4.5rem; margin: 0; font-weight: 800;
-            letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
-        }
-
-        .subtitle {
-            font-size: 1.2rem; color: var(--text-dim);
-            margin: 15px 0 60px 0; letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        /* --- 極限玻璃質感框架 --- */
-        .glass-container {
-            width: 100%; max-width: 950px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 12px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
-                        inset 0 0 30px rgba(0, 242, 255, 0.05);
-            margin-bottom: 70px;
-            transition: 0.5s;
-        }
-
-        .glass-container:hover {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
-        }
-
-        .glass-container img {
-            width: 100%; border-radius: 18px; display: block;
-            filter: brightness(1.05);
-        }
-
-        /* --- 下載按鈕 --- */
+        /* --- 下載按鈕：圓角化 (膠囊型) --- */
         .download-btn {
-            background: transparent;
-            color: var(--neon-blue);
-            text-decoration: none;
-            padding: 22px 80px;
-            border: 2px solid var(--neon-blue);
-            font-weight: 900; font-size: 1.5rem;
-            letter-spacing: 5px;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
-            display: inline-block;
+            background: transparent; color: var(--neon-blue); text-decoration: none;
+            padding: 20px 70px; border: 2px solid var(--neon-blue);
+            border-radius: 50px; /* 大圓角 */
+            font-weight: 900; font-size: 1.4rem; letter-spacing: 5px;
+            transition: all 0.4s ease; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+            display: inline-block; margin-bottom: 80px;
         }
+        .download-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 60px var(--neon-blue); transform: translateY(-5px); }
 
-        .download-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 60px var(--neon-blue);
-            transform: translateY(-5px);
-        }
-
-        /* --- 功能卡片 --- */
+        /* --- 功能卡片：圓角化 --- */
         .features-row {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px; width: 100%; margin-top: 100px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; width: 100%; margin-top: 40px;
         }
-
         .feature-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            padding: 35px; border-radius: 15px; text-align: left;
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border);
+            padding: 35px; 
+            border-radius: var(--radius-main); /* 20px 圓角 */
+            text-align: left; transition: 0.4s ease;
+            backdrop-filter: blur(10px);
         }
-
-        .feature-card h3 { color: var(--neon-blue); margin-top: 0; letter-spacing: 1px; }
-        .feature-card p { color: var(--text-dim); line-height: 1.6; margin-bottom: 0; }
-
-        footer {
-            padding: 80px 20px; text-align: center; color: #333;
-            font-size: 0.8rem; letter-spacing: 2px;
+        .feature-card:hover { 
+            border-color: var(--neon-blue); 
+            background: rgba(0, 242, 255, 0.05);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
+        .feature-card h3 { color: var(--neon-blue); margin-top: 0; font-size: 1.1rem; letter-spacing: 1px; }
+        .feature-card p { color: var(--text-dim); line-height: 1.6; margin-bottom: 0; font-size: 0.95rem; }
+
+        footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
 </head>
 <body onload="startPage()">
-
     <div class="bg-overlay"></div>
-
     <header>
-        <div class="h-brand">H</div>
-        <div class="nav-title">HVXZ SYSTEM CLEAR</div>
+        <div class="header-left">
+            <div class="h-brand">H</div>
+            <div class="nav-title">HVXZ SYSTEM CLEAR</div>
+        </div>
+        <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="discord-link" title="Join our Discord">
+            <i class="fa-brands fa-discord"></i>
+        </a>
     </header>
 
     <main class="hero" id="main-ui">
         <h1 class="stagger">HVXZ SYSTEM CLEAR</h1>
         <p class="subtitle stagger">ADVANCED WINDOWS OPTIMIZATION</p>
-
-        <div class="glass-container stagger">
-            <img src="螢幕擷取畫面 2026-02-16 190133.jpg" alt="SOFTWARE INTERFACE">
-        </div>
 
         <div class="stagger">
             <a href="https://linkvertise.com/1459750/X1XFslOMFdIj?o=sharing" target="_blank" class="download-btn">DOWNLOAD NOW</a>
@@ -199,12 +155,14 @@
                 <h3>Modern Engine</h3>
                 <p>Native WPF-inspired design with a fluid high-tech interface.</p>
             </div>
+            <div class="feature-card">
+                <h3>Expert Design</h3>
+                <p>HVXZ Team brings 2 years of professional UI/UX design experience.</p>
+            </div>
         </div>
     </main>
 
-    <footer>
-        &copy; 2026 HVXZ. LICENSED UNDER MIT.
-    </footer>
+    <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
         function startPage() {

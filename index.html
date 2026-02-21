@@ -8,13 +8,13 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(0, 242, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.02); /* 調暗背景 */
+            --glass-border: rgba(0, 242, 255, 0.2);
             --dark-bg: #050505;
             --text-main: #ffffff;
             --text-dim: #888888;
             --radius-main: 20px;
-            --btn-border: rgb(80, 80, 80); /* 亮邊框色 */
+            --btn-border: rgb(80, 80, 80); /* 邊框保持不變 */
         }
 
         body, html {
@@ -29,8 +29,8 @@
         .bg-overlay {
             position: fixed; inset: 0; z-index: -1;
             background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 60px 60px;
             mask-image: radial-gradient(circle at center, black, transparent 90%);
             opacity: 0.2;
@@ -38,7 +38,7 @@
 
         header {
             height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(255, 255, 255, 0.05);
+            padding: 0 40px; background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
             border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
             margin: 0 20px; position: sticky; top: 0; z-index: 100;
@@ -88,16 +88,17 @@
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
         .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
 
-        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
+        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* --- 放大後的版本卡片 --- */
+        /* --- 大尺寸卡片，背景調暗 --- */
         .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
         .ver-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 45px 20px; 
+            background: rgba(255, 255, 255, 0.02); /* 調暗卡片背景 */
+            border: 1px solid var(--glass-border); padding: 45px 20px; 
             border-radius: var(--radius-main); width: 240px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
         }
-        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0, 242, 255, 0.15); }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); background: rgba(0, 242, 255, 0.05); }
         .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
         .dl-label { 
             font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); 
@@ -105,42 +106,37 @@
         }
         .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
 
-        /* --- 廣告選擇頁面 --- */
-        .ad-container { 
-            position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; 
-            background: #000; z-index: 2000; opacity: 0; transition: 0.5s ease;
+        /* --- F.A.Q 字樣升級 --- */
+        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: left; }
+        .faq-title { 
+            font-size: 4rem; 
+            font-weight: 900; 
+            color: #fff; 
+            margin-bottom: 50px; 
+            text-align: center; 
+            letter-spacing: 20px; /* 超寬間距 */
+            text-shadow: 0 0 30px var(--neon-blue); /* 霓虹發光感 */
+            text-transform: uppercase;
         }
-        .ad-container.show { display: flex; opacity: 1; }
-        .ad-box { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
-        .ad-card { 
-            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; width: 280px; text-align: center; transition: 0.4s;
-        }
-        .ad-card:hover { border-color: #333; box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); }
-        .ad-card img { width: 70px; height: 70px; margin-bottom: 20px; border-radius: 12px; }
-        .ad-card h3 { font-size: 1.5rem; margin-bottom: 20px; }
-        .ad-btn { 
-            background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 12px; 
-            width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
-            text-decoration: none; font-weight: bold; transition: 0.3s;
-        }
-        .ad-btn:hover { background: #fff; color: #000; border-color: #fff; }
-        .back-btn { margin-top: 40px; color: #555; cursor: pointer; transition: 0.3s; }
-        .back-btn:hover { color: #fff; }
-
-        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
-        .feature-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; 
-            border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px);
-        }
-        .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
-
-        .faq-section { margin-top: 120px; width: 100%; max-width: 800px; text-align: left; }
-        .faq-title { font-size: 2rem; color: var(--neon-blue); margin-bottom: 40px; text-align: center; letter-spacing: 5px; }
+        
         .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
         .faq-item h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
         .faq-item p { margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
 
         footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
+
+        /* 廣告選擇頁 */
+        .ad-container { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 2000; opacity: 0; transition: 0.5s ease; }
+        .ad-container.show { display: flex; opacity: 1; }
+        .ad-box { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+        .ad-card { background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; width: 280px; text-align: center; transition: 0.4s; }
+        .ad-card:hover { border-color: #333; }
+        .ad-card img { width: 70px; height: 70px; margin-bottom: 20px; border-radius: 12px; }
+        .ad-btn { background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .back-btn { margin-top: 40px; color: #555; cursor: pointer; }
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
+        .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
     </style>
 </head>
 <body onload="startPage()">

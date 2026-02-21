@@ -8,12 +8,13 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --neon-red: #ff0000;
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(0, 242, 255, 0.3);
             --dark-bg: #050505;
             --text-main: #ffffff;
             --text-dim: #888888;
-            --radius-main: 20px; /* 統一圓角設定 */
+            --radius-main: 20px;
         }
 
         body, html {
@@ -35,89 +36,73 @@
             opacity: 0.2;
         }
 
-        /* --- Header: 圓角化 --- */
+        /* --- Header: 雙社群按鈕 --- */
         header {
             height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-top: none;
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            margin: 0 20px;
-            position: sticky; top: 0; z-index: 100;
+            padding: 0 40px; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+            margin: 0 20px; position: sticky; top: 0; z-index: 100;
         }
 
-        .header-left { display: flex; align-items: center; }
-        .h-brand {
-            font-size: 24px; font-weight: 900; color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue); margin-right: 15px;
-        }
-        .nav-title { font-size: 0.8rem; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; }
+        .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        .discord-link {
-            background: rgba(0, 242, 255, 0.1);
-            width: 45px; height: 45px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; /* 圓形 Discord 按鈕 */
-            color: var(--neon-blue); font-size: 1.2rem; text-decoration: none;
-            transition: 0.3s; border: 1px solid var(--glass-border);
-        }
-        .discord-link:hover { 
-            background: var(--neon-blue); color: #000; 
-            box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1);
+        .social-group { display: flex; gap: 12px; }
+
+        .social-link {
+            width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border);
+            font-size: 1.1rem;
         }
 
-        /* --- 動態系統 --- */
+        /* Discord 顏色 */
+        .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
+        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1); }
+
+        /* YouTube 顏色 */
+        .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
+        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
+
+        /* --- 動態與 Hero --- */
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; }
+        
         @keyframes fadeInUpBlur {
             from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; }
         .stagger { opacity: 0; }
         .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        
         .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
         .animate .stagger:nth-child(3) { animation-delay: 0.4s; }
         .animate .stagger:nth-child(4) { animation-delay: 0.6s; }
+        .animate .stagger:nth-child(5) { animation-delay: 0.8s; }
 
         h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* --- 下載按鈕：圓角化 (膠囊型) --- */
         .download-btn {
             background: transparent; color: var(--neon-blue); text-decoration: none;
-            padding: 20px 70px; border: 2px solid var(--neon-blue);
-            border-radius: 50px; /* 大圓角 */
+            padding: 20px 70px; border: 2px solid var(--neon-blue); border-radius: 50px;
             font-weight: 900; font-size: 1.4rem; letter-spacing: 5px;
             transition: all 0.4s ease; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
             display: inline-block; margin-bottom: 80px;
         }
         .download-btn:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 60px var(--neon-blue); transform: translateY(-5px); }
 
-        /* --- 功能卡片：圓角化 --- */
-        .features-row {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px; width: 100%; margin-top: 40px;
-        }
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; }
         .feature-card {
-            background: var(--glass-bg); 
-            border: 1px solid var(--glass-border);
-            padding: 35px; 
-            border-radius: var(--radius-main); /* 20px 圓角 */
-            text-align: left; transition: 0.4s ease;
-            backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; 
+            border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px);
         }
-        .feature-card:hover { 
-            border-color: var(--neon-blue); 
-            background: rgba(0, 242, 255, 0.05);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-        .feature-card h3 { color: var(--neon-blue); margin-top: 0; font-size: 1.1rem; letter-spacing: 1px; }
-        .feature-card p { color: var(--text-dim); line-height: 1.6; margin-bottom: 0; font-size: 0.95rem; }
+        .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
+
+        .faq-section { margin-top: 120px; width: 100%; max-width: 800px; text-align: left; }
+        .faq-title { font-size: 2rem; color: var(--neon-blue); margin-bottom: 40px; text-align: center; letter-spacing: 5px; }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
+        .faq-item h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
+        .faq-item p { margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
 
         footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
@@ -125,13 +110,15 @@
 <body onload="startPage()">
     <div class="bg-overlay"></div>
     <header>
-        <div class="header-left">
-            <div class="h-brand">H</div>
-            <div class="nav-title">HVXZ SYSTEM CLEAR</div>
+        <div class="h-brand">H</div>
+        <div class="social-group">
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube" title="Subscribe on YouTube">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord" title="Join our Discord">
+                <i class="fa-brands fa-discord"></i>
+            </a>
         </div>
-        <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="discord-link" title="Join our Discord">
-            <i class="fa-brands fa-discord"></i>
-        </a>
     </header>
 
     <main class="hero" id="main-ui">
@@ -143,21 +130,21 @@
         </div>
 
         <div class="features-row stagger">
-            <div class="feature-card">
-                <h3>High Performance</h3>
-                <p>Engineered for speed, removing deep system clutters instantly.</p>
+            <div class="feature-card"><h3>High Performance</h3><p>Engineered for speed, removing deep system clutters instantly.</p></div>
+            <div class="feature-card"><h3>Privacy First</h3><p>Completely wipe caches and temporary logs without a trace.</p></div>
+            <div class="feature-card"><h3>Modern Engine</h3><p>Native WPF-inspired design with a fluid high-tech interface.</p></div>
+            <div class="feature-card"><h3>Expert Design</h3><p>HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
+        </div>
+
+        <div class="faq-section stagger">
+            <div class="faq-title">F.A.Q</div>
+            <div class="faq-item">
+                <h4>Is it safe to use?</h4>
+                <p>Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p>
             </div>
-            <div class="feature-card">
-                <h3>Privacy First</h3>
-                <p>Completely wipe caches and temporary logs without a trace.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Modern Engine</h3>
-                <p>Native WPF-inspired design with a fluid high-tech interface.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Expert Design</h3>
-                <p>HVXZ Team brings 2 years of professional UI/UX design experience.</p>
+            <div class="faq-item">
+                <h4>Which systems are supported?</h4>
+                <p>Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p>
             </div>
         </div>
     </main>
@@ -166,9 +153,7 @@
 
     <script>
         function startPage() {
-            setTimeout(() => {
-                document.getElementById('main-ui').classList.add('animate');
-            }, 300);
+            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
         }
     </script>
 </body>

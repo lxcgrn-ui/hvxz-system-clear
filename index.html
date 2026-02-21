@@ -13,111 +13,124 @@
             --card-bg: #0a0a0a;
             --text-main: #ffffff;
             --text-dim: #777777;
+            --btn-border: rgb(50, 50, 50);
         }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             background-color: var(--dark-bg);
             color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             overflow-x: hidden;
         }
 
-        /* 網格背景與背景微光 */
+        /* 網格背景 (參考 image_7bfb9c.png) */
         .bg-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 50px 50px;
             mask-image: radial-gradient(circle at center, black, transparent 90%);
         }
 
         header {
-            height: 75px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(25px);
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000;
         }
 
-        .h-brand { font-size: 28px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
 
+        /* 語言切換 */
         .custom-lang-dropdown { position: relative; margin-left: 20px; }
         .lang-trigger { 
             background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--neon-blue);
-            padding: 8px 18px; border-radius: 12px; cursor: pointer; transition: 0.3s;
+            padding: 6px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s;
             display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
         }
-        .lang-trigger:hover { box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); background: rgba(0, 242, 255, 0.1); }
         .lang-options { 
-            position: absolute; top: 125%; left: 0; background: #0a0a0a; border: 1px solid var(--glass-border); 
-            border-radius: 15px; overflow: hidden; display: none; flex-direction: column; min-width: 140px;
+            position: absolute; top: 120%; left: 0; background: #0a0a0a; border: 1px solid var(--glass-border); 
+            border-radius: 10px; overflow: hidden; display: none; flex-direction: column; min-width: 130px;
         }
         .custom-lang-dropdown:hover .lang-options { display: flex; }
-        .lang-opt { padding: 12px 20px; color: #fff; cursor: pointer; transition: 0.2s; }
-        .lang-opt:hover { background: var(--neon-blue); color: #000; font-weight: bold; }
+        .lang-opt { padding: 10px 15px; color: #fff; cursor: pointer; transition: 0.2s; }
+        .lang-opt:hover { background: var(--neon-blue); color: #000; }
 
         .social-group { display: flex; gap: 15px; }
-        .social-link { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); transition: 0.3s; color: #fff; text-decoration: none; font-size: 1.1rem; }
+        .social-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); transition: 0.3s; color: #fff; text-decoration: none; }
         .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; }
 
-        /* 主頁面 */
         .hero { 
-            display: flex; flex-direction: column; align-items: center; padding: 80px 20px; text-align: center; max-width: 1000px; margin: 0 auto; 
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; align-items: center; padding: 60px 20px; text-align: center; max-width: 1200px; margin: 0 auto; 
+            transition: all 0.5s ease;
         }
-        .page-hidden { opacity: 0; transform: scale(0.92); pointer-events: none; position: absolute; width: 100%; left: 0; }
+        .page-hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 100%; }
 
-        h1 { font-size: 4rem; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 40px rgba(0, 242, 255, 0.2); margin: 0; }
-        .subtitle { color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 5px; text-transform: uppercase; font-size: 1.1rem; }
+        h1 { font-size: 3.5rem; letter-spacing: 8px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.2); margin: 0; }
+        .subtitle { color: var(--text-dim); margin: 10px 0 50px 0; letter-spacing: 4px; }
 
-        /* 版本卡片 */
-        .version-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; width: 100%; max-width: 700px; margin-bottom: 80px; }
+        /* 版本一行排開 (參考 image_85e142.png) */
+        .version-grid { display: flex; justify-content: center; gap: 20px; width: 100%; margin-bottom: 80px; }
         .ver-card { 
-            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 25px;
-            transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
+            background: #080808; border: 1px solid #1a1a1a; padding: 30px; border-radius: 15px;
+            width: 220px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
         }
-        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); box-shadow: 0 15px 45px rgba(0, 242, 255, 0.2); background: rgba(0, 242, 255, 0.05); }
-        .ver-card h2 { margin: 0; font-size: 2.8rem; color: var(--neon-blue); }
-        .dl-badge { margin-top: 15px; font-size: 0.9rem; font-weight: bold; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 5px 15px; border-radius: 50px; }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2); }
+        .ver-card h2 { margin: 0; font-size: 2.2rem; color: var(--neon-blue); margin-bottom: 15px; }
+        
+        /* 下載按鈕細節調整 */
+        .dl-badge { 
+            font-size: 0.8rem; font-weight: bold; color: var(--neon-blue); 
+            border: 1px solid var(--btn-border); padding: 6px 20px; 
+            border-radius: 5px; /* 較小的圓角 */
+            transition: 0.3s;
+        }
+        .ver-card:hover .dl-badge { border-color: var(--neon-blue); }
 
-        /* FAQ 區塊 */
-        .faq-section { width: 100%; max-width: 800px; text-align: left; margin-bottom: 100px; }
-        .faq-item { background: rgba(255,255,255,0.01); border: 1px solid #111; padding: 25px; border-radius: 20px; margin-bottom: 15px; transition: 0.3s; }
-        .faq-item:hover { border-color: var(--glass-border); background: rgba(255,255,255,0.03); }
+        /* 經驗數據區塊 */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; width: 100%; max-width: 900px; margin-bottom: 80px; }
+        .stat-item { background: rgba(255,255,255,0.01); border: 1px solid #111; padding: 30px; border-radius: 20px; }
+        .stat-item h4 { font-size: 2.5rem; color: var(--neon-blue); margin: 0; }
+        .stat-item p { color: var(--text-dim); margin: 10px 0 0 0; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* F.A.Q 區塊 */
+        .faq-section { width: 100%; max-width: 900px; text-align: left; margin-bottom: 100px; }
+        .faq-item { background: rgba(255,255,255,0.02); border: 1px solid #111; padding: 25px; border-radius: 15px; margin-bottom: 15px; transition: 0.3s; }
+        .faq-item:hover { border-color: var(--glass-border); }
         .faq-item h3 { color: var(--neon-blue); margin-top: 0; font-size: 1.2rem; margin-bottom: 10px; }
         .faq-item p { color: #888; margin-bottom: 0; line-height: 1.6; }
 
-        /* 廣告下載頁面 (完美還原 Image_7bf0d5.png) */
+        /* 廣告下載介面 (參考 image_7bf0d5.png) */
         .ad-container { 
             position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; 
-            background: #000; z-index: 2000; opacity: 0; transform: scale(1.1); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #000; z-index: 2000; opacity: 0; transition: 0.5s ease;
         }
-        .ad-container.show { display: flex; opacity: 1; transform: scale(1); }
-        
-        .ad-grid { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+        .ad-container.show { display: flex; opacity: 1; }
+        .ad-grid { display: flex; gap: 30px; justify-content: center; }
         .ad-card { 
-            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 50px 35px; border-radius: 24px; width: 320px; text-align: center;
-            transition: 0.4s; position: relative;
+            background: #0d0d0d; border: 1px solid #1a1a1a; padding: 45px; border-radius: 24px; width: 320px; text-align: center; transition: 0.4s;
         }
-        .ad-card:hover { border-color: #444; box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); }
-        .ad-card img { width: 85px; height: 85px; margin-bottom: 25px; border-radius: 18px; }
-        .ad-card h3 { font-size: 2rem; margin-bottom: 15px; color: #fff; }
-        .ad-card .ad-desc { color: var(--text-dim); font-size: 1rem; margin-bottom: 30px; line-height: 1.5; }
-
-        .ad-features { text-align: left; display: inline-block; margin-bottom: 40px; color: #bbb; font-size: 0.95rem; width: 100%; }
-        .ad-features div { margin-bottom: 12px; display: flex; align-items: center; gap: 15px; }
-        .ad-features i { color: #555; font-size: 0.85rem; }
+        .ad-card:hover { border-color: #333; box-shadow: 0 0 50px rgba(255, 255, 255, 0.05); }
+        .ad-card img { width: 80px; height: 80px; margin-bottom: 20px; border-radius: 15px; }
+        .ad-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .ad-desc { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 25px; height: 40px; }
+        
+        .ad-features { text-align: left; display: inline-block; margin-bottom: 30px; color: #aaa; font-size: 0.9rem; width: 100%; }
+        .ad-features div { margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .ad-features i { color: #555; font-size: 0.8rem; }
 
         .ad-btn { 
-            background: #121212; border: 1px solid #222; color: #fff; padding: 15px; border-radius: 14px; 
-            width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; cursor: pointer;
-            text-decoration: none; font-weight: bold; transition: 0.3s; font-size: 1.1rem;
+            background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 14px; border-radius: 8px; 
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+            text-decoration: none; font-weight: bold; transition: 0.3s;
         }
-        .ad-btn:hover { background: #fff; color: #000; box-shadow: 0 0 25px #fff; border-color: #fff; }
+        .ad-btn:hover { background: #fff; color: #000; box-shadow: 0 0 20px #fff; border-color: #fff; }
 
-        .back-btn { margin-top: 50px; color: #444; cursor: pointer; transition: 0.3s; font-size: 1rem; border-bottom: 1px solid transparent; }
-        .back-btn:hover { color: #fff; border-color: #fff; }
+        .back-btn { margin-top: 40px; color: #555; cursor: pointer; transition: 0.3s; }
+        .back-btn:hover { color: #fff; }
 
-        footer { padding: 60px 0; color: #1a1a1a; text-align: center; font-size: 0.85rem; letter-spacing: 2px; }
+        footer { padding: 60px 0; color: #1a1a1a; text-align: center; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -150,49 +163,53 @@
             <div class="ver-card" onclick="openAdMenu('3.5')"><h2>3.5</h2><div class="dl-badge" id="dl-4">DOWNLOAD</div></div>
         </div>
 
+        <div class="stats-grid">
+            <div class="stat-item"><h4>4+</h4><p id="stat-1">YEARS EXPERIENCE</p></div>
+            <div class="stat-item"><h4>500+</h4><p id="stat-2">SUCCESS PROJECTS</p></div>
+            <div class="stat-item"><h4>100%</h4><p id="stat-3">SECURE DESIGN</p></div>
+        </div>
+
         <div class="faq-section">
-            <h2 id="faq-title" style="letter-spacing: 3px; margin-bottom: 30px; font-size: 2rem;">F.A.Q</h2>
+            <h2 id="faq-title" style="letter-spacing: 2px; margin-bottom: 25px;">F.A.Q</h2>
             <div class="faq-item">
                 <h3 id="q1">Is it safe to use?</h3>
-                <p id="a1">Yes, HVXZ System Clear is built to clean only redundant system logs and junk files safely.</p>
+                <p id="a1">Yes, HVXZ System Clear only targets redundant system logs and junk files safely.</p>
             </div>
             <div class="faq-item">
-                <h3 id="q2">Does it improve FPS?</h3>
-                <p id="a2">By clearing deep system cache and background junk, it helps stabilize your system performance.</p>
+                <h3 id="q2">Does it improve performance?</h3>
+                <p id="a2">It significantly clears background cache and junk, providing a smoother experience.</p>
             </div>
         </div>
     </main>
 
     <div id="ad-page" class="ad-container">
-        <h2 id="ad-title-text" style="margin-bottom: 50px; font-size: 2.2rem; letter-spacing: 2px;">CHOOSE DOWNLOAD METHOD</h2>
+        <h2 id="ad-title-text" style="margin-bottom: 40px;">CHOOSE DOWNLOAD METHOD</h2>
         <div class="ad-grid">
             <div class="ad-card">
                 <img src="https://linkvertise.com/assets/img/logo/logo-blue.svg" alt="Linkvertise">
                 <h3>Linkvertise</h3>
-                <p class="ad-desc" id="p1">Quick and easy download through Linkvertise platform.</p>
+                <p class="ad-desc" id="p1">Quick and easy download through Linkvertise.</p>
                 <div class="ad-features">
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f1">Fast Download</span></div>
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f2">Secure Link</span></div>
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f3">Easy Process</span></div>
                 </div>
-                <a id="linkvertise-url" href="#" target="_blank" class="ad-btn"><span id="dl-btn-1">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a id="linkvertise-url" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </div>
             <div class="ad-card">
                 <img src="https://work.ink/favicon.ico" alt="Work.ink">
                 <h3>Work.ink</h3>
-                <p class="ad-desc" id="p2">Fast and reliable download through Work.ink system.</p>
+                <p class="ad-desc" id="p2">Fast and reliable download through Work.ink.</p>
                 <div class="ad-features">
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f4">Quick Download</span></div>
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f5">Reliable Service</span></div>
                     <div><i class="fa-solid fa-arrow-right"></i> <span id="f6">Simple Process</span></div>
                 </div>
-                <a id="workink-url" href="#" target="_blank" class="ad-btn"><span id="dl-btn-2">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                <a id="workink-url" href="#" target="_blank" class="ad-btn"><span class="dl-text">Download Now</span> <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
             </div>
         </div>
         <div class="back-btn" onclick="closeAdMenu()" id="back-text">← BACK TO VERSIONS</div>
     </div>
-
-    <footer>&copy; 2026 HVXZ TEAM. DESIGNED FOR PERFORMANCE.</footer>
 
     <script>
         const downloadLinks = {
@@ -200,23 +217,25 @@
             "2.0": { linkvertise: "https://link-target.net/1459750/9dOY29nMsgsd", workink: "https://work.ink/281n/hvxz-system-clear-20" },
             "3.0": { linkvertise: "https://direct-link.net/1459750/FTaQbx03GPCS", workink: "https://work.ink/281n/hvxz-system-clear-30" },
             "3.5": { linkvertise: "https://link-center.net/1459750/X1XFslOMFdIj", workink: "https://work.ink/281n/hvxz-system-clear-35" }
-        };
+        }; [cite: 1]
 
         const langData = {
             en: {
                 subtitle: "SELECT YOUR VERSION", dl: "DOWNLOAD",
-                q1: "Is it safe to use?", a1: "Yes, HVXZ System Clear is built to clean only redundant system logs and junk files safely.",
-                q2: "Does it improve FPS?", a2: "By clearing deep system cache and background junk, it helps stabilize your system performance.",
+                stat1: "YEARS EXPERIENCE", stat2: "SUCCESS PROJECTS", stat3: "SECURE DESIGN",
+                q1: "Is it safe to use?", a1: "Yes, HVXZ System Clear only targets redundant system logs and junk files safely.",
+                q2: "Does it improve performance?", a2: "It significantly clears background cache and junk, providing a smoother experience.",
                 adTitle: "CHOOSE DOWNLOAD METHOD", back: "← BACK TO VERSIONS", dlBtn: "Download Now",
-                p1: "Quick and easy download through Linkvertise platform.", p2: "Fast and reliable download through Work.ink system.",
+                p1: "Quick and easy download through Linkvertise.", p2: "Fast and reliable download through Work.ink.",
                 f1: "Fast Download", f2: "Secure Link", f3: "Easy Process", f4: "Quick Download", f5: "Reliable Service", f6: "Simple Process"
             },
             zh: {
-                subtitle: "選擇您的軟體版本", dl: "立即下載",
-                q1: "使用起來安全嗎？", a1: "是的，HVXZ System Clear 專為安全清理冗餘系統日誌與垃圾檔案而設計。",
-                q2: "能提升 FPS 嗎？", a2: "透過清理深層系統快取與背景垃圾，能有效穩定您的系統效能。",
+                subtitle: "選擇您的版本", dl: "立即下載",
+                stat1: "年以上設計經驗", stat2: "個成功專案", stat3: "安全設計保證",
+                q1: "使用起來安全嗎？", a1: "是的，HVXZ System Clear 僅安全地針對冗餘的系統日誌與垃圾檔案。",
+                q2: "能提升效能嗎？", a2: "它能顯著清理背景快取與垃圾，提供更流暢的體驗。",
                 adTitle: "請選擇下載方式", back: "← 返回版本選擇", dlBtn: "立即下載",
-                p1: "透過 Linkvertise 平台進行快速且輕鬆地下載。", p2: "透過 Work.ink 系統進行快速且可靠地下載。",
+                p1: "透過 Linkvertise 快速且輕鬆地下載。", p2: "透過 Work.ink 快速且可靠地下載。",
                 f1: "極速下載", f2: "安全連結", f3: "簡單流程", f4: "快速下載", f5: "可靠服務", f6: "簡易流程"
             }
         };
@@ -225,12 +244,15 @@
             const d = langData[lang];
             document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${lang === 'en' ? 'English' : '繁體中文'}`;
             document.getElementById('main-subtitle').textContent = d.subtitle;
+            document.getElementById('stat-1').textContent = d.stat1;
+            document.getElementById('stat-2').textContent = d.stat2;
+            document.getElementById('stat-3').textContent = d.stat3;
             document.getElementById('q1').textContent = d.q1; document.getElementById('a1').textContent = d.a1;
             document.getElementById('q2').textContent = d.q2; document.getElementById('a2').textContent = d.a2;
             document.getElementById('ad-title-text').textContent = d.adTitle;
             document.getElementById('back-text').textContent = d.back;
             document.getElementById('p1').textContent = d.p1; document.getElementById('p2').textContent = d.p2;
-            document.getElementById('dl-btn-1').textContent = d.dlBtn; document.getElementById('dl-btn-2').textContent = d.dlBtn;
+            document.querySelectorAll('.dl-text').forEach(el => el.textContent = d.dlBtn);
             for(let i=1; i<=6; i++) document.getElementById('f'+i).textContent = d['f'+i];
             for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = d.dl;
         }
@@ -239,19 +261,12 @@
             document.getElementById('main-ui').classList.add('page-hidden');
             document.getElementById('linkvertise-url').href = downloadLinks[version].linkvertise;
             document.getElementById('workink-url').href = downloadLinks[version].workink;
-            setTimeout(() => { 
-                const adPage = document.getElementById('ad-page');
-                adPage.style.display = 'flex'; 
-                setTimeout(() => adPage.classList.add('show'), 50); 
-            }, 400);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'flex'; setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50); }, 400);
         }
 
         function closeAdMenu() {
             document.getElementById('ad-page').classList.remove('show');
-            setTimeout(() => { 
-                document.getElementById('ad-page').style.display = 'none'; 
-                document.getElementById('main-ui').classList.remove('page-hidden'); 
-            }, 600);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'none'; document.getElementById('main-ui').classList.remove('page-hidden'); }, 500);
         }
     </script>
 </body>

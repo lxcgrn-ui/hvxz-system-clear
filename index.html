@@ -14,7 +14,7 @@
             --text-main: #ffffff;
             --text-dim: #888888;
             --radius-main: 20px;
-            --btn-border: rgb(80, 80, 80); /* 你要求的亮一點的邊框 */
+            --btn-border: rgb(80, 80, 80); /* 亮邊框色 */
         }
 
         body, html {
@@ -75,8 +75,7 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
 
-        /* --- 動態系統 --- */
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; transition: 0.5s ease; }
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; transition: 0.5s ease; }
         .page-hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 100%; }
 
         @keyframes fadeInUpBlur {
@@ -92,17 +91,17 @@
         h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* --- 版本卡片一行併排 --- */
-        .version-row { display: flex; justify-content: center; gap: 20px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
+        /* --- 放大後的版本卡片 --- */
+        .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
         .ver-card {
-            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; 
-            border-radius: var(--radius-main); width: 180px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
+            background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 45px 20px; 
+            border-radius: var(--radius-main); width: 240px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
         }
-        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0, 242, 255, 0.2); }
-        .ver-card h2 { margin: 0; font-size: 2.5rem; color: var(--neon-blue); margin-bottom: 15px; }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0, 242, 255, 0.15); }
+        .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
         .dl-label { 
-            font-size: 0.85rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); 
-            padding: 8px 15px; border-radius: 12px; transition: 0.3s;
+            font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); 
+            padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px;
         }
         .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
 

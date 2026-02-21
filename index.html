@@ -34,7 +34,7 @@
             opacity: 0.2;
         }
 
-        /* --- 頂部導航 (左上角固定的 H) --- */
+        /* --- 頂部導航 --- */
         header {
             height: 70px; display: flex; align-items: center;
             padding: 0 40px;
@@ -75,19 +75,17 @@
             max-width: 1100px; margin: 0 auto;
         }
 
-        /* 初始隱藏，透過 JS 觸發 */
         .stagger { opacity: 0; }
 
         .animate .stagger {
             animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* 階梯延遲設定 */
-        .animate .stagger:nth-child(1) { animation-delay: 0.2s; } /* Title */
-        .animate .stagger:nth-child(2) { animation-delay: 0.4s; } /* Subtitle */
-        .animate .stagger:nth-child(3) { animation-delay: 0.6s; } /* Image Frame */
-        .animate .stagger:nth-child(4) { animation-delay: 0.8s; } /* Download Section */
-        .animate .stagger:nth-child(5) { animation-delay: 1.0s; } /* Feature Cards */
+        .animate .stagger:nth-child(1) { animation-delay: 0.2s; }
+        .animate .stagger:nth-child(2) { animation-delay: 0.4s; }
+        .animate .stagger:nth-child(3) { animation-delay: 0.6s; }
+        .animate .stagger:nth-child(4) { animation-delay: 0.8s; }
+        .animate .stagger:nth-child(5) { animation-delay: 1.0s; }
 
         h1 {
             font-size: 4.5rem; margin: 0; font-weight: 800;
@@ -125,7 +123,7 @@
             filter: brightness(1.05);
         }
 
-        /* --- 下載按鈕 (WPF 霓虹風格) --- */
+        /* --- 下載按鈕 --- */
         .download-btn {
             background: transparent;
             color: var(--neon-blue);
@@ -181,7 +179,7 @@
         <p class="subtitle stagger">ADVANCED WINDOWS OPTIMIZATION</p>
 
         <div class="glass-container stagger">
-            <img src="preview.jpg" alt="SOFTWARE INTERFACE">
+            <img src="螢幕擷取畫面 2026-02-16 190133.jpg" alt="SOFTWARE INTERFACE">
         </div>
 
         <div class="stagger">
@@ -210,7 +208,6 @@
 
     <script>
         function startPage() {
-            // 進入頁面後直接觸發階梯顯現
             setTimeout(() => {
                 document.getElementById('main-ui').classList.add('animate');
             }, 300);

@@ -8,142 +8,134 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
-            --neon-green: #00ff88;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(0, 242, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(0, 242, 255, 0.2);
             --dark-bg: #050505;
+            --card-bg: #0d0d0d;
             --text-main: #ffffff;
             --text-dim: #888888;
-            --radius-main: 20px;
         }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             background-color: var(--dark-bg);
             color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             overflow-x: hidden;
-            display: flex; flex-direction: column;
         }
 
-        /* 網格背景 */
+        /* 網格與背景暈光 */
         .bg-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background-image: linear-gradient(rgba(0, 242, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.1) 1px, transparent 1px);
-            background-size: 60px 60px; 
-            mask-image: radial-gradient(circle at center, black, transparent 90%); 
-            opacity: 0.2;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(circle at center, black, transparent 85%);
         }
 
-        /* 頂部導航列 */
         header {
-            height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
-            margin: 0 20px; position: sticky; top: 0; z-index: 100;
+            height: 75px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 1000;
         }
 
-        .header-left { display: flex; align-items: center; gap: 20px; }
-        .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
-        
-        /* 語言切換下拉選單 (WPF 懸浮風格) */
-        .custom-lang-dropdown { position: relative; display: inline-block; }
+        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+
+        .custom-lang-dropdown { position: relative; margin-left: 20px; }
         .lang-trigger { 
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); 
-            color: var(--neon-blue); padding: 6px 15px; border-radius: 10px; font-size: 0.85rem; 
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; 
+            background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--neon-blue);
+            padding: 8px 16px; border-radius: 12px; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
         .lang-options { 
-            position: absolute; top: 120%; left: 0; background: rgba(10, 10, 10, 0.95); 
-            border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; 
-            display: none; flex-direction: column; min-width: 120px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            position: absolute; top: 125%; left: 0; background: rgba(10, 10, 10, 0.98); 
+            border: 1px solid var(--glass-border); border-radius: 15px; overflow: hidden; display: none; flex-direction: column; min-width: 140px;
         }
         .custom-lang-dropdown:hover .lang-options { display: flex; }
-        .lang-opt { padding: 10px 15px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-        .lang-opt:hover { background: var(--neon-blue); color: #000; }
+        .lang-opt { padding: 12px 20px; color: #fff; cursor: pointer; transition: 0.2s; }
+        .lang-opt:hover { background: var(--neon-blue); color: #000; font-weight: bold; }
 
-        /* 右側社群按鈕 */
-        .social-group { display: flex; gap: 12px; }
-        .social-link { 
-            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border); font-size: 1.1rem; 
-        }
-        .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
-        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1); }
-        .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
-        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
+        .social-group { display: flex; gap: 15px; }
+        .social-link { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); transition: 0.3s; color: #fff; text-decoration: none; }
+        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; }
 
-        /* 主畫面區塊 (支援淡出) */
+        /* 主頁面樣式 */
         .hero { 
-            display: flex; flex-direction: column; align-items: center; padding: 100px 20px; 
-            text-align: center; max-width: 1200px; margin: 0 auto; 
-            transition: opacity 0.5s ease, transform 0.5s ease; 
+            display: flex; flex-direction: column; align-items: center; padding: 80px 20px; text-align: center; max-width: 1000px; margin: 0 auto; 
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .fade-out { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+        .page-hidden { opacity: 0; transform: scale(0.9) translateY(-30px); pointer-events: none; position: absolute; width: 100%; }
 
-        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 30px rgba(0, 242, 255, 0.4); }
-        .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
+        h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 40px rgba(0, 242, 255, 0.3); margin: 0; }
+        .subtitle { color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* --- 多版本按鈕卡片 --- */
-        .version-grid { 
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; 
-            margin-bottom: 80px; width: 100%; max-width: 600px; 
-        }
+        /* 版本卡片網格 */
+        .version-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; width: 100%; max-width: 650px; margin-bottom: 80px; }
         .ver-card { 
-            background: var(--glass-bg); border: 2px solid var(--glass-border); padding: 25px; 
-            border-radius: var(--radius-main); transition: 0.3s; cursor: pointer; 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 35px; border-radius: 20px;
+            transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
         }
-        .ver-card:hover { border-color: var(--neon-blue); box-shadow: 0 0 30px rgba(0, 242, 255, 0.2); transform: translateY(-5px); }
-        .ver-card h2 { margin: 0 0 10px 0; color: var(--neon-blue); font-size: 1.8rem; }
-        .ver-card .dl-text { 
-            font-weight: 900; letter-spacing: 2px; font-size: 0.9rem; border: 1px solid var(--neon-blue); 
-            padding: 5px 15px; border-radius: 50px; display: inline-block; 
-        }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15); background: rgba(0, 242, 255, 0.05); }
+        .ver-card h2 { margin: 0; font-size: 2.5rem; color: var(--neon-blue); }
+        .dl-badge { margin-top: 15px; font-size: 0.8rem; font-weight: bold; color: var(--neon-blue); border: 1px solid var(--neon-blue); padding: 5px 15px; border-radius: 50px; display: inline-block; }
 
-        /* --- 廣告選擇頁面 (預設隱藏，淡入顯示) --- */
-        .ad-selection { 
-            position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; 
-            justify-content: center; background: var(--dark-bg); z-index: 200; padding: 20px; 
-            opacity: 0; transition: opacity 0.5s ease; 
+        /* FAQ 區塊 */
+        .faq-section { width: 100%; max-width: 800px; text-align: left; margin-bottom: 100px; }
+        .faq-item { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); padding: 25px; border-radius: 15px; margin-bottom: 15px; }
+        .faq-item h3 { color: var(--neon-blue); margin-top: 0; font-size: 1.1rem; }
+        .faq-item p { color: #ccc; margin-bottom: 0; line-height: 1.6; }
+
+        /* 究極廣告介面 (參考圖風格) */
+        .ad-container { 
+            position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; 
+            background: #000; z-index: 2000; opacity: 0; transition: all 0.5s ease;
         }
-        .ad-selection.show { display: flex; opacity: 1; }
-        .ad-title { font-size: 2.5rem; color: var(--neon-blue); margin-bottom: 50px; letter-spacing: 2px; }
-        
+        .ad-container.show { display: flex; opacity: 1; }
         .ad-grid { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
-        .ad-card { 
-            background: rgba(255,255,255,0.03); border: 2px solid var(--glass-border); padding: 40px; 
-            border-radius: 30px; text-align: center; width: 280px; transition: 0.4s; cursor: pointer; 
-            text-decoration: none; color: #fff; 
-        }
-        .ad-card:hover { border-color: var(--neon-blue); transform: scale(1.05); box-shadow: 0 0 50px rgba(0, 242, 255, 0.3); }
-        .ad-card img { width: 80px; height: 80px; margin-bottom: 20px; object-fit: contain; border-radius: 15px; }
-        .ad-card h3 { font-size: 1.5rem; margin: 0; }
         
-        .back-btn { margin-top: 50px; color: var(--text-dim); cursor: pointer; border-bottom: 1px solid var(--text-dim); transition: 0.3s; padding-bottom: 5px; }
+        .ad-card { 
+            background: #0d0d0d; border: 1px solid #222; padding: 50px 35px; border-radius: 24px; width: 300px; text-align: center;
+            transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .ad-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); box-shadow: 0 0 40px rgba(0, 242, 255, 0.1); }
+        .ad-card img { width: 80px; height: 80px; margin-bottom: 25px; border-radius: 15px; }
+        .ad-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+        .ad-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 30px; }
+
+        .ad-features { text-align: left; display: inline-block; margin-bottom: 40px; color: #bbb; font-size: 0.9rem; width: 100%; }
+        .ad-features div { margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+        .ad-features i { color: #444; font-size: 0.8rem; }
+
+        .ad-btn { 
+            background: #151515; border: 1px solid #333; color: #fff; padding: 14px 25px; border-radius: 12px; 
+            width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;
+            text-decoration: none; font-weight: bold; transition: 0.3s;
+        }
+        .ad-btn:hover { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 20px #fff; }
+
+        .back-btn { margin-top: 50px; color: var(--text-dim); cursor: pointer; transition: 0.3s; border-bottom: 1px solid transparent; }
         .back-btn:hover { color: #fff; border-color: #fff; }
 
-        /* 特色卡片 */
-        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 40px; }
-        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
-        
-        /* 動畫設定 */
-        .stagger { opacity: 0; }
-        .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        @keyframes fadeInUpBlur { from { opacity: 0; transform: translateY(40px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        /* 動畫 */
+        .stagger { opacity: 0; transform: translateY(30px); }
+        .animate .stagger { animation: fadeInUp 0.8s ease forwards; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
-        .animate .stagger:nth-child(3) { animation-delay: 0.4s; }
+        .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
 
-        footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
+        footer { padding: 60px 0; color: #222; text-align: center; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
 </head>
-<body onload="startPage()">
+<body onload="document.body.classList.add('animate')">
     <div class="bg-overlay"></div>
-    
     <header>
-        <div class="header-left">
-            <div class="h-brand">H</div>
+        <div class="h-brand">H</div>
+        <div style="display: flex; align-items: center;">
+            <div class="social-group">
+                <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
+            </div>
             <div class="custom-lang-dropdown">
                 <div class="lang-trigger" id="current-lang"><i class="fa-solid fa-globe"></i> English</div>
                 <div class="lang-options">
@@ -152,48 +144,64 @@
                 </div>
             </div>
         </div>
-        <div class="social-group">
-            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
-        </div>
     </header>
 
     <main class="hero" id="main-ui">
-        <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
+        <h1 class="stagger">HVXZ SYSTEM CLEAR</h1>
         <p class="subtitle stagger" id="main-subtitle">SELECT YOUR VERSION</p>
 
         <div class="version-grid stagger">
-            <div class="ver-card" onclick="openAdMenu('1.0')"><h2>1.0</h2><div class="dl-text" id="dl-1">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('2.0')"><h2>2.0</h2><div class="dl-text" id="dl-2">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('3.0')"><h2>3.0</h2><div class="dl-text" id="dl-3">DOWNLOAD</div></div>
-            <div class="ver-card" onclick="openAdMenu('3.5')"><h2>3.5</h2><div class="dl-text" id="dl-4">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('1.0')"><h2>1.0</h2><div class="dl-badge" id="dl-1">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('2.0')"><h2>2.0</h2><div class="dl-badge" id="dl-2">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('3.0')"><h2>3.0</h2><div class="dl-badge" id="dl-3">DOWNLOAD</div></div>
+            <div class="ver-card" onclick="openAdMenu('3.5')"><h2>3.5</h2><div class="dl-badge" id="dl-4">DOWNLOAD</div></div>
         </div>
 
-        <div class="features-row stagger">
-            <div class="feature-card"><h3 id="f1-t">Expert Design</h3><p id="f1-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
-            <div class="feature-card"><h3 id="f2-t">High Performance</h3><p id="f2-p">Engineered for speed, removing deep system clutters instantly.</p></div>
+        <div class="faq-section stagger">
+            <h2 id="faq-title" style="margin-bottom: 30px; letter-spacing: 2px;">F.A.Q</h2>
+            <div class="faq-item">
+                <h3 id="q1">Is it safe to use?</h3>
+                <p id="a1">Yes, HVXZ System Clear is designed to clean only redundant system files and junk.</p>
+            </div>
+            <div class="faq-item">
+                <h3 id="q2">Does it affect performance?</h3>
+                <p id="a2">It significantly improves performance by freeing up disk space and clearing cache.</p>
+            </div>
         </div>
     </main>
 
-    <div id="ad-page" class="ad-selection">
-        <div class="ad-title" id="ad-title-text">CHOOSE METHOD</div>
+    <div id="ad-page" class="ad-container">
+        <h2 class="ad-title" id="ad-title-text" style="margin-bottom: 50px; font-size: 2rem;">CHOOSE DOWNLOAD METHOD</h2>
         <div class="ad-grid">
-            <a id="linkvertise-url" href="#" target="_blank" class="ad-card">
+            <div class="ad-card">
                 <img src="https://linkvertise.com/assets/img/logo/logo-blue.svg" alt="Linkvertise">
                 <h3>Linkvertise</h3>
-            </a>
-            <a id="workink-url" href="#" target="_blank" class="ad-card">
+                <p id="ad-p1">Fast and secure download via Linkvertise platform.</p>
+                <div class="ad-features">
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f1">Fast Download</span></div>
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f2">Secure Link</span></div>
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f3">Easy Process</span></div>
+                </div>
+                <a id="linkvertise-url" href="#" target="_blank" class="ad-btn">Download Now <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+            </div>
+            <div class="ad-card">
                 <img src="https://work.ink/favicon.ico" alt="Work.ink">
                 <h3>Work.ink</h3>
-            </a>
+                <p id="ad-p2">Reliable and quick download via Work.ink system.</p>
+                <div class="ad-features">
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f4">Quick Access</span></div>
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f5">Verified File</span></div>
+                    <div><i class="fa-solid fa-arrow-right"></i> <span id="f6">No Hassle</span></div>
+                </div>
+                <a id="workink-url" href="#" target="_blank" class="ad-btn">Download Now <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+            </div>
         </div>
         <div class="back-btn" onclick="closeAdMenu()" id="back-text">← BACK TO VERSIONS</div>
     </div>
 
-    <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
+    <footer>&copy; 2026 HVXZ TEAM. ALL RIGHTS RESERVED.</footer>
 
     <script>
-        // 你的所有版本載點都在這裡，完美對應
         const downloadLinks = {
             "1.0": { linkvertise: "https://direct-link.net/1459750/wzIv98WbnfNx", workink: "https://work.ink/281n/hvxz-system-clear-10" },
             "2.0": { linkvertise: "https://link-target.net/1459750/9dOY29nMsgsd", workink: "https://work.ink/281n/hvxz-system-clear-20" },
@@ -202,54 +210,47 @@
         };
 
         const langData = {
-            en: { 
-                display: "English", subtitle: "SELECT YOUR VERSION", dl: "DOWNLOAD", 
-                adTitle: "CHOOSE METHOD", back: "← BACK TO VERSIONS", 
-                f1t: "Expert Design", f1p: "HVXZ Team brings 2 years of professional UI/UX design experience.", 
-                f2t: "High Performance", f2p: "Engineered for speed, removing deep system clutters instantly." 
+            en: {
+                display: "English", subtitle: "SELECT YOUR VERSION", dl: "DOWNLOAD",
+                q1: "Is it safe to use?", a1: "Yes, HVXZ System Clear is designed to clean only redundant system files and junk.",
+                q2: "Does it affect performance?", a2: "It significantly improves performance by freeing up disk space and clearing cache.",
+                adTitle: "CHOOSE DOWNLOAD METHOD", back: "← BACK TO VERSIONS",
+                p1: "Fast and secure download via Linkvertise platform.", p2: "Reliable and quick download via Work.ink system.",
+                f1: "Fast Download", f2: "Secure Link", f3: "Easy Process", f4: "Quick Access", f5: "Verified File", f6: "No Hassle"
             },
-            zh: { 
-                display: "繁體中文", subtitle: "選擇您的版本", dl: "下載版本", 
-                adTitle: "選擇下載方式", back: "← 返回版本選擇", 
-                f1t: "專業設計", f1p: "HVXZ 團隊擁有長達 2 年的專業 UI/UX 設計經驗。", 
-                f2t: "極致效能", f2p: "專為極速打造，瞬間清除系統深處的雜亂檔案。" 
+            zh: {
+                display: "繁體中文", subtitle: "請選擇軟體版本", dl: "點擊下載",
+                q1: "這安全嗎？", a1: "是的，HVXZ System Clear 專門設計用於清理冗餘系統檔案與垃圾。",
+                q2: "會影響性能嗎？", a2: "它能透過釋放磁碟空間與清理快取來顯著提升效能。",
+                adTitle: "請選擇下載方式", back: "← 返回版本選擇",
+                p1: "透過 Linkvertise 平台進行快速且安全的下載。", p2: "透過 Work.ink 系統進行可靠且迅速的下載。",
+                f1: "極速下載", f2: "安全連結", f3: "簡單流程", f4: "快速存取", f5: "檔案已驗證", f6: "無繁瑣步驟"
             }
         };
 
-        // 打開廣告選單並寫入對應的連結
+        function changeLanguage(lang) {
+            const d = langData[lang];
+            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${d.display}`;
+            document.getElementById('main-subtitle').textContent = d.subtitle;
+            document.getElementById('q1').textContent = d.q1; document.getElementById('a1').textContent = d.a1;
+            document.getElementById('q2').textContent = d.q2; document.getElementById('a2').textContent = d.a2;
+            document.getElementById('ad-title-text').textContent = d.adTitle;
+            document.getElementById('back-text').textContent = d.back;
+            document.getElementById('ad-p1').textContent = d.p1; document.getElementById('ad-p2').textContent = d.p2;
+            for(let i=1; i<=6; i++) document.getElementById('f'+i).textContent = d['f'+i];
+            for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = d.dl;
+        }
+
         function openAdMenu(version) {
-            document.getElementById('main-ui').classList.add('fade-out');
+            document.getElementById('main-ui').classList.add('page-hidden');
             document.getElementById('linkvertise-url').href = downloadLinks[version].linkvertise;
             document.getElementById('workink-url').href = downloadLinks[version].workink;
-            
-            setTimeout(() => {
-                const adPage = document.getElementById('ad-page');
-                adPage.classList.add('show');
-            }, 500);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'flex'; setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50); }, 400);
         }
 
-        // 關閉廣告選單
         function closeAdMenu() {
             document.getElementById('ad-page').classList.remove('show');
-            setTimeout(() => {
-                document.getElementById('main-ui').classList.remove('fade-out');
-            }, 500);
-        }
-
-        // 語言切換邏輯
-        function changeLanguage(lang) {
-            const data = langData[lang];
-            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${data.display}`;
-            document.getElementById('main-subtitle').textContent = data.subtitle;
-            document.getElementById('ad-title-text').textContent = data.adTitle;
-            document.getElementById('back-text').textContent = data.back;
-            document.getElementById('f1-t').textContent = data.f1t; document.getElementById('f1-p').textContent = data.f1p;
-            for(let i=1; i<=4; i++) document.getElementById(`dl-${i}`).textContent = data.dl;
-        }
-
-        // 初始動畫
-        function startPage() {
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'none'; document.getElementById('main-ui').classList.remove('page-hidden'); }, 500);
         }
     </script>
 </body>

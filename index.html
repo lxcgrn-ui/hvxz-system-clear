@@ -32,20 +32,22 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
-            z-index: -1.5; /* 夾在光暈與網格之間 */
+            z-index: -1.5;
         }
 
-        /* --- 滑鼠跟隨光暈 (Mouse Spotlight) --- */
+        /* --- 優化後的滑鼠溫和光暈 --- */
         #mouse-light {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
             z-index: -1;
+            /* 使用多層顏色過渡，讓光暈看起來溫和但中心點明顯 */
             background: radial-gradient(
-                600px circle at var(--x, 50%) var(--y, 50%), 
-                rgba(0, 242, 255, 0.08), 
-                transparent 40%
+                500px circle at var(--x, 50%) var(--y, 50%), 
+                rgba(0, 242, 255, 0.15) 0%,   /* 中心亮度 */
+                rgba(0, 242, 255, 0.05) 30%,  /* 中間過渡 */
+                transparent 70%               /* 邊緣消失 */
             );
         }
 
@@ -259,22 +261,17 @@
         resizeCanvas();
 
         class Particle {
-            constructor() {
-                this.init();
-            }
+            constructor() { this.init(); }
             init() {
                 this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height; // 從上方生成
+                this.y = Math.random() * canvas.height - canvas.height;
                 this.size = Math.random() * 2 + 0.5;
-                this.speed = Math.random() * 1.5 + 0.5; // 下落速度
+                this.speed = Math.random() * 1.5 + 0.5;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
             update() {
                 this.y += this.speed;
-                if (this.y > canvas.height) {
-                    this.init();
-                    this.y = -10;
-                }
+                if (this.y > canvas.height) { this.init(); this.y = -10; }
             }
             draw() {
                 ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
@@ -284,18 +281,10 @@
             }
         }
 
-        function createParticles() {
-            for (let i = 0; i < 100; i++) {
-                particles.push(new Particle());
-            }
-        }
-
+        function createParticles() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
         createParticles();

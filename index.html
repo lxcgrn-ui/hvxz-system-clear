@@ -8,6 +8,7 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --neon-red: #ff3131;
             --glass-bg: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(0, 242, 255, 0.2);
             --dark-bg: #050505;
@@ -35,19 +36,18 @@
             z-index: -1.5;
         }
 
-        /* --- 優化後的滑鼠溫和光暈 --- */
+        /* --- 滑鼠追蹤光暈 --- */
         #mouse-light {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
             z-index: -1;
-            /* 使用多層顏色過渡，讓光暈看起來溫和但中心點明顯 */
             background: radial-gradient(
                 500px circle at var(--x, 50%) var(--y, 50%), 
-                rgba(0, 242, 255, 0.15) 0%,   /* 中心亮度 */
-                rgba(0, 242, 255, 0.05) 30%,  /* 中間過渡 */
-                transparent 70%               /* 邊緣消失 */
+                rgba(0, 242, 255, 0.15) 0%,
+                rgba(0, 242, 255, 0.05) 30%,
+                transparent 70%
             );
         }
 
@@ -100,6 +100,32 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
 
+        /* --- 新增：紅色閃爍狀態燈 --- */
+        .status-alert {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255, 49, 49, 0.05);
+            padding: 8px 20px; border-radius: 50px;
+            border: 1px solid rgba(255, 49, 49, 0.2);
+            margin-bottom: 30px;
+        }
+        .red-dot {
+            width: 10px; height: 10px;
+            background-color: var(--neon-red);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            animation: pulse-red 1.5s infinite;
+        }
+        .status-text {
+            color: var(--neon-red);
+            font-weight: 800; font-size: 0.9rem;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 5px var(--neon-red); }
+            50% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 15px var(--neon-red), 0 0 25px var(--neon-red); }
+            100% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 5px var(--neon-red); }
+        }
+
         .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; transition: 0.5s ease; }
         .page-hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 100%; }
 
@@ -112,6 +138,7 @@
         .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
         .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
+        .animate .stagger:nth-child(4) { animation-delay: 0.4s; }
 
         h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
@@ -131,17 +158,7 @@
         .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
 
         .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: left; }
-        .faq-title { 
-            font-size: 4rem; 
-            font-weight: 900; 
-            color: #fff; 
-            margin-bottom: 50px; 
-            text-align: center; 
-            letter-spacing: 20px; 
-            text-shadow: 0 0 30px var(--neon-blue); 
-            text-transform: uppercase;
-        }
-        
+        .faq-title { font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 50px; text-align: center; letter-spacing: 20px; text-shadow: 0 0 30px var(--neon-blue); text-transform: uppercase; }
         .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
         .faq-item h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
         .faq-item p { margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
@@ -152,10 +169,10 @@
         .ad-container.show { display: flex; opacity: 1; }
         .ad-box { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
         .ad-card { background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; width: 280px; text-align: center; transition: 0.4s; }
-        .ad-card:hover { border-color: #333; }
         .ad-card img { width: 70px; height: 70px; margin-bottom: 20px; border-radius: 12px; }
         .ad-btn { background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-weight: bold; }
         .back-btn { margin-top: 40px; color: #555; cursor: pointer; }
+
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
         .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
@@ -163,10 +180,9 @@
 </head>
 <body onload="startPage()">
     <canvas id="particle-canvas"></canvas>
-
     <div id="mouse-light"></div>
-    
     <div class="bg-overlay"></div>
+
     <header>
         <div class="header-left">
             <div class="h-brand">H</div>
@@ -185,6 +201,11 @@
     </header>
 
     <main class="hero" id="main-ui">
+        <div class="status-alert stagger">
+            <div class="red-dot"></div>
+            <div class="status-text" id="status-label">NOT UPDATE</div>
+        </div>
+
         <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
         <p class="subtitle stagger" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
 
@@ -251,15 +272,9 @@
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-
         class Particle {
             constructor() { this.init(); }
             init() {
@@ -269,35 +284,18 @@
                 this.speed = Math.random() * 1.5 + 0.5;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
-            update() {
-                this.y += this.speed;
-                if (this.y > canvas.height) { this.init(); this.y = -10; }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            update() { this.y += this.speed; if (this.y > canvas.height) { this.init(); this.y = -10; } }
+            draw() { ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-
         function createParticles() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
-        createParticles();
-        animateParticles();
-
+        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+        createParticles(); animateParticles();
 
         // --- 滑鼠追蹤邏輯 ---
         const mouseLight = document.getElementById('mouse-light');
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX + 'px';
-            const y = e.clientY + 'px';
-            mouseLight.style.setProperty('--x', x);
-            mouseLight.style.setProperty('--y', y);
+            mouseLight.style.setProperty('--x', e.clientX + 'px');
+            mouseLight.style.setProperty('--y', e.clientY + 'px');
         });
 
         const downloadLinks = {
@@ -309,7 +307,7 @@
 
         const langData = {
             en: {
-                display: "English", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
+                display: "English", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", status: "NOT UPDATE",
                 dl: "DOWNLOAD", adTitle: "CHOOSE AD METHOD", back: "← BACK TO HOME", adBtn: "Download Now",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
@@ -319,7 +317,7 @@
                 q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
             },
             zh: {
-                display: "繁體中文", title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化",
+                display: "繁體中文", title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", status: "尚未更新 (NOT UPDATE)",
                 dl: "立即下載", adTitle: "請選擇廣告下載方式", back: "← 返回首頁", adBtn: "立即下載",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
@@ -335,6 +333,7 @@
             document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${data.display}`;
             document.getElementById('main-title').textContent = data.title;
             document.getElementById('main-subtitle').textContent = data.subtitle;
+            document.getElementById('status-label').textContent = data.status;
             document.getElementById('ad-title').textContent = data.adTitle;
             document.getElementById('back-text').textContent = data.back;
             document.querySelectorAll('.dl-text').forEach(el => el.textContent = data.adBtn);
@@ -352,23 +351,15 @@
             document.getElementById('main-ui').classList.add('page-hidden');
             document.getElementById('lv-link').href = downloadLinks[ver].lv;
             document.getElementById('wi-link').href = downloadLinks[ver].wi;
-            setTimeout(() => {
-                document.getElementById('ad-page').style.display = 'flex';
-                setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50);
-            }, 400);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'flex'; setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50); }, 400);
         }
 
         function closeAdMenu() {
             document.getElementById('ad-page').classList.remove('show');
-            setTimeout(() => {
-                document.getElementById('ad-page').style.display = 'none';
-                document.getElementById('main-ui').classList.remove('page-hidden');
-            }, 500);
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'none'; document.getElementById('main-ui').classList.remove('page-hidden'); }, 500);
         }
 
-        function startPage() {
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
-        }
+        function startPage() { setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300); }
     </script>
 </body>
 </html>

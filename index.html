@@ -9,12 +9,12 @@
         :root {
             --neon-blue: #00f2ff;
             --neon-red: #ff3131;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(0, 242, 255, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(0, 242, 255, 0.2);
             --dark-bg: #050505;
             --text-main: #ffffff;
             --text-dim: #888888;
-            --radius-main: 15px;
+            --radius-main: 20px;
             --btn-border: rgb(80, 80, 80);
         }
 
@@ -27,168 +27,107 @@
             display: flex; flex-direction: column;
         }
 
-        /* --- 粒子背景 --- */
-        #particle-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: -1.5;
-        }
-
-        /* --- 滑鼠溫和光暈 --- */
+        /* --- 粒子效果與背景 --- */
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1.5; }
         #mouse-light {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: -1;
-            background: radial-gradient(
-                500px circle at var(--x, 50%) var(--y, 50%), 
-                rgba(0, 242, 255, 0.15) 0%,
-                rgba(0, 242, 255, 0.05) 30%,
-                transparent 70%
-            );
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            background: radial-gradient(500px circle at var(--x, 50%) var(--y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%);
         }
-
         .bg-overlay {
             position: fixed; inset: 0; z-index: -2;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(circle at center, black, transparent 90%);
-            opacity: 0.2;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- 高科技 Header --- */
+        /* --- Header & 高科技選單 --- */
         header {
-            height: 80px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
-            position: sticky; top: 0; z-index: 1000;
+            height: 75px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
+            border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+            margin: 0 20px; position: sticky; top: 0; z-index: 1000;
         }
 
-        .h-brand { font-size: 28px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* --- 高科技語言選單設計 --- */
+        /* 新：高科技選單樣式 */
         .tech-lang-menu { position: relative; }
         .tech-lang-trigger {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--glass-border);
-            color: var(--neon-blue);
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex; align-items: center; gap: 10px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 14px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
+            color: var(--neon-blue); padding: 8px 18px; border-radius: 10px;
+            font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 10px; letter-spacing: 1px;
         }
-        .tech-lang-trigger:hover {
-            background: rgba(0, 242, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-            border-color: var(--neon-blue);
-        }
+        .tech-lang-trigger:hover { background: rgba(0, 242, 255, 0.1); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
         .tech-lang-options {
-            position: absolute; top: calc(100% + 10px); right: 0;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            min-width: 160px;
-            display: none; flex-direction: column;
-            overflow: hidden;
+            position: absolute; top: calc(100% + 12px); right: 0; 
+            background: rgba(10, 10, 10, 0.95); border: 1px solid var(--glass-border);
+            border-radius: 12px; display: none; flex-direction: column; 
+            min-width: 150px; overflow: hidden; backdrop-filter: blur(20px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(25px);
         }
         .tech-lang-menu:hover .tech-lang-options { display: flex; }
         .tech-opt {
-            padding: 12px 20px;
-            color: #fff;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 14px;
+            padding: 12px 20px; color: #fff; cursor: pointer; transition: 0.3s; font-size: 0.85rem;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .tech-opt:last-child { border-bottom: none; }
-        .tech-opt:hover {
-            background: rgba(0, 242, 255, 0.2);
-            color: var(--neon-blue);
-            padding-left: 25px;
-        }
+        .tech-opt:hover { background: var(--neon-blue); color: #000; font-weight: bold; }
 
-        .social-group { display: flex; gap: 15px; }
+        .social-group { display: flex; gap: 12px; }
         .social-link {
-            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; 
-            border-radius: 8px; border: 1px solid var(--glass-border); transition: 0.3s;
+            width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; 
+            border-radius: 10px; text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border);
+            font-size: 1.1rem;
         }
-        .link-discord { color: var(--neon-blue); }
-        .link-youtube { color: #ff3131; border-color: rgba(255, 49, 49, 0.3); }
-        .social-link:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); }
+        .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); }
+        .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.05); border-color: rgba(255, 0, 0, 0.2); }
+        .social-link:hover { transform: translateY(-3px); background: rgba(255, 255, 255, 0.1); }
 
         /* --- 紅色閃爍狀態燈 --- */
         .status-alert {
-            display: flex; align-items: center; gap: 15px;
+            display: flex; align-items: center; gap: 12px;
             background: rgba(255, 49, 49, 0.08);
             padding: 10px 25px; border-radius: 50px;
             border: 1px solid rgba(255, 49, 49, 0.3);
-            margin-bottom: 40px;
-            box-shadow: 0 0 20px rgba(255, 49, 49, 0.1);
+            margin-bottom: 30px;
         }
         .red-dot {
-            width: 12px; height: 12px;
-            background-color: var(--neon-red);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--neon-red);
-            animation: pulse-red 1.5s infinite ease-in-out;
+            width: 10px; height: 10px; background-color: var(--neon-red); border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red);
+            animation: pulse-red 1.5s infinite;
         }
-        .status-text {
-            color: var(--neon-red);
-            font-weight: 900; font-size: 1rem;
-            letter-spacing: 2px;
-        }
+        .status-text { color: var(--neon-red); font-weight: 800; font-size: 0.95rem; letter-spacing: 1px; }
         @keyframes pulse-red {
-            0%, 100% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 25px var(--neon-red); }
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 15px var(--neon-red), 0 0 25px var(--neon-red); }
+            100% { transform: scale(0.95); opacity: 0.7; }
         }
 
-        /* --- Hero Section --- */
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1200px; margin: 0 auto; }
-        .stagger { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
-        .animate .stagger { opacity: 1; transform: translateY(0); }
-
-        h1 { font-size: 4rem; font-weight: 900; letter-spacing: 8px; margin: 0; text-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
-        .subtitle { color: var(--text-dim); margin: 20px 0 60px 0; font-size: 1.1rem; letter-spacing: 5px; }
-
-        /* --- 下載卡片 --- */
-        .version-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 80px; }
-        .ver-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border); padding: 40px 30px; 
-            border-radius: var(--radius-main); width: 220px; cursor: pointer; transition: 0.4s;
-            backdrop-filter: blur(10px);
-        }
+        /* --- 其他原本樣式 --- */
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; transition: 0.5s ease; }
+        .page-hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 100%; }
+        @keyframes fadeInUpBlur { from { opacity: 0; transform: translateY(40px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        .stagger { opacity: 0; }
+        .animate .stagger { animation: fadeInUpBlur 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 10px; text-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
+        .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
+        .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
+        .ver-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 45px 20px; border-radius: var(--radius-main); width: 240px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px); }
         .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); background: rgba(0, 242, 255, 0.05); }
-        .ver-card h2 { font-size: 3rem; color: var(--neon-blue); margin: 0 0 20px 0; font-weight: 900; }
-        .dl-label { font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 10px; border-radius: 10px; letter-spacing: 1px; font-size: 0.9rem; }
-
-        /* --- 功能區塊與 FAQ --- */
-        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; width: 100%; }
-        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: var(--radius-main); text-align: left; }
-        
-        .faq-section { margin-top: 100px; width: 100%; max-width: 800px; text-align: left; }
-        .faq-title { font-size: 3rem; font-weight: 900; color: #fff; margin-bottom: 40px; text-align: center; letter-spacing: 15px; }
-        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
-        .faq-item h4 { margin: 0 0 10px 0; color: #fff; }
-        .faq-item p { margin: 0; color: var(--text-dim); line-height: 1.6; }
-
-        footer { padding: 60px; text-align: center; color: #444; font-size: 0.8rem; letter-spacing: 2px; }
-
-        /* --- 廣告與隱藏控制 --- */
-        .page-hidden { display: none !important; }
-        .ad-container { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 2000; }
-        .ad-container.show { display: flex; }
-        .ad-box { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
-        .ad-card { background: #0d0d0d; border: 1px solid #222; padding: 40px; border-radius: 20px; width: 260px; text-align: center; transition: 0.3s; }
-        .ad-card:hover { border-color: #444; }
-        .ad-btn { background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 10px; width: 100%; display: block; text-decoration: none; font-weight: bold; margin-top: 20px; }
-        .back-btn { margin-top: 40px; color: #666; cursor: pointer; text-decoration: underline; }
+        .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
+        .dl-label { font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px; }
+        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: left; }
+        .faq-title { font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 50px; text-align: center; letter-spacing: 20px; text-shadow: 0 0 30px var(--neon-blue); }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
+        footer { padding: 80px 20px; text-align: center; color: #333; font-size: 0.8rem; letter-spacing: 2px; }
+        .ad-container { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; background: #000; z-index: 2000; opacity: 0; transition: 0.5s ease; }
+        .ad-container.show { display: flex; opacity: 1; }
+        .ad-box { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+        .ad-card { background: #0d0d0d; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; width: 280px; text-align: center; }
+        .ad-btn { background: #111; border: 1px solid var(--btn-border); color: #fff; padding: 12px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .back-btn { margin-top: 40px; color: #555; cursor: pointer; }
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body onload="startPage()">
@@ -197,28 +136,28 @@
     <div class="bg-overlay"></div>
 
     <header>
-        <div class="h-brand">H</div>
-        <div class="header-right" style="display: flex; align-items: center; gap: 30px;">
+        <div class="header-left">
+            <div class="h-brand">H</div>
             <div class="tech-lang-menu">
                 <div class="tech-lang-trigger" id="current-lang">
-                    <i class="fa-solid fa-microchip"></i> <span>Language</span>
+                    <i class="fa-solid fa-microchip"></i> <span>SYSTEM LANGUAGE</span>
                 </div>
                 <div class="tech-lang-options">
-                    <div class="tech-opt" onclick="changeLanguage('en')">ENGLISH [US]</div>
+                    <div class="tech-opt" onclick="changeLanguage('en')">ENGLISH [INTL]</div>
                     <div class="tech-opt" onclick="changeLanguage('zh')">繁體中文 [TW]</div>
                 </div>
             </div>
-            <div class="social-group">
-                <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
-            </div>
+        </div>
+        <div class="social-group">
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
         </div>
     </header>
 
     <main class="hero" id="main-ui">
         <div class="status-alert stagger">
             <div class="red-dot"></div>
-            <div class="status-text" id="status-label">停更一個月</div>
+            <div class="status-text" id="status-label">UPDATE PAUSED</div>
         </div>
 
         <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
@@ -244,6 +183,10 @@
                 <h3 id="f3-t">Modern Engine</h3>
                 <p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p>
             </div>
+            <div class="feature-card">
+                <h3 id="f4-t">Expert Design</h3>
+                <p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p>
+            </div>
         </div>
 
         <div class="faq-section stagger">
@@ -256,26 +199,25 @@
     </main>
 
     <div id="ad-page" class="ad-container">
-        <h2 id="ad-title" style="margin-bottom: 40px; color: var(--neon-blue);">SELECT DOWNLOAD GATEWAY</h2>
+        <h2 id="ad-title" style="margin-bottom: 40px; color: var(--neon-blue);">ESTABLISHING CONNECTION...</h2>
         <div class="ad-box">
             <div class="ad-card">
-                <img src="https://linkvertise.com/assets/img/logo/logo-blue.svg" width="60" alt="LV">
+                <img src="https://linkvertise.com/assets/img/logo/logo-blue.svg" alt="LV">
                 <h3>Linkvertise</h3>
                 <a id="lv-link" href="#" target="_blank" class="ad-btn"><span class="dl-text">GET LINK</span></a>
             </div>
             <div class="ad-card">
-                <img src="https://work.ink/favicon.ico" width="60" alt="WI">
+                <img src="https://work.ink/favicon.ico" alt="WI">
                 <h3>Work.ink</h3>
                 <a id="wi-link" href="#" target="_blank" class="ad-btn"><span class="dl-text">GET LINK</span></a>
             </div>
         </div>
-        <div class="back-btn" onclick="closeAdMenu()" id="back-text">← ABORT AND RETURN</div>
+        <div class="back-btn" onclick="closeAdMenu()" id="back-text">← TERMINATE AND RETURN</div>
     </div>
 
-    <footer>&copy; 2026 HVXZ. POWERED BY HVXZ ENGINE.</footer>
+    <footer>&copy; 2026 HVXZ. POWERED BY HVXZ TECH.</footer>
 
     <script>
-        // --- 粒子效果邏輯 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -284,28 +226,20 @@
         resizeCanvas();
         class Particle {
             constructor() { this.init(); }
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speed = Math.random() * 1.5 + 0.5;
-                this.opacity = Math.random() * 0.5 + 0.1;
-            }
+            init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height - canvas.height; this.size = Math.random() * 2 + 0.5; this.speed = Math.random() * 1.5 + 0.5; this.opacity = Math.random() * 0.5 + 0.1; }
             update() { this.y += this.speed; if (this.y > canvas.height) { this.init(); this.y = -10; } }
             draw() { ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        function createParticles() { for (let i = 0; i < 80; i++) particles.push(new Particle()); }
+        function createParticles() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
         function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
         createParticles(); animateParticles();
 
-        // --- 滑鼠追蹤邏輯 ---
         const mouseLight = document.getElementById('mouse-light');
         document.addEventListener('mousemove', (e) => {
             mouseLight.style.setProperty('--x', e.clientX + 'px');
             mouseLight.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // --- 語言與資料庫 ---
         const downloadLinks = {
             "1.0": { lv: "https://direct-link.net/1459750/wzIv98WbnfNx", wi: "https://work.ink/281n/hvxz-system-clear-10" },
             "2.0": { lv: "https://link-target.net/1459750/9dOY29nMsgsd", wi: "https://work.ink/281n/hvxz-system-clear-20" },
@@ -315,20 +249,22 @@
 
         const langData = {
             en: {
-                trigger: "Language: EN", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", status: "UPDATE PAUSED FOR 1 MONTH",
-                dl: "DOWNLOAD", adTitle: "SELECT DOWNLOAD GATEWAY", back: "← ABORT AND RETURN", adBtn: "GET LINK",
-                f1t: "High Performance", f1p: "Engineered for speed, removing system clutters.",
-                f2t: "Privacy First", f2p: "Wipe caches and logs without a trace.",
-                f3t: "Modern Engine", f3p: "Native WPF-inspired fluid interface.",
-                faqTitle: "F.A.Q", q1t: "Is it safe?", q1p: "Yes, we only target safe temporary files."
+                trigger: "SYSTEM LANGUAGE", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", status: "UPDATE PAUSED",
+                dl: "DOWNLOAD", adTitle: "ESTABLISHING CONNECTION...", back: "← TERMINATE AND RETURN", adBtn: "GET LINK",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters.",
+                f2t: "Privacy First", f2p: "Completely wipe caches and logs without a trace.",
+                f3t: "Modern Engine", f3p: "Native WPF-inspired high-tech interface.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design.",
+                faqTitle: "F.A.Q", q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets safe temporary files."
             },
             zh: {
                 trigger: "語言切換: 繁中", title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", status: "停更一個月",
-                dl: "立即下載", adTitle: "請選擇下載網關", back: "← 取消並返回", adBtn: "獲取連結",
-                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統雜亂檔案。",
-                f2t: "隱私優先", f2p: "徹底清除快取，不留任何痕跡。",
-                f3t: "現代引擎", f3p: "源自原生 WPF 靈感的高科技介面。",
-                faqTitle: "常見問題", q1t: "使用安全嗎？", q1p: "是的，僅針對可安全刪除的暫存檔案。"
+                dl: "立即下載", adTitle: "正在建立安全連線...", back: "← 終止並返回", adBtn: "獲取連結",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                faqTitle: "常見問題解答", q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案。"
             }
         };
 
@@ -345,6 +281,7 @@
             document.getElementById('f1-t').textContent = data.f1t; document.getElementById('f1-p').textContent = data.f1p;
             document.getElementById('f2-t').textContent = data.f2t; document.getElementById('f2-p').textContent = data.f2p;
             document.getElementById('f3-t').textContent = data.f3t; document.getElementById('f3-p').textContent = data.f3p;
+            document.getElementById('f4-t').textContent = data.f4t; document.getElementById('f4-p').textContent = data.f4p;
             document.getElementById('faq-main-title').textContent = data.faqTitle;
             document.getElementById('q1-t').textContent = data.q1t; document.getElementById('q1-p').textContent = data.q1p;
         }
@@ -353,17 +290,15 @@
             document.getElementById('main-ui').classList.add('page-hidden');
             document.getElementById('lv-link').href = downloadLinks[ver].lv;
             document.getElementById('wi-link').href = downloadLinks[ver].wi;
-            document.getElementById('ad-page').classList.add('show');
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'flex'; setTimeout(() => document.getElementById('ad-page').classList.add('show'), 50); }, 400);
         }
 
         function closeAdMenu() {
             document.getElementById('ad-page').classList.remove('show');
-            document.getElementById('main-ui').classList.remove('page-hidden');
+            setTimeout(() => { document.getElementById('ad-page').style.display = 'none'; document.getElementById('main-ui').classList.remove('page-hidden'); }, 500);
         }
 
-        function startPage() {
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 100);
-        }
+        function startPage() { setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 100); }
     </script>
 </body>
 </html>

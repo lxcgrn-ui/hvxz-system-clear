@@ -17,6 +17,36 @@
             --btn-border: rgb(80, 80, 80);
         }
 
+        /* --- 自訂全域科技感捲動軸 (完美清除預設白線) --- */
+        /* Firefox 支援 */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 242, 255, 0.5) rgba(5, 5, 5, 1);
+        }
+
+        /* WebKit 核心 (Chrome, Edge, Safari) 支援 */
+        ::-webkit-scrollbar {
+            width: 10px; /* 捲動軸整體寬度 */
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(5, 5, 5, 0.9); /* 軌道底色，完美融入深色背景 */
+            border-left: 1px solid rgba(255, 255, 255, 0.03); /* 極微弱的邊界感 */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 255, 0.35); /* 科技藍滑塊 */
+            border-radius: 10px; /* 圓角修飾 */
+            border: 2px solid rgba(5, 5, 5, 0.9); /* 增加內縮感，讓滑塊看起來浮在軌道上 */
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 242, 255, 0.8); /* 滑鼠懸停時高亮發光 */
+        }
+        /* --------------------------------------------------- */
+
         /* --- 修正後的隨機搖晃動畫 (僅作用於外框) --- */
         @keyframes sway {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
@@ -25,7 +55,6 @@
             75% { transform: translate(-2px, 3px) rotate(-0.5deg); }
         }
         
-        /* 搖晃類別 - 僅套用於容器 */
         .sway-frame { 
             animation: sway var(--sway-duration, 4s) ease-in-out infinite; 
             animation-delay: var(--sway-delay, 0s);
@@ -56,7 +85,7 @@
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- 懸浮 Header 與位置修正 --- */
+        /* --- 懸浮 Header --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
@@ -79,7 +108,6 @@
         }
         .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
 
-        /* 修正社交按鈕在右邊 */
         .social-group { display: flex; gap: 15px; }
         .social-link {
             width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; 
@@ -210,7 +238,6 @@
     <footer class="sway-frame">&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
-        // --- 1. 隨機搖晃初始化 (僅作用於外框) ---
         function initRandomSway() {
             const frames = document.querySelectorAll('.sway-frame');
             frames.forEach(el => {
@@ -221,10 +248,9 @@
             });
         }
 
-        // --- 2. 高度優化的延遲追隨游標光 ---
         let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
         let currentX = targetX, currentY = targetY;
-        const ease = 0.05; // 數值越小，延遲感越重 (0.05 約等於 1 秒左右完全跟上)
+        const ease = 0.05;
 
         window.addEventListener('mousemove', (e) => {
             targetX = e.clientX;
@@ -232,7 +258,6 @@
         });
 
         function updateMouseLight() {
-            // Lerp 插值計算
             currentX += (targetX - currentX) * ease;
             currentY += (targetY - currentY) * ease;
             
@@ -243,7 +268,6 @@
             requestAnimationFrame(updateMouseLight);
         }
 
-        // --- 3. 粒子背景 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -273,7 +297,6 @@
             requestAnimationFrame(animateParticles);
         }
 
-        // --- 4. 語言切換邏輯 ---
         const langData = {
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD",

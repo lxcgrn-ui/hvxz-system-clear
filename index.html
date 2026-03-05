@@ -17,75 +17,60 @@
             --btn-border: rgb(80, 80, 80);
         }
 
-        /* --- 自訂全域科技感捲動軸 (完美清除預設白線) --- */
-        /* Firefox 支援 */
+        /* --- 徹底修正：自定義捲動軸並消除雙線 Bug --- */
         html {
+            overflow-y: scroll; /* 統一由 html 控制滾動 */
+            overflow-x: hidden;
             scrollbar-width: thin;
-            scrollbar-color: rgba(0, 242, 255, 0.5) rgba(5, 5, 5, 1);
+            scrollbar-color: rgba(0, 242, 255, 0.4) #050505;
         }
 
-        /* WebKit 核心 (Chrome, Edge, Safari) 支援 */
-        ::-webkit-scrollbar {
-            width: 10px; /* 捲動軸整體寬度 */
-            background: transparent;
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            overflow: hidden; /* 禁止 body 產生第二條捲動軸 */
+            min-height: 100vh;
+            display: flex; flex-direction: column;
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(5, 5, 5, 0.9); /* 軌道底色，完美融入深色背景 */
-            border-left: 1px solid rgba(255, 255, 255, 0.03); /* 極微弱的邊界感 */
-        }
-
+        /* WebKit 核心專用 (Chrome, Edge, Safari) */
+        ::-webkit-scrollbar { width: 8px; background: #050505; }
+        ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb {
-            background: rgba(0, 242, 255, 0.35); /* 科技藍滑塊 */
-            border-radius: 10px; /* 圓角修飾 */
-            border: 2px solid rgba(5, 5, 5, 0.9); /* 增加內縮感，讓滑塊看起來浮在軌道上 */
-            transition: background 0.3s ease;
+            background: rgba(0, 242, 255, 0.3);
+            border-radius: 10px;
+            border: 2px solid #050505;
         }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 242, 255, 0.8); /* 滑鼠懸停時高亮發光 */
-        }
-        /* --------------------------------------------------- */
-
-        /* --- 修正後的隨機搖晃動畫 (僅作用於外框) --- */
+        /* --- 搖晃動畫 (僅作用於外框) --- */
         @keyframes sway {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-3px, -2px) rotate(-1.5deg); }
-            50% { transform: translate(3px, -1px) rotate(1.5deg); }
-            75% { transform: translate(-2px, 3px) rotate(-0.5deg); }
+            25% { transform: translate(-2px, -1.5px) rotate(-1deg); }
+            50% { transform: translate(2px, -0.5px) rotate(1deg); }
+            75% { transform: translate(-1px, 2px) rotate(-0.3deg); }
         }
-        
         .sway-frame { 
             animation: sway var(--sway-duration, 4s) ease-in-out infinite; 
             animation-delay: var(--sway-delay, 0s);
         }
 
-        body, html {
-            margin: 0; padding: 0; min-height: 100vh;
-            background-color: var(--dark-bg);
-            color: var(--text-main);
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            overflow-x: hidden;
-            display: flex; flex-direction: column;
-        }
-
-        /* 粒子背景 */
-        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1.5; }
-        
-        /* 延遲跟隨的藍色光 */
+        /* 背景與粒子 */
+        #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
         #mouse-light {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
             background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%);
             will-change: transform;
         }
-
         .bg-overlay {
             position: fixed; inset: 0; z-index: -2;
             background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- 懸浮 Header --- */
+        /* --- Header 布局修正 --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
@@ -104,10 +89,11 @@
         .lang-btn {
             background: transparent; border: none; color: var(--text-dim);
             padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; transition: 0.3s;
         }
         .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
 
+        /* 社交按鈕固定在右邊 */
         .social-group { display: flex; gap: 15px; }
         .social-link {
             width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; 
@@ -118,13 +104,11 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
-        /* --- Hero Section --- */
+        /* --- 主內容區 --- */
         .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
-        
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; text-shadow: 0 0 25px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; text-transform: uppercase; }
 
-        /* --- 版本下載區塊 --- */
         .version-row { display: flex; justify-content: center; gap: 28px; width: 100%; margin-bottom: 90px; flex-wrap: wrap; }
         .ver-card {
             background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 50px 25px; 
@@ -133,30 +117,25 @@
         }
         .ver-card:hover { border-color: var(--neon-blue); transform: scale(1.05) translateY(-15px); background: rgba(0, 242, 255, 0.05); }
         .ver-card h2 { margin: 0; font-size: 3.5rem; color: var(--neon-blue); margin-bottom: 30px; font-weight: 900; }
-        .dl-label { 
-            font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); 
-            padding: 14px 30px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px;
-        }
-
+        .dl-label { font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 14px 30px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px; }
         .ver-card.disabled { opacity: 0.35; cursor: not-allowed; border-color: #333; pointer-events: none; }
-        
-        /* --- 特色與 FAQ --- */
+
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px;}
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); text-align: left; transition: 0.4s; backdrop-filter: blur(15px); }
 
         .faq-section { margin-top: 130px; width: 100%; max-width: 900px; } 
-        .faq-title { font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 60px; letter-spacing: 25px; text-shadow: 0 0 35px var(--neon-blue); text-transform: uppercase; text-align: center; }
+        .faq-title { font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 60px; letter-spacing: 25px; text-shadow: 0 0 35px var(--neon-blue); text-align: center; }
         .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 18px; padding: 30px; margin-bottom: 20px; border-left: 5px solid var(--neon-blue); }
 
-        /* 入場動畫 */
+        footer { padding: 100px 20px; text-align: center; color: #444; font-size: 0.85rem; letter-spacing: 3px; }
+
+        /* 入場動畫控製 */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .stagger { opacity: 0; }
         .animate .stagger { animation: fadeInUp 0.8s ease forwards; }
         .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
         .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
-
-        footer { padding: 100px 20px; text-align: center; color: #444; font-size: 0.85rem; letter-spacing: 3px; }
     </style>
 </head>
 <body onload="startPage()">
@@ -196,42 +175,20 @@
                 <h2>3.5</h2><div class="dl-label" id="dl-4">DOWNLOAD</div>
             </a>
             <div class="ver-card disabled sway-frame">
-                <h2>4.0</h2><div class="dl-label" id="dl-5">敬情期待</div>
-            </div>
-            <div class="ver-card disabled sway-frame">
-                <h2>5.0</h2><div class="dl-label" id="dl-6">敬情期待</div>
+                <h2>4.0</h2><div class="dl-label" id="dl-5">COMING SOON</div>
             </div>
         </div>
 
         <div class="features-row stagger">
-            <div class="feature-card sway-frame">
-                <h3 id="f1-t">High Performance</h3>
-                <p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p>
-            </div>
-            <div class="feature-card sway-frame">
-                <h3 id="f2-t">Privacy First</h3>
-                <p id="f2-p">Completely wipe caches and temporary logs without a trace.</p>
-            </div>
-            <div class="feature-card sway-frame">
-                <h3 id="f3-t">Modern Engine</h3>
-                <p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p>
-            </div>
-            <div class="feature-card sway-frame">
-                <h3 id="f4-t">Expert Design</h3>
-                <p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p>
-            </div>
+            <div class="feature-card sway-frame"><h3 id="f1-t">High Performance</h3><p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f2-t">Privacy First</h3><p id="f2-p">Completely wipe caches and temporary logs without a trace.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f3-t">Modern Engine</h3><p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f4-t">Expert Design</h3><p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
         </div>
 
         <div class="faq-section stagger">
             <div class="faq-title" id="faq-main-title">F.A.Q</div>
-            <div class="faq-item sway-frame">
-                <h4 id="q1-t">Is it safe to use?</h4>
-                <p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p>
-            </div>
-            <div class="faq-item sway-frame">
-                <h4 id="q2-t">Which systems are supported?</h4>
-                <p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p>
-            </div>
+            <div class="faq-item sway-frame"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
         </div>
     </main>
 
@@ -239,108 +196,58 @@
 
     <script>
         function initRandomSway() {
-            const frames = document.querySelectorAll('.sway-frame');
-            frames.forEach(el => {
-                const duration = (Math.random() * 2 + 4).toFixed(2) + 's';
-                const delay = (Math.random() * -5).toFixed(2) + 's';
-                el.style.setProperty('--sway-duration', duration);
-                el.style.setProperty('--sway-delay', delay);
+            document.querySelectorAll('.sway-frame').forEach(el => {
+                el.style.setProperty('--sway-duration', (Math.random() * 2 + 4).toFixed(2) + 's');
+                el.style.setProperty('--sway-delay', (Math.random() * -5).toFixed(2) + 's');
             });
         }
 
         let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
         let currentX = targetX, currentY = targetY;
-        const ease = 0.05;
-
-        window.addEventListener('mousemove', (e) => {
-            targetX = e.clientX;
-            targetY = e.clientY;
-        });
+        window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
 
         function updateMouseLight() {
-            currentX += (targetX - currentX) * ease;
-            currentY += (targetY - currentY) * ease;
-            
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
             const light = document.getElementById('mouse-light');
             light.style.setProperty('--light-x', currentX + 'px');
             light.style.setProperty('--light-y', currentY + 'px');
-            
             requestAnimationFrame(updateMouseLight);
         }
 
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
 
-        class Particle {
+        class P {
             constructor() { this.init(); }
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speed = Math.random() * 0.8 + 0.3;
-                this.opacity = Math.random() * 0.4 + 0.1;
-            }
-            update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
-            draw() {
-                ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
+            init() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.s = Math.random()*1.5+0.5; this.sp = Math.random()*0.8+0.3; this.o = Math.random()*0.4+0.1; }
+            up() { this.y += this.sp; if(this.y > canvas.height) this.y = -10; }
+            dr() { ctx.fillStyle=`rgba(0, 242, 255, ${this.o})`; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
         }
-        function createParticles() { for (let i = 0; i < 80; i++) particles.push(new Particle()); }
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
-        }
+        function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(animate); }
 
         const langData = {
-            en: {
-                title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD",
-                coming: "Coming Soon", f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
-                f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
-                f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
-                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
-                faqTitle: "F.A.Q", q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.",
-                q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
-            },
-            zh: {
-                title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", dl: "立即下載",
-                coming: "敬情期待", f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
-                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
-                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
-                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
-                faqTitle: "常見問題解答", q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。",
-                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。"
-            }
+            en: { title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD", faq: "F.A.Q", coming: "COMING SOON" },
+            zh: { title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", dl: "立即下載", faq: "常見問題解答", coming: "敬請期待" }
         };
 
         function changeLanguage(lang) {
-            const data = langData[lang];
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + lang).classList.add('active');
-            document.getElementById('main-title').textContent = data.title;
-            document.getElementById('main-subtitle').textContent = data.subtitle;
-            for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = data.dl;
-            document.getElementById('dl-5').textContent = data.coming;
-            document.getElementById('dl-6').textContent = data.coming;
-            document.getElementById('f1-t').textContent = data.f1t; document.getElementById('f1-p').textContent = data.f1p;
-            document.getElementById('f2-t').textContent = data.f2t; document.getElementById('f2-p').textContent = data.f2p;
-            document.getElementById('f3-t').textContent = data.f3t; document.getElementById('f3-p').textContent = data.f3p;
-            document.getElementById('f4-t').textContent = data.f4t; document.getElementById('f4-p').textContent = data.f4p;
-            document.getElementById('faq-main-title').textContent = data.faqTitle;
-            document.getElementById('q1-t').textContent = data.q1t; document.getElementById('q1-p').textContent = data.q1p;
-            document.getElementById('q2-t').textContent = data.q2t; document.getElementById('q2-p').textContent = data.q2p;
+            const d = langData[lang];
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+lang).classList.add('active');
+            document.getElementById('main-title').textContent = d.title;
+            document.getElementById('main-subtitle').textContent = d.subtitle;
+            document.querySelectorAll('.dl-label').forEach(l => { if(l.id.includes('5')) l.textContent = d.coming; else l.textContent = d.dl; });
+            document.getElementById('faq-main-title').textContent = d.faq;
         }
 
-        function startPage() { 
-            createParticles(); animateParticles();
-            initRandomSway(); 
-            updateMouseLight();
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300); 
+        function startPage() {
+            for(let i=0; i<80; i++) particles.push(new P());
+            animate(); initRandomSway(); updateMouseLight();
+            setTimeout(() => document.getElementById('main-ui').classList.add('animate'), 300);
         }
     </script>
 </body>

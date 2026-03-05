@@ -26,6 +26,15 @@
             display: flex; flex-direction: column;
         }
 
+        /* --- 新增：原地輕微搖晃動畫 --- */
+        @keyframes sway {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-0.8px, -0.8px) rotate(-0.3deg); }
+            50% { transform: translate(0.8px, -0.8px) rotate(0.3deg); }
+            75% { transform: translate(-0.8px, 0.8px) rotate(-0.1deg); }
+        }
+        .sway-effect { animation: sway 5s ease-in-out infinite; display: inline-block; }
+
         /* --- 粒子效果畫布 --- */
         #particle-canvas {
             position: fixed;
@@ -116,7 +125,6 @@
 
         .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
         
-        /* 修改卡片為超連結直達樣式 */
         .ver-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--glass-border); padding: 45px 20px; 
@@ -130,6 +138,12 @@
             padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px;
         }
         .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
+
+        /* --- 新增：禁用卡片的樣式 --- */
+        .ver-card.disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
+        .ver-card.disabled:hover { transform: none; background: rgba(255, 255, 255, 0.01); border-color: #333; }
+        .ver-card.disabled h2 { color: #555; }
+        .ver-card.disabled .dl-label { color: #555; border-color: #333; }
 
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; width: 100%; margin-top: 50px;}
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
@@ -171,50 +185,57 @@
     </header>
 
     <main class="hero" id="main-ui">
-        <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
-        <p class="subtitle stagger" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
+        <h1 class="stagger sway-effect" id="main-title">HVXZ SYSTEM CLEAR</h1>
+        <p class="subtitle stagger sway-effect" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
 
         <div class="version-row stagger">
-            <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank" class="ver-card">
+            <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank" class="ver-card sway-effect">
                 <h2>1.0</h2><div class="dl-label" id="dl-1">DOWNLOAD</div>
             </a>
-            <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank" class="ver-card">
+            <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank" class="ver-card sway-effect">
                 <h2>2.0</h2><div class="dl-label" id="dl-2">DOWNLOAD</div>
             </a>
-            <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank" class="ver-card">
+            <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank" class="ver-card sway-effect">
                 <h2>3.0</h2><div class="dl-label" id="dl-3">DOWNLOAD</div>
             </a>
-            <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card">
+            <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card sway-effect">
                 <h2>3.5</h2><div class="dl-label" id="dl-4">DOWNLOAD</div>
             </a>
+            
+            <div class="ver-card disabled sway-effect">
+                <h2>4.0</h2><div class="dl-label">敬請期待</div>
+            </div>
+            <div class="ver-card disabled sway-effect">
+                <h2>5.0</h2><div class="dl-label">敬請期待</div>
+            </div>
         </div>
 
         <div class="features-row stagger">
-            <div class="feature-card">
+            <div class="feature-card sway-effect">
                 <h3 id="f1-t">High Performance</h3>
                 <p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card sway-effect">
                 <h3 id="f2-t">Privacy First</h3>
                 <p id="f2-p">Completely wipe caches and temporary logs without a trace.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card sway-effect">
                 <h3 id="f3-t">Modern Engine</h3>
                 <p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card sway-effect">
                 <h3 id="f4-t">Expert Design</h3>
                 <p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p>
             </div>
         </div>
 
         <div class="faq-section stagger">
-            <div class="faq-title" id="faq-main-title">F.A.Q</div>
-            <div class="faq-item">
+            <div class="faq-title sway-effect" id="faq-main-title">F.A.Q</div>
+            <div class="faq-item sway-effect">
                 <h4 id="q1-t">Is it safe to use?</h4>
                 <p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p>
             </div>
-            <div class="faq-item">
+            <div class="faq-item sway-effect">
                 <h4 id="q2-t">Which systems are supported?</h4>
                 <p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p>
             </div>

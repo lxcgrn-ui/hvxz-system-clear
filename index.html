@@ -17,6 +17,15 @@
             --btn-border: rgb(80, 80, 80);
         }
 
+        /* --- 加強後的明顯搖晃動畫 --- */
+        @keyframes sway {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-3px, -2px) rotate(-1.5deg); }
+            50% { transform: translate(3px, -1px) rotate(1.5deg); }
+            75% { transform: translate(-2px, 3px) rotate(-0.5deg); }
+        }
+        .sway-effect { animation: sway 4s ease-in-out infinite; display: inline-block; }
+
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
             background-color: var(--dark-bg);
@@ -26,89 +35,49 @@
             display: flex; flex-direction: column;
         }
 
-        /* --- 新增：原地輕微搖晃動畫 --- */
-        @keyframes sway {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-0.8px, -0.8px) rotate(-0.3deg); }
-            50% { transform: translate(0.8px, -0.8px) rotate(0.3deg); }
-            75% { transform: translate(-0.8px, 0.8px) rotate(-0.1deg); }
-        }
-        .sway-effect { animation: sway 5s ease-in-out infinite; display: inline-block; }
-
-        /* --- 粒子效果畫布 --- */
-        #particle-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: -1.5;
-        }
-
-        /* --- 優化後的滑鼠溫和光暈 --- */
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1.5; }
         #mouse-light {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            background: radial-gradient(
-                500px circle at var(--x, 50%) var(--y, 50%), 
-                rgba(0, 242, 255, 0.15) 0%, 
-                rgba(0, 242, 255, 0.05) 30%, 
-                transparent 70%
-            );
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            background: radial-gradient(500px circle at var(--x, 50%) var(--y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%);
         }
-
         .bg-overlay {
             position: fixed; inset: 0; z-index: -2;
-            background-image: 
-                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(circle at center, black, transparent 90%);
-            opacity: 0.2;
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
         header {
             height: 70px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px); border: 1px solid var(--glass-border);
-            border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+            padding: 0 40px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
             margin: 0 20px; position: sticky; top: 0; z-index: 100;
         }
 
         .header-left { display: flex; align-items: center; gap: 25px; }
         .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        .custom-lang-dropdown { position: relative; display: inline-block; }
-        .lang-trigger {
+        /* --- 改良後的選單樣式語言切換 --- */
+        .lang-select-wrapper {
             background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
-            color: var(--neon-blue); padding: 6px 15px; border-radius: 10px;
-            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
+            border-radius: 10px; padding: 2px 10px;
         }
-        .lang-trigger:hover { background: rgba(0, 242, 255, 0.1); border-color: var(--neon-blue); }
-        .lang-options {
-            position: absolute; top: 120%; left: 0; background: rgba(10, 10, 10, 0.95);
-            border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden;
-            display: none; flex-direction: column; min-width: 120px;
+        #lang-select {
+            background: transparent; color: var(--neon-blue); border: none; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; outline: none; padding: 5px;
         }
-        .custom-lang-dropdown:hover .lang-options { display: flex; }
-        .lang-opt { padding: 10px 15px; color: #fff; cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-        .lang-opt:hover { background: var(--neon-blue); color: #000; }
+        #lang-select option { background: #111; color: #fff; }
 
         .social-group { display: flex; gap: 12px; }
         .social-link {
             width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border);
-            font-size: 1.1rem;
+            border-radius: 50%; text-decoration: none; transition: 0.3s; border: 1px solid var(--glass-border); font-size: 1.1rem;
         }
         .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
         .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.1); }
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 20px #ff0000; transform: scale(1.1); }
 
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; transition: 0.5s ease; }
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
 
         @keyframes fadeInUpBlur {
             from { opacity: 0; transform: translateY(40px); filter: blur(10px); }
@@ -124,10 +93,8 @@
         .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 15px 0 60px 0; letter-spacing: 4px; text-transform: uppercase; }
 
         .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 80px; flex-wrap: wrap; }
-        
         .ver-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border); padding: 45px 20px; 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 45px 20px; 
             border-radius: var(--radius-main); width: 240px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(10px);
             text-decoration: none; display: block; color: inherit;
         }
@@ -139,9 +106,8 @@
         }
         .ver-card:hover .dl-label { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
 
-        /* --- 新增：禁用卡片的樣式 --- */
         .ver-card.disabled { opacity: 0.4; cursor: not-allowed; border-color: #333; }
-        .ver-card.disabled:hover { transform: none; background: rgba(255, 255, 255, 0.01); border-color: #333; }
+        .ver-card.disabled:hover { transform: none; background: rgba(255, 255, 255, 0.01); }
         .ver-card.disabled h2 { color: #555; }
         .ver-card.disabled .dl-label { color: #555; border-color: #333; }
 
@@ -149,13 +115,13 @@
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
         .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
 
-        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: left; }
+        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: center; } /* 確保 FAQ 區塊置中 */
         .faq-title { 
             font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 50px; 
-            text-align: center; letter-spacing: 20px; text-shadow: 0 0 30px var(--neon-blue); 
-            text-transform: uppercase;
+            letter-spacing: 20px; text-shadow: 0 0 30px var(--neon-blue); text-transform: uppercase;
+            width: 100%; display: block;
         }
-        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 15px; padding: 25px; margin-bottom: 15px; border-left: 4px solid var(--neon-blue); text-align: left; }
         .faq-item h4 { margin: 0 0 10px 0; font-size: 1.1rem; color: #fff; }
         .faq-item p { margin: 0; color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
 
@@ -170,12 +136,11 @@
     <header>
         <div class="header-left">
             <div class="h-brand">H</div>
-            <div class="custom-lang-dropdown">
-                <div class="lang-trigger" id="current-lang"><i class="fa-solid fa-globe"></i> English</div>
-                <div class="lang-options">
-                    <div class="lang-opt" onclick="changeLanguage('en')">English</div>
-                    <div class="lang-opt" onclick="changeLanguage('zh')">繁體中文</div>
-                </div>
+            <div class="lang-select-wrapper">
+                <select id="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="zh">繁體中文</option>
+                </select>
             </div>
         </div>
         <div class="social-group">
@@ -201,12 +166,11 @@
             <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card sway-effect">
                 <h2>3.5</h2><div class="dl-label" id="dl-4">DOWNLOAD</div>
             </a>
-            
             <div class="ver-card disabled sway-effect">
-                <h2>4.0</h2><div class="dl-label">敬請期待</div>
+                <h2>4.0</h2><div class="dl-label" id="dl-5">敬情期待</div>
             </div>
             <div class="ver-card disabled sway-effect">
-                <h2>5.0</h2><div class="dl-label">敬請期待</div>
+                <h2>5.0</h2><div class="dl-label" id="dl-6">敬情期待</div>
             </div>
         </div>
 
@@ -245,16 +209,10 @@
     <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
-        // --- 粒子效果邏輯 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -267,41 +225,29 @@
                 this.speed = Math.random() * 1.5 + 0.5;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
-            update() {
-                this.y += this.speed;
-                if (this.y > canvas.height) { this.init(); this.y = -10; }
-            }
+            update() { this.y += this.speed; if (this.y > canvas.height) { this.init(); this.y = -10; } }
             draw() {
                 ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
-
         function createParticles() { for (let i = 0; i < 100; i++) particles.push(new Particle()); }
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
-        createParticles();
-        animateParticles();
+        createParticles(); animateParticles();
 
-        // --- 滑鼠追蹤邏輯 ---
-        const mouseLight = document.getElementById('mouse-light');
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX + 'px';
-            const y = e.clientY + 'px';
-            mouseLight.style.setProperty('--x', x);
-            mouseLight.style.setProperty('--y', y);
+            document.getElementById('mouse-light').style.setProperty('--x', e.clientX + 'px');
+            document.getElementById('mouse-light').style.setProperty('--y', e.clientY + 'px');
         });
 
         const langData = {
             en: {
-                display: "English", title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
-                dl: "DOWNLOAD",
-                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD",
+                coming: "Coming Soon", f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
                 f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
@@ -309,9 +255,8 @@
                 q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
             },
             zh: {
-                display: "繁體中文", title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化",
-                dl: "立即下載",
-                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", dl: "立即下載",
+                coming: "敬情期待", f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
                 f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
@@ -322,10 +267,11 @@
 
         function changeLanguage(lang) {
             const data = langData[lang];
-            document.getElementById('current-lang').innerHTML = `<i class="fa-solid fa-globe"></i> ${data.display}`;
             document.getElementById('main-title').textContent = data.title;
             document.getElementById('main-subtitle').textContent = data.subtitle;
             for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = data.dl;
+            document.getElementById('dl-5').textContent = data.coming;
+            document.getElementById('dl-6').textContent = data.coming;
             document.getElementById('f1-t').textContent = data.f1t; document.getElementById('f1-p').textContent = data.f1p;
             document.getElementById('f2-t').textContent = data.f2t; document.getElementById('f2-p').textContent = data.f2p;
             document.getElementById('f3-t').textContent = data.f3t; document.getElementById('f3-p').textContent = data.f3p;
@@ -335,9 +281,7 @@
             document.getElementById('q2-t').textContent = data.q2t; document.getElementById('q2-p').textContent = data.q2p;
         }
 
-        function startPage() {
-            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300);
-        }
+        function startPage() { setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300); }
     </script>
 </body>
 </html>

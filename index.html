@@ -17,14 +17,20 @@
             --btn-border: rgb(80, 80, 80);
         }
 
-        /* --- 加強後的明顯搖晃動畫 --- */
+        /* --- 進階隨機搖晃動畫 --- */
         @keyframes sway {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             25% { transform: translate(-3px, -2px) rotate(-1.5deg); }
             50% { transform: translate(3px, -1px) rotate(1.5deg); }
             75% { transform: translate(-2px, 3px) rotate(-0.5deg); }
         }
-        .sway-effect { animation: sway 4s ease-in-out infinite; display: inline-block; }
+        
+        /* 使用 CSS 變數來控制隨機性 */
+        .sway-effect { 
+            animation: sway var(--sway-duration, 4s) ease-in-out infinite; 
+            animation-delay: var(--sway-delay, 0s);
+            display: inline-block; 
+        }
 
         body, html {
             margin: 0; padding: 0; min-height: 100vh;
@@ -56,16 +62,36 @@
         .header-left { display: flex; align-items: center; gap: 25px; }
         .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
 
-        /* --- 改良後的選單樣式語言切換 --- */
-        .lang-select-wrapper {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
-            border-radius: 10px; padding: 2px 10px;
+        /* --- 升級後的語言切換按鈕組 --- */
+        .lang-switcher-v2 {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
         }
-        #lang-select {
-            background: transparent; color: var(--neon-blue); border: none; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; outline: none; padding: 5px;
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: 1px;
         }
-        #lang-select option { background: #111; color: #fff; }
+        .lang-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
 
         .social-group { display: flex; gap: 12px; }
         .social-link {
@@ -115,7 +141,7 @@
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: var(--radius-main); text-align: left; transition: 0.4s ease; backdrop-filter: blur(10px); }
         .feature-card:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.05); transform: translateY(-10px); }
 
-        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: center; } /* 確保 FAQ 區塊置中 */
+        .faq-section { margin-top: 120px; width: 100%; max-width: 850px; text-align: center; } 
         .faq-title { 
             font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 50px; 
             letter-spacing: 20px; text-shadow: 0 0 30px var(--neon-blue); text-transform: uppercase;
@@ -136,11 +162,9 @@
     <header>
         <div class="header-left">
             <div class="h-brand">H</div>
-            <div class="lang-select-wrapper">
-                <select id="lang-select" onchange="changeLanguage(this.value)">
-                    <option value="en">English</option>
-                    <option value="zh">繁體中文</option>
-                </select>
+            <div class="lang-switcher-v2">
+                <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">EN</button>
+                <button class="lang-btn" id="btn-zh" onclick="changeLanguage('zh')">繁中</button>
             </div>
         </div>
         <div class="social-group">
@@ -209,6 +233,17 @@
     <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
+        // --- 隨機搖晃初始化系統 ---
+        function initRandomSway() {
+            const elements = document.querySelectorAll('.sway-effect');
+            elements.forEach(el => {
+                const duration = (Math.random() * 2 + 3).toFixed(2) + 's'; // 3s - 5s 隨機時長
+                const delay = (Math.random() * -5).toFixed(2) + 's'; // 隨機延遲使擺動錯開
+                el.style.setProperty('--sway-duration', duration);
+                el.style.setProperty('--sway-delay', delay);
+            });
+        }
+
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -267,6 +302,12 @@
 
         function changeLanguage(lang) {
             const data = langData[lang];
+            
+            // 更新按鈕狀態
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            // 更新內容
             document.getElementById('main-title').textContent = data.title;
             document.getElementById('main-subtitle').textContent = data.subtitle;
             for(let i=1; i<=4; i++) document.getElementById('dl-'+i).textContent = data.dl;
@@ -281,7 +322,10 @@
             document.getElementById('q2-t').textContent = data.q2t; document.getElementById('q2-p').textContent = data.q2p;
         }
 
-        function startPage() { setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300); }
+        function startPage() { 
+            initRandomSway(); // 啟動隨機搖晃系統
+            setTimeout(() => { document.getElementById('main-ui').classList.add('animate'); }, 300); 
+        }
     </script>
 </body>
 </html>

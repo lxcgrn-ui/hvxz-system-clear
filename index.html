@@ -17,25 +17,22 @@
             --btn-border: rgb(80, 80, 80);
         }
 
-        /* --- 徹底修正：自定義捲動軸並消除雙線 Bug --- */
+        /* --- 捲動軸優化 (保持不變) --- */
         html {
-            overflow-y: scroll; /* 統一由 html 控制滾動 */
+            overflow-y: scroll;
             overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 242, 255, 0.4) #050505;
         }
-
         body {
             margin: 0; padding: 0;
             background-color: var(--dark-bg);
             color: var(--text-main);
             font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            overflow: hidden; /* 禁止 body 產生第二條捲動軸 */
+            overflow: hidden;
             min-height: 100vh;
             display: flex; flex-direction: column;
         }
-
-        /* WebKit 核心專用 (Chrome, Edge, Safari) */
         ::-webkit-scrollbar { width: 8px; background: #050505; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb {
@@ -45,7 +42,7 @@
         }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
 
-        /* --- 搖晃動畫 (僅作用於外框) --- */
+        /* --- 搖晃動畫 (僅框框動) --- */
         @keyframes sway {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             25% { transform: translate(-2px, -1.5px) rotate(-1deg); }
@@ -57,7 +54,7 @@
             animation-delay: var(--sway-delay, 0s);
         }
 
-        /* 背景與粒子 */
+        /* --- 背景與特效 --- */
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
         #mouse-light {
             position: fixed; inset: 0; pointer-events: none; z-index: -1;
@@ -70,72 +67,53 @@
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- Header 布局修正 --- */
+        /* --- Header --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border); border-radius: 20px;
             margin: 25px 40px; position: sticky; top: 25px; z-index: 100;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
         }
-
         .header-left { display: flex; align-items: center; gap: 20px; }
         .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-
-        .lang-switcher-v2 {
-            display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border);
-            border-radius: 12px; padding: 4px; gap: 4px;
-        }
-        .lang-btn {
-            background: transparent; border: none; color: var(--text-dim);
-            padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700;
-            cursor: pointer; transition: 0.3s;
-        }
+        .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
+        .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
 
-        /* 社交按鈕固定在右邊 */
         .social-group { display: flex; gap: 15px; }
-        .social-link {
-            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; 
-            border-radius: 50%; text-decoration: none; transition: 0.4s; border: 1px solid var(--glass-border); font-size: 1.2rem;
-        }
+        .social-link { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); font-size: 1.2rem; text-decoration: none; transition: 0.4s; }
         .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.08); }
         .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 25px var(--neon-blue); transform: translateY(-5px); }
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
-        /* --- 主內容區 --- */
+        /* --- Hero --- */
         .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; text-shadow: 0 0 25px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; text-transform: uppercase; }
 
         .version-row { display: flex; justify-content: center; gap: 28px; width: 100%; margin-bottom: 90px; flex-wrap: wrap; }
-        .ver-card {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 50px 25px; 
-            border-radius: var(--radius-main); width: 250px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            cursor: pointer; backdrop-filter: blur(15px); text-decoration: none; color: inherit; display: block;
-        }
-        .ver-card:hover { border-color: var(--neon-blue); transform: scale(1.05) translateY(-15px); background: rgba(0, 242, 255, 0.05); }
-        .ver-card h2 { margin: 0; font-size: 3.5rem; color: var(--neon-blue); margin-bottom: 30px; font-weight: 900; }
-        .dl-label { font-size: 1rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 14px 30px; border-radius: 15px; transition: 0.3s; letter-spacing: 2px; }
+        .ver-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 50px 25px; border-radius: var(--radius-main); width: 220px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(15px); text-decoration: none; color: inherit; display: block; }
+        .ver-card:hover { border-color: var(--neon-blue); transform: scale(1.05) translateY(-10px); background: rgba(0, 242, 255, 0.05); }
+        .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
+        .dl-label { font-size: 0.9rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 1px; }
         .ver-card.disabled { opacity: 0.35; cursor: not-allowed; border-color: #333; pointer-events: none; }
 
-        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px;}
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px; }
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); text-align: left; transition: 0.4s; backdrop-filter: blur(15px); }
 
         .faq-section { margin-top: 130px; width: 100%; max-width: 900px; } 
         .faq-title { font-size: 4rem; font-weight: 900; color: #fff; margin-bottom: 60px; letter-spacing: 25px; text-shadow: 0 0 35px var(--neon-blue); text-align: center; }
-        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 18px; padding: 30px; margin-bottom: 20px; border-left: 5px solid var(--neon-blue); }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 18px; padding: 30px; margin-bottom: 20px; border-left: 5px solid var(--neon-blue); text-align: left;}
 
         footer { padding: 100px 20px; text-align: center; color: #444; font-size: 0.85rem; letter-spacing: 3px; }
 
-        /* 入場動畫控製 */
+        /* Animation */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .stagger { opacity: 0; }
         .animate .stagger { animation: fadeInUp 0.8s ease forwards; }
         .animate .stagger:nth-child(1) { animation-delay: 0.1s; }
         .animate .stagger:nth-child(2) { animation-delay: 0.2s; }
-        .animate .stagger:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
 <body onload="startPage()">
@@ -163,19 +141,22 @@
 
         <div class="version-row stagger">
             <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank" class="ver-card sway-frame">
-                <h2>1.0</h2><div class="dl-label" id="dl-1">DOWNLOAD</div>
+                <h2>1.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
             </a>
             <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank" class="ver-card sway-frame">
-                <h2>2.0</h2><div class="dl-label" id="dl-2">DOWNLOAD</div>
+                <h2>2.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
             </a>
             <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank" class="ver-card sway-frame">
-                <h2>3.0</h2><div class="dl-label" id="dl-3">DOWNLOAD</div>
+                <h2>3.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
             </a>
             <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card sway-frame">
-                <h2>3.5</h2><div class="dl-label" id="dl-4">DOWNLOAD</div>
+                <h2>3.5</h2><div class="dl-label dl-active">DOWNLOAD</div>
             </a>
             <div class="ver-card disabled sway-frame">
-                <h2>4.0</h2><div class="dl-label" id="dl-5">COMING SOON</div>
+                <h2>4.0</h2><div class="dl-label dl-wait">COMING SOON</div>
+            </div>
+            <div class="ver-card disabled sway-frame">
+                <h2>5.0</h2><div class="dl-label dl-wait">COMING SOON</div>
             </div>
         </div>
 
@@ -189,29 +170,21 @@
         <div class="faq-section stagger">
             <div class="faq-title" id="faq-main-title">F.A.Q</div>
             <div class="faq-item sway-frame"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
+            <div class="faq-item sway-frame"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
         </div>
     </main>
 
     <footer class="sway-frame">&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
-        function initRandomSway() {
-            document.querySelectorAll('.sway-frame').forEach(el => {
-                el.style.setProperty('--sway-duration', (Math.random() * 2 + 4).toFixed(2) + 's');
-                el.style.setProperty('--sway-delay', (Math.random() * -5).toFixed(2) + 's');
-            });
-        }
-
-        let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
-        let currentX = targetX, currentY = targetY;
+        // 游標光與粒子 (絕對不動)
+        let targetX = window.innerWidth/2, targetY = window.innerHeight/2, currentX = targetX, currentY = targetY;
         window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
-
         function updateMouseLight() {
             currentX += (targetX - currentX) * 0.05;
             currentY += (targetY - currentY) * 0.05;
-            const light = document.getElementById('mouse-light');
-            light.style.setProperty('--light-x', currentX + 'px');
-            light.style.setProperty('--light-y', currentY + 'px');
+            document.getElementById('mouse-light').style.setProperty('--light-x', currentX + 'px');
+            document.getElementById('mouse-light').style.setProperty('--light-y', currentY + 'px');
             requestAnimationFrame(updateMouseLight);
         }
 
@@ -220,7 +193,6 @@
         let particles = [];
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
-
         class P {
             constructor() { this.init(); }
             init() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.s = Math.random()*1.5+0.5; this.sp = Math.random()*0.8+0.3; this.o = Math.random()*0.4+0.1; }
@@ -229,24 +201,59 @@
         }
         function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(animate); }
 
+        // 多國語言數據
         const langData = {
-            en: { title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD", faq: "F.A.Q", coming: "COMING SOON" },
-            zh: { title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", dl: "立即下載", faq: "常見問題解答", coming: "敬請期待" }
+            en: { 
+                title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", 
+                dl: "DOWNLOAD", wait: "COMING SOON", faq: "F.A.Q",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
+                f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
+                q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.",
+                q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
+            },
+            zh: { 
+                title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", 
+                dl: "立即下載", wait: "敬請期待", faq: "常見問題解答",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。",
+                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。"
+            }
         };
 
         function changeLanguage(lang) {
             const d = langData[lang];
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-'+lang).classList.add('active');
+            
+            // 更新所有文本
             document.getElementById('main-title').textContent = d.title;
             document.getElementById('main-subtitle').textContent = d.subtitle;
-            document.querySelectorAll('.dl-label').forEach(l => { if(l.id.includes('5')) l.textContent = d.coming; else l.textContent = d.dl; });
+            document.querySelectorAll('.dl-active').forEach(el => el.textContent = d.dl);
+            document.querySelectorAll('.dl-wait').forEach(el => el.textContent = d.wait);
+            document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
+            document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
+            document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;
+            document.getElementById('f4-t').textContent = d.f4t; document.getElementById('f4-p').textContent = d.f4p;
             document.getElementById('faq-main-title').textContent = d.faq;
+            document.getElementById('q1-t').textContent = d.q1t; document.getElementById('q1-p').textContent = d.q1p;
+            document.getElementById('q2-t').textContent = d.q2t; document.getElementById('q2-p').textContent = d.q2p;
+        }
+
+        function initSway() {
+            document.querySelectorAll('.sway-frame').forEach(el => {
+                el.style.setProperty('--sway-duration', (Math.random()*2+4).toFixed(2)+'s');
+                el.style.setProperty('--sway-delay', (Math.random()*-5).toFixed(2)+'s');
+            });
         }
 
         function startPage() {
             for(let i=0; i<80; i++) particles.push(new P());
-            animate(); initRandomSway(); updateMouseLight();
+            animate(); initSway(); updateMouseLight();
             setTimeout(() => document.getElementById('main-ui').classList.add('animate'), 300);
         }
     </script>

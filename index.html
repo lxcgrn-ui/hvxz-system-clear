@@ -33,8 +33,16 @@
             min-height: 100vh;
             display: flex; flex-direction: column;
         }
+        ::-webkit-scrollbar { width: 8px; background: #050505; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 255, 0.3);
+            border-radius: 10px;
+            border: 2px solid #050505;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
 
-        /* --- 強化版搖晃動畫 (明顯擺動) --- */
+        /* --- 強化版搖晃動畫 (大幅提升明顯度) --- */
         @keyframes sway {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             25% { transform: translate(-10px, -8px) rotate(-3.5deg); }
@@ -47,36 +55,28 @@
             will-change: transform;
         }
 
-        /* --- 背景與粒子 --- */
+        /* --- 背景與特效 --- */
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
-        
-        /* --- 游標追蹤光暈 (在這裡！) --- */
         #mouse-light {
-            position: fixed; 
-            inset: 0; 
-            pointer-events: none; 
-            z-index: -1;
-            /* 這裡定義了光暈的大小與漸層色 */
-            background: radial-gradient(500px circle at var(--light-x, 50%) var(--light-y, 50%), 
-                        rgba(0, 242, 255, 0.18) 0%, 
-                        rgba(0, 242, 255, 0.05) 35%, 
-                        transparent 70%);
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%);
             will-change: transform;
         }
-
         .bg-overlay {
             position: fixed; inset: 0; z-index: -2;
             background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- UI 元件 --- */
+        /* --- Header --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border); border-radius: 20px;
             margin: 25px 40px; position: sticky; top: 25px; z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .header-left { display: flex; align-items: center; gap: 20px; }
         .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
         .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
         .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
@@ -89,6 +89,7 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
+        /* --- Hero --- */
         .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; text-shadow: 0 0 25px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; text-transform: uppercase; }
@@ -109,6 +110,7 @@
 
         footer { padding: 100px 20px; text-align: center; color: #444; font-size: 0.85rem; letter-spacing: 3px; }
 
+        /* Animation */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         .stagger { opacity: 0; }
         .animate .stagger { animation: fadeInUp 0.8s ease forwards; }
@@ -118,9 +120,7 @@
 </head>
 <body onload="startPage()">
     <canvas id="particle-canvas"></canvas>
-    
     <div id="mouse-light"></div>
-    
     <div class="bg-overlay"></div>
 
     <header class="sway-frame">
@@ -179,31 +179,17 @@
     <footer class="sway-frame">&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
-        // --- 核心邏輯：游標追蹤光暈 ---
-        let targetX = window.innerWidth/2, targetY = window.innerHeight/2;
-        let currentX = targetX, currentY = targetY;
-
-        // 監聽滑鼠移動
-        window.addEventListener('mousemove', (e) => {
-            targetX = e.clientX;
-            targetY = e.clientY;
-        });
-
-        // 平滑動畫循環
+        // 游標光與粒子 (保持不變)
+        let targetX = window.innerWidth/2, targetY = window.innerHeight/2, currentX = targetX, currentY = targetY;
+        window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
         function updateMouseLight() {
-            // 透過 插值 讓光暈產生隨後的優雅感 (0.05 是平滑係數)
-            currentX += (targetX - currentX) * 0.08;
-            currentY += (targetY - currentY) * 0.08;
-            
-            const light = document.getElementById('mouse-light');
-            if(light) {
-                light.style.setProperty('--light-x', currentX + 'px');
-                light.style.setProperty('--light-y', currentY + 'px');
-            }
+            currentX += (targetX - currentX) * 0.05;
+            currentY += (targetY - currentY) * 0.05;
+            document.getElementById('mouse-light').style.setProperty('--light-x', currentX + 'px');
+            document.getElementById('mouse-light').style.setProperty('--light-y', currentY + 'px');
             requestAnimationFrame(updateMouseLight);
         }
 
-        // --- 粒子系統 ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -217,10 +203,28 @@
         }
         function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(animate); }
 
-        // --- 語言切換 ---
+        // 多國語言數據
         const langData = {
-            en: { title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", dl: "DOWNLOAD", wait: "COMING SOON", faq: "F.A.Q", f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.", f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.", f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.", f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.", q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.", q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)." },
-            zh: { title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", dl: "立即下載", wait: "敬請期待", faq: "常見問題解答", f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。", f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。", f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。", f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。", q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。", q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。" }
+            en: { 
+                title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", 
+                dl: "DOWNLOAD", wait: "COMING SOON", faq: "F.A.Q",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
+                f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
+                q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.",
+                q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
+            },
+            zh: { 
+                title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", 
+                dl: "立即下載", wait: "敬請期待", faq: "常見問題解答",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案，不會影響您的個人資料。",
+                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 (x64) 進行了優化。"
+            }
         };
 
         function changeLanguage(lang) {
@@ -240,19 +244,20 @@
             document.getElementById('q2-t').textContent = d.q2t; document.getElementById('q2-p').textContent = d.q2p;
         }
 
+        // 初始化隨機晃動參數
         function initSway() {
             document.querySelectorAll('.sway-frame').forEach(el => {
+                // 給予每個元件隨機的時間與延遲，讓晃動更自然但不整齊
                 el.style.setProperty('--sway-duration', (Math.random()*2+4).toFixed(2)+'s');
                 el.style.setProperty('--sway-delay', (Math.random()*-5).toFixed(2)+'s');
             });
         }
 
-        // 啟動頁面
         function startPage() {
             for(let i=0; i<80; i++) particles.push(new P());
             animate(); 
             initSway(); 
-            updateMouseLight(); // 啟動光暈追蹤
+            updateMouseLight();
             setTimeout(() => document.getElementById('main-ui').classList.add('animate'), 300);
         }
     </script>

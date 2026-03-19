@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVXZ SYSTEM CLEAR | Official Site</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --danger-red: #ff4444;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(0, 242, 255, 0.2);
+            --dark-bg: #050505;
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --radius-main: 20px;
+            --btn-border: rgb(80, 80, 80);
+        }
+
+        /* --- 捲動軸徹底修復 --- */
+        html {
+            overflow-x: hidden;
+            overflow-y: auto; 
+            height: 100%;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 242, 255, 0.4) #050505;
+        }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 255, 0.3);
+            border-radius: 10px;
+            border: 2px solid #050505;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
+
+        /* --- 搖晃動畫 --- */
+        @keyframes sway {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-8px, -6px) rotate(-2deg); }
+            50% { transform: translate(8px, -2px) rotate(2deg); }
+            75% { transform: translate(-4px, 8px) rotate(-1deg); }
+        }
+        .sway-frame { 
+            animation: sway var(--sway-duration, 5s) ease-in-out infinite; 
+            animation-delay: var(--sway-delay, 0s);
+        }
+
+        /* --- 背景與特效 --- */
+        #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
+        #mouse-light {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.12) 0%, transparent 70%);
+        }
+
+        /* --- 導航欄與紅點 --- */
+        header {
+            height: 70px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 35px; background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            position: fixed; top: 25px; left: 40px; right: 40px; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* 紅點容器 - 居中於 Header */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+        }
+        .status-dot-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 5px;
+            width: 12px; height: 12px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .status-dot-container:hover {
+            width: 170px; /* 寬度隨語言文字長度調整 */
+            padding: 5px 15px;
+            border-color: var(--danger-red);
+            background: rgba(20, 0, 0, 0.8);
+        }
+        .status-dot {
+            width: 10px; height: 10px; background: var(--danger-red); border-radius: 50%;
+            animation: pulse 2s infinite; flex-shrink: 0;
+        }
+        .status-text {
+            color: var(--danger-red); font-size: 0.8rem; font-weight: 900;
+            white-space: nowrap; opacity: 0; margin-left: 0;
+            transition: opacity 0.3s, margin-left 0.3s;
+        }
+        .status-dot-container:hover .status-text { opacity: 1; margin-left: 10px; }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .h-brand { font-size: 24px; font-weight: 900; color: var(--neon-blue); }
+        .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
+        .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 6px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .lang-btn.active { background: var(--neon-blue); color: #000; }
+
+        .social-group { display: flex; gap: 15px; }
+        .social-link { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); text-decoration: none; transition: 0.3s; font-size: 1.1rem; }
+        .link-discord { color: var(--neon-blue); }
+        .link-youtube { color: #ff0000; }
+        .social-link:hover { transform: translateY(-5px); background: rgba(255,255,255,0.05); }
+
+        /* --- Hero --- */
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 150px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
+        h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: 12px; }
+        .subtitle { font-size: 1.2rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
+
+        /* 版本卡片 */
+        .version-row { display: flex; justify-content: center; gap: 25px; width: 100%; margin-bottom: 90px; flex-wrap: wrap; }
+        .ver-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 45px 25px; border-radius: var(--radius-main); width: 210px; transition: 0.4s; backdrop-filter: blur(15px); text-decoration: none; color: inherit; }
+        .ver-card:hover { border-color: var(--neon-blue); transform: translateY(-10px); }
+        .ver-card h2 { margin: 0 0 25px 0; font-size: 3rem; color: var(--neon-blue); font-weight: 900; }
+        .dl-label { font-size: 0.9rem; font-weight: 800; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 12px; border-radius: 15px; display: block; }
+        
+        .ver-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; border-color: #333; }
+        .dl-stop { color: var(--danger-red) !important; border-color: rgba(255, 68, 68, 0.4) !important; }
+
+        /* 特色區 */
+        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-bottom: 80px; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); text-align: left; backdrop-filter: blur(15px); }
+
+        /* FAQ */
+        .faq-section { width: 100%; max-width: 900px; }
+        .faq-title { font-size: 3.5rem; font-weight: 900; margin-bottom: 60px; letter-spacing: 20px; }
+        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 20px; padding: 30px; margin-bottom: 20px; border-left: 5px solid var(--neon-blue); text-align: left;}
+
+        footer { padding: 100px 20px; text-align: center; color: #444; font-size: 0.85rem; letter-spacing: 3px; }
+
+        .stagger { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+        .animate .stagger { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body onload="startPage()">
+
+    <canvas id="particle-canvas"></canvas>
+    <div id="mouse-light"></div>
+
+    <header>
+        <div class="header-left">
+            <div class="h-brand">H</div>
+            <div class="lang-switcher-v2">
+                <button class="lang-btn active" id="btn-en" onclick="changeLanguage('en')">EN</button>
+                <button class="lang-btn" id="btn-zh" onclick="changeLanguage('zh')">繁中</button>
+            </div>
+        </div>
+
+        <div class="status-dot-container">
+            <div class="status-dot"></div>
+            <div class="status-text" id="status-text">NOT UPDATE</div>
+        </div>
+
+        <div class="social-group">
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
+        </div>
+    </header>
+
+    <main class="hero" id="main-ui">
+        <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
+        <p class="subtitle stagger" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
+
+        <div class="version-row stagger">
+            <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank" class="ver-card sway-frame">
+                <h2>1.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
+            </a>
+            <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank" class="ver-card sway-frame">
+                <h2>2.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
+            </a>
+            <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank" class="ver-card sway-frame">
+                <h2>3.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
+            </a>
+            <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card sway-frame">
+                <h2>3.5</h2><div class="dl-label dl-active">DOWNLOAD</div>
+            </a>
+            <div class="ver-card disabled sway-frame">
+                <h2>4.0</h2><div class="dl-label dl-stop">NOT UPDATE</div>
+            </div>
+            <div class="ver-card disabled sway-frame">
+                <h2>5.0</h2><div class="dl-label dl-stop">NOT UPDATE</div>
+            </div>
+        </div>
+
+        <div class="features-row stagger">
+            <div class="feature-card sway-frame"><h3 id="f1-t">High Performance</h3><p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f2-t">Privacy First</h3><p id="f2-p">Completely wipe caches and temporary logs without a trace.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f3-t">Modern Engine</h3><p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p></div>
+            <div class="feature-card sway-frame"><h3 id="f4-t">Expert Design</h3><p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
+        </div>
+
+        <div class="faq-section stagger">
+            <div class="faq-title" id="faq-main-title">F.A.Q</div>
+            <div class="faq-item sway-frame"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
+            <div class="faq-item sway-frame"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
+        </div>
+    </main>
+
+    <footer class="sway-frame">&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
+
+    <script>
+        const langData = {
+            en: { 
+                title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", 
+                dl: "DOWNLOAD", stop: "NOT UPDATE", faq: "F.A.Q",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
+                f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
+                q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders.",
+                q2t: "Which systems are supported?", q2p: "Optimized for Windows 10 and Windows 11."
+            },
+            zh: { 
+                title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", 
+                dl: "立即下載", stop: "停止更新", faq: "常見問題解答",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
+                f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
+                f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
+                q1t: "使用起來安全嗎？", q1p: "是的，HVXZ 僅針對可安全刪除的暫存檔案與快取目錄。",
+                q2t: "支援哪些系統？", q2p: "本軟體針對 Windows 10 與 Windows 11 進行了優化。"
+            }
+        };
+
+        function changeLanguage(lang) {
+            const d = langData[lang];
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-'+lang).classList.add('active');
+            
+            document.getElementById('status-text').textContent = d.stop;
+            document.getElementById('main-title').textContent = d.title;
+            document.getElementById('main-subtitle').textContent = d.subtitle;
+            document.querySelectorAll('.dl-active').forEach(el => el.textContent = d.dl);
+            document.querySelectorAll('.dl-stop').forEach(el => el.textContent = d.stop);
+            document.getElementById('faq-main-title').textContent = d.faq;
+
+            document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
+            document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
+            document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;
+            document.getElementById('f4-t').textContent = d.f4t; document.getElementById('f4-p').textContent = d.f4p;
+            document.getElementById('q1-t').textContent = d.q1t; document.getElementById('q1-p').textContent = d.q1p;
+            document.getElementById('q2-t').textContent = d.q2t; document.getElementById('q2-p').textContent = d.q2p;
+        }
+
+        // 游標特效
+        let targetX = window.innerWidth/2, targetY = window.innerHeight/2, currentX = targetX, currentY = targetY;
+        window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
+        function updateMouseLight() {
+            currentX += (targetX - currentX) * 0.1;
+            currentY += (targetY - currentY) * 0.1;
+            document.getElementById('mouse-light').style.setProperty('--light-x', currentX + 'px');
+            document.getElementById('mouse-light').style.setProperty('--light-y', currentY + 'px');
+            requestAnimationFrame(updateMouseLight);
+        }
+
+        // 粒子背景
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        class P {
+            constructor() { this.init(); }
+            init() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.s = Math.random()*1.5; this.sp = Math.random()*0.4+0.1; this.o = Math.random()*0.3; }
+            up() { this.y += this.sp; if(this.y > canvas.height) this.y = -10; }
+            dr() { ctx.fillStyle=`rgba(0, 242, 255, ${this.o})`; ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill(); }
+        }
+
+        function startPage() {
+            for(let i=0; i<60; i++) particles.push(new P());
+            function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(animate); }
+            animate();
+            updateMouseLight();
+            document.querySelectorAll('.sway-frame').forEach(el => {
+                el.style.setProperty('--sway-duration', (Math.random()*2+4)+'s');
+                el.style.setProperty('--sway-delay', (Math.random()*-5)+'s');
+            });
+            setTimeout(() => document.getElementById('main-ui').classList.add('animate'), 200);
+        }
+    </script>
+</body>
+</html>

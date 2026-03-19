@@ -8,6 +8,7 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --danger-red: #ff4444; /* 用於停止更新的紅色 */
             --glass-bg: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(0, 242, 255, 0.2);
             --dark-bg: #050505;
@@ -29,7 +30,7 @@
             background-color: var(--dark-bg);
             color: var(--text-main);
             font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden; /* 允許上下滑動，隱藏左右溢出 */
             min-height: 100vh;
             display: flex; flex-direction: column;
         }
@@ -68,13 +69,81 @@
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- Header --- */
+        /* --- 頂部停止更新小光 (新增) --- */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
+        }
+
+        .status-dot-container {
+            position: fixed;
+            top: 10px; /* Header 之上 */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1100; /* 高於 Header */
+            display: flex;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 20px; /* 預設只顯示點 */
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .status-dot-container:hover {
+            width: auto; /* 展開 */
+            padding: 5px 15px;
+            background: rgba(20, 20, 20, 0.95);
+            border-color: var(--danger-red);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--danger-red);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+            margin-right: 0; /* 預設無間距 */
+            transition: margin 0.3s ease;
+        }
+
+        .status-dot-container:hover .status-dot {
+            margin-right: 10px; /* 展開時加入間距 */
+        }
+
+        .status-text {
+            color: var(--danger-red);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            opacity: 0; /* 預設隱藏 */
+            transition: opacity 0.3s ease 0.1s;
+        }
+
+        .status-dot-container:hover .status-text {
+            opacity: 1; /* 展開時顯示 */
+        }
+
+        /* --- Header (完美跟隨與強化玻璃質感) --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
-            padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
+            padding: 0 35px; 
+            background: rgba(15, 15, 15, 0.65); /* 加深底色讓文字滑過時對比更清晰 */
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); /* 確保所有瀏覽器都有玻璃效果 */
             border: 1px solid var(--glass-border); border-radius: 20px;
-            margin: 25px 40px; position: sticky; top: 25px; z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: fixed; /* 讓導航列固定跟隨 */
+            top: 25px; left: 40px; right: 40px; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
@@ -90,7 +159,7 @@
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
         /* --- Hero --- */
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
+        .hero { display: flex; flex-direction: column; align-items: center; padding: 140px 20px 100px 20px; /* 頂部留白加大，避開固定的 Header */ text-align: center; max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; text-shadow: 0 0 25px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; text-transform: uppercase; }
 
@@ -100,6 +169,13 @@
         .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
         .dl-label { font-size: 0.9rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 1px; }
         .ver-card.disabled { opacity: 0.35; cursor: not-allowed; border-color: #333; pointer-events: none; }
+        
+        /* 針對停止更新按鈕的特殊樣式 (新增) */
+        .ver-card.disabled .dl-label.dl-stop {
+            color: var(--danger-red);
+            border-color: rgba(255, 68, 68, 0.4);
+            background: rgba(255, 68, 68, 0.05);
+        }
 
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px; }
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); text-align: left; transition: 0.4s; backdrop-filter: blur(15px); }
@@ -119,11 +195,16 @@
     </style>
 </head>
 <body onload="startPage()">
+    <div class="status-dot-container">
+        <div class="status-dot"></div>
+        <div class="status-text" id="status-text-content">NOT UPDATE(停止更新)</div>
+    </div>
+
     <canvas id="particle-canvas"></canvas>
     <div id="mouse-light"></div>
     <div class="bg-overlay"></div>
 
-    <header class="sway-frame">
+    <header>
         <div class="header-left">
             <div class="h-brand">H</div>
             <div class="lang-switcher-v2">
@@ -155,10 +236,10 @@
                 <h2>3.5</h2><div class="dl-label dl-active">DOWNLOAD</div>
             </a>
             <div class="ver-card disabled sway-frame">
-                <h2>4.0</h2><div class="dl-label dl-wait">COMING SOON</div>
+                <h2>4.0</h2><div class="dl-label dl-stop">NOT UPDATE(停止更新)</div>
             </div>
             <div class="ver-card disabled sway-frame">
-                <h2>5.0</h2><div class="dl-label dl-wait">COMING SOON</div>
+                <h2>5.0</h2><div class="dl-label dl-stop">NOT UPDATE(停止更新)</div>
             </div>
         </div>
 
@@ -203,11 +284,11 @@
         }
         function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.up();p.dr();}); requestAnimationFrame(animate); }
 
-        // 多國語言數據
+        // 多國語言數據 (更新了停止更新的文字)
         const langData = {
             en: { 
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION", 
-                dl: "DOWNLOAD", wait: "COMING SOON", faq: "F.A.Q",
+                dl: "DOWNLOAD", wait: "COMING SOON", stop: "NOT UPDATE(停止更新)", faq: "F.A.Q",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
@@ -217,7 +298,7 @@
             },
             zh: { 
                 title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化", 
-                dl: "立即下載", wait: "敬請期待", faq: "常見問題解答",
+                dl: "立即下載", wait: "敬請期待", stop: "停止更新", faq: "常見問題解答",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
@@ -235,6 +316,10 @@
             document.getElementById('main-subtitle').textContent = d.subtitle;
             document.querySelectorAll('.dl-active').forEach(el => el.textContent = d.dl);
             document.querySelectorAll('.dl-wait').forEach(el => el.textContent = d.wait);
+            // 更新停止更新按鈕的文字 (新增)
+            document.querySelectorAll('.dl-stop').forEach(el => el.textContent = (lang === 'en' ? d.stop : d.stop)); 
+            document.getElementById('status-text-content').textContent = (lang === 'en' ? d.stop : d.stop);
+
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;

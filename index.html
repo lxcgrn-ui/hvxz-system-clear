@@ -27,41 +27,47 @@
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
         @keyframes red-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
 
-        /* --- 背景背景與特效 --- */
+        /* --- 背景與特效 --- */
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
         #mouse-light { position: fixed; inset: 0; pointer-events: none; z-index: -1; background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%); will-change: transform; }
         .bg-overlay { position: fixed; inset: 0; z-index: -2; background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2; }
 
         /* --- Header --- */
         header { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; margin: 25px 40px; position: sticky; top: 25px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .header-left { display: flex; align-items: center; gap: 25px; }
+        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        
+        .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
+        .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
+
         .status-dot-container { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 68, 68, 0.4); border-radius: 30px; padding: 6px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 14px; height: 14px; overflow: hidden; }
         .status-dot-container:hover { width: 170px; padding: 6px 15px; }
         .status-dot { width: 10px; height: 10px; background-color: var(--danger-red); border-radius: 50%; animation: red-pulse 2s infinite; flex-shrink: 0; }
         .status-text { color: var(--danger-red); font-size: 0.85rem; font-weight: 800; opacity: 0; margin-left: 0; transition: 0.3s; white-space: nowrap; }
         .status-dot-container:hover .status-text { opacity: 1; margin-left: 12px; }
 
-        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-        .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
-        .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
-
+        /* --- 社交圖示顏色修復 --- */
         .social-group { display: flex; gap: 15px; }
-        .social-link { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); font-size: 1.2rem; transition: 0.4s; text-decoration: none; color: var(--text-main); }
-        .social-link:hover { transform: translateY(-5px); background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+        .social-link { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); font-size: 1.2rem; transition: 0.4s; text-decoration: none; }
+        .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.08); }
+        .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 25px var(--neon-blue); transform: translateY(-5px); }
+        .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
+        .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
         /* --- Hero --- */
         .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; animation: pulse-glow 4s infinite ease-in-out; }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
 
-        /* --- 主下載區塊 (放大版) --- */
+        /* --- 主下載區塊 --- */
         .main-download-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 90px; width: 100%; transition: 0.5s; }
         .main-dl-title { font-size: 3.8rem; color: var(--neon-blue); font-weight: 900; margin: 0 0 35px 0; letter-spacing: 2px; }
         .main-dl-btn { background: rgba(0, 242, 255, 0.05); border: 2px solid var(--neon-blue); color: var(--neon-blue); font-size: 1.6rem; font-weight: 900; padding: 22px 70px; border-radius: 20px; text-decoration: none; transition: 0.4s; letter-spacing: 3px; animation: btn-breath 3s infinite; }
         .main-dl-btn:hover { background: var(--neon-blue); color: #000; transform: scale(1.05); box-shadow: 0 0 40px var(--neon-blue); }
         .main-dl-btn.disabled-btn { border-color: #444; color: #666; animation: none; cursor: not-allowed; }
         
-        /* 版本切換時的過渡動畫類 */
         .switched { animation: fade-switch 0.6s ease-out; }
 
         /* --- 其他選項 --- */
@@ -76,7 +82,7 @@
 
         /* 特色區塊 */
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px; }
-        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); transition: 0.4s; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); transition: 0.4s; text-align: left; }
         .feature-card:hover { transform: translateY(-10px); background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); }
 
         .faq-section { margin-top: 130px; width: 100%; max-width: 900px; }
@@ -93,18 +99,22 @@
     <div class="bg-overlay"></div>
 
     <header>
-        <div class="h-brand">H</div>
-        <div class="lang-switcher-v2">
-            <button class="lang-btn active" id="btn-en" onclick="setLanguage('en')">EN</button>
-            <button class="lang-btn" id="btn-zh" onclick="setLanguage('zh')">繁中</button>
+        <div class="header-left">
+            <div class="h-brand">H</div>
+            <div class="lang-switcher-v2">
+                <button class="lang-btn active" id="btn-en" onclick="setLanguage('en')">EN</button>
+                <button class="lang-btn" id="btn-zh" onclick="setLanguage('zh')">繁中</button>
+            </div>
         </div>
+
         <div class="status-dot-container">
             <div class="status-dot"></div>
             <div class="status-text" id="status-text">NOT UPDATE</div>
         </div>
+
         <div class="social-group">
-            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
         </div>
     </header>
 
@@ -119,12 +129,12 @@
             <div class="other-options-dropdown">
                 <div class="dropdown-label" id="other-label">Other Options ▼</div>
                 <div class="dropdown-content">
-                    <div class="dropdown-item" onclick="switchVersion('3.5')">Version 3.5 (Latest)</div>
-                    <div class="dropdown-item" onclick="switchVersion('3.0')">Version 3.0</div>
-                    <div class="dropdown-item" onclick="switchVersion('2.0')">Version 2.0</div>
-                    <div class="dropdown-item" onclick="switchVersion('1.0')">Version 1.0</div>
-                    <div class="dropdown-item disabled-ver" onclick="switchVersion('4.0')">Version 4.0 (Coming Soon)</div>
-                    <div class="dropdown-item disabled-ver" onclick="switchVersion('5.0')">Version 5.0 (Coming Soon)</div>
+                    <div class="dropdown-item" id="opt-35" onclick="switchVersion('3.5')">Version 3.5 (Latest)</div>
+                    <div class="dropdown-item" id="opt-30" onclick="switchVersion('3.0')">Version 3.0</div>
+                    <div class="dropdown-item" id="opt-20" onclick="switchVersion('2.0')">Version 2.0</div>
+                    <div class="dropdown-item" id="opt-10" onclick="switchVersion('1.0')">Version 1.0</div>
+                    <div class="dropdown-item disabled-ver" id="opt-40" onclick="switchVersion('4.0')">Version 4.0 (Coming Soon)</div>
+                    <div class="dropdown-item disabled-ver" id="opt-50" onclick="switchVersion('5.0')">Version 5.0 (Coming Soon)</div>
                 </div>
             </div>
         </div>
@@ -137,7 +147,7 @@
         </div>
 
         <div class="faq-section">
-            <div class="faq-title">F.A.Q</div>
+            <div class="faq-title" id="faq-title">F.A.Q</div>
             <div class="faq-item"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
             <div class="faq-item"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
         </div>
@@ -161,15 +171,10 @@
                 this.speed = Math.random() * 0.5 + 0.2;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
-            update() {
-                this.y += this.speed;
-                if (this.y > canvas.height) this.y = -10;
-            }
+            update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
             draw() {
                 ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
         function animate() {
@@ -178,18 +183,17 @@
             requestAnimationFrame(animate);
         }
 
-        // --- 2. 滑鼠光暈延遲平滑處理 ---
+        // --- 2. 滑鼠光暈平滑延遲 ---
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
         window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
         function updateMouse() {
-            curX += (mouseX - curX) * 0.1;
-            curY += (mouseY - curY) * 0.1;
-            document.getElementById('mouse-light').style.setProperty('--light-x', curX + 'px');
-            document.getElementById('mouse-light').style.setProperty('--light-y', curY + 'px');
+            curX += (mouseX - curX) * 0.1; curY += (mouseY - curY) * 0.1;
+            const ml = document.getElementById('mouse-light');
+            if(ml) { ml.style.setProperty('--light-x', curX + 'px'); ml.style.setProperty('--light-y', curY + 'px'); }
             requestAnimationFrame(updateMouse);
         }
 
-        // --- 3. 核心邏輯與語言資料庫 ---
+        // --- 3. 核心邏輯與語言 ---
         let currentLang = 'en';
         let currentVer = '3.5';
         const versions = {
@@ -204,7 +208,10 @@
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
                 dl: "DOWNLOAD NOW", other: "Other Options ▼", wait: "COMING SOON",
-                status: "NOT UPDATE", f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
+                status: "NOT UPDATE", faq: "F.A.Q",
+                v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
+                v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
+                f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
                 f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
@@ -214,7 +221,10 @@
             zh: {
                 title: "HVXZ 系統清理器", subtitle: "進階 WINDOWS 系統優化",
                 dl: "立即下載", other: "其他版本選項 ▼", wait: "敬請期待",
-                status: "停止更新", f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
+                status: "停止更新", faq: "常見問題解答",
+                v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
+                v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
+                f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
                 f4t: "專業設計", f4p: "HVXZ 團隊擁有 2 年以上的 UI/UX 專業設計經驗。",
@@ -233,7 +243,7 @@
         function switchVersion(v) {
             const container = document.getElementById('dl-container');
             container.classList.remove('switched');
-            void container.offsetWidth; // 強制重繪觸發動畫
+            void container.offsetWidth; // 觸發重繪
             currentVer = v;
             refreshUI();
             container.classList.add('switched');
@@ -245,8 +255,17 @@
             document.getElementById('main-subtitle').textContent = d.subtitle;
             document.getElementById('status-text').textContent = d.status;
             document.getElementById('other-label').textContent = d.other;
+            document.getElementById('faq-title').textContent = d.faq;
             document.getElementById('ver-title').textContent = `HVXZ SYSTEM CLEAR ${currentVer}`;
             
+            // 更新下拉選單文字
+            document.getElementById('opt-35').textContent = d.v35;
+            document.getElementById('opt-30').textContent = d.v30;
+            document.getElementById('opt-20').textContent = d.v20;
+            document.getElementById('opt-10').textContent = d.v10;
+            document.getElementById('opt-40').textContent = d.v40;
+            document.getElementById('opt-50').textContent = d.v50;
+
             const btn = document.getElementById('dl-btn');
             if (versions[currentVer]) {
                 btn.href = versions[currentVer];

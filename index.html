@@ -18,9 +18,9 @@
             --btn-border: rgb(80, 80, 80);
         }
 
-        /* --- 捲動軸優化：修復雙線 Bug --- */
+        /* --- 捲動軸優化 --- */
         html {
-            overflow-y: auto; /* 改為 auto 確保流暢 */
+            overflow-y: auto;
             overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: rgba(0, 242, 255, 0.4) #050505;
@@ -31,7 +31,6 @@
             background-color: var(--dark-bg);
             color: var(--text-main);
             font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            /* 移除這裡的 overflow: hidden 以解決拉不下去的問題 */
             min-height: 100vh;
             display: flex; flex-direction: column;
         }
@@ -43,19 +42,6 @@
             border: 2px solid #050505;
         }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
-
-        /* --- 搖晃動畫 --- */
-        @keyframes sway {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-10px, -8px) rotate(-3.5deg); }
-            50% { transform: translate(10px, -3px) rotate(3.5deg); }
-            75% { transform: translate(-6px, 10px) rotate(-1.5deg); }
-        }
-        .sway-frame {
-            animation: sway var(--sway-duration, 5s) ease-in-out infinite;
-            animation-delay: var(--sway-delay, 0s);
-            will-change: transform;
-        }
 
         /* --- 背景與特效 --- */
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
@@ -70,7 +56,7 @@
             background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2;
         }
 
-        /* --- Header & 紅點居中系統 --- */
+        /* --- Header & 紅點 --- */
         header {
             height: 75px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
@@ -78,37 +64,20 @@
             margin: 25px 40px; position: sticky; top: 25px; z-index: 100;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        /* 紅點精確居中邏輯 */
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); }
             70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); }
         }
         .status-dot-container {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 68, 68, 0.4);
-            border-radius: 30px;
-            padding: 6px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            width: 14px; height: 14px;
-            overflow: hidden;
+            position: absolute; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 68, 68, 0.4); border-radius: 30px;
+            padding: 6px; cursor: pointer; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            width: 14px; height: 14px; overflow: hidden;
         }
-        .status-dot-container:hover {
-            width: 170px;
-            padding: 6px 15px;
-            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
-        }
-        .status-dot {
-            width: 10px; height: 10px; background-color: var(--danger-red);
-            border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0;
-        }
+        .status-dot-container:hover { width: 170px; padding: 6px 15px; box-shadow: 0 0 15px rgba(255, 68, 68, 0.3); }
+        .status-dot { width: 10px; height: 10px; background-color: var(--danger-red); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
         .status-text {
             color: var(--danger-red); font-size: 0.85rem; font-weight: 800;
             letter-spacing: 0.5px; white-space: nowrap; opacity: 0; margin-left: 0;
@@ -134,13 +103,53 @@
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; text-shadow: 0 0 25px rgba(0, 242, 255, 0.2); }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; text-transform: uppercase; }
 
-        .version-row { display: flex; justify-content: center; gap: 28px; width: 100%; margin-bottom: 90px; flex-wrap: wrap; }
-        .ver-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); padding: 50px 25px; border-radius: var(--radius-main); width: 220px; transition: 0.4s; cursor: pointer; backdrop-filter: blur(15px); text-decoration: none; color: inherit; display: block; }
-        .ver-card:hover { border-color: var(--neon-blue); transform: scale(1.05) translateY(-10px); background: rgba(0, 242, 255, 0.05); }
-        .ver-card h2 { margin: 0; font-size: 3.2rem; color: var(--neon-blue); margin-bottom: 25px; font-weight: 900; }
-        .dl-label { font-size: 0.9rem; font-weight: 900; color: var(--neon-blue); border: 1px solid var(--btn-border); padding: 12px 25px; border-radius: 15px; transition: 0.3s; letter-spacing: 1px; display: block;}
-        .ver-card.disabled { opacity: 0.35; cursor: not-allowed; border-color: #333; pointer-events: none; }
+        /* --- 單一主下載區塊 --- */
+        .main-download-section {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin-bottom: 90px; width: 100%;
+        }
+        .main-dl-title {
+            font-size: 2.8rem; color: var(--neon-blue); font-weight: 900; margin: 0 0 30px 0;
+            letter-spacing: 2px; text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+        }
+        .main-dl-btn {
+            background: rgba(0, 242, 255, 0.05); border: 2px solid var(--neon-blue);
+            color: var(--neon-blue); font-size: 1.2rem; font-weight: 900;
+            padding: 16px 50px; border-radius: 18px; text-decoration: none;
+            transition: 0.4s; letter-spacing: 2px; backdrop-filter: blur(10px);
+        }
+        .main-dl-btn:hover {
+            background: var(--neon-blue); color: #000;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.6); transform: translateY(-5px) scale(1.02);
+        }
+        
+        /* --- 其他選項 (隱藏菜單) --- */
+        .other-options-dropdown {
+            margin-top: 20px; position: relative; padding: 10px;
+        }
+        .dropdown-label {
+            font-size: 0.85rem; color: var(--text-dim); cursor: pointer;
+            transition: 0.3s; letter-spacing: 1px;
+        }
+        .dropdown-label:hover { color: var(--text-main); }
+        .dropdown-content {
+            display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            background: rgba(15, 15, 15, 0.95); border: 1px solid var(--glass-border);
+            border-radius: 12px; padding: 10px; min-width: 200px; z-index: 10;
+            flex-direction: column; gap: 8px; backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .other-options-dropdown:hover .dropdown-content { display: flex; animation: fadeIn 0.3s ease; }
+        .dropdown-content a, .dropdown-content span {
+            color: var(--text-dim); text-decoration: none; font-size: 0.9rem; font-weight: 700;
+            padding: 8px 12px; border-radius: 8px; transition: 0.3s; text-align: center;
+        }
+        .dropdown-content a:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
+        .dropdown-content .disabled-ver { opacity: 0.4; cursor: not-allowed; }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+        /* 特色與 FAQ */
         .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px; }
         .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); text-align: left; transition: 0.4s; backdrop-filter: blur(15px); }
 
@@ -160,7 +169,7 @@
     <div id="mouse-light"></div>
     <div class="bg-overlay"></div>
 
-    <header class="sway-frame">
+    <header>
         <div class="header-left">
             <div class="h-brand">H</div>
             <div class="lang-switcher-v2">
@@ -184,42 +193,37 @@
         <h1 class="stagger" id="main-title">HVXZ SYSTEM CLEAR</h1>
         <p class="subtitle stagger" id="main-subtitle">ADVANCED WINDOWS OPTIMIZATION</p>
 
-        <div class="version-row stagger">
-            <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank" class="ver-card sway-frame">
-                <h2>1.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
-            </a>
-            <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank" class="ver-card sway-frame">
-                <h2>2.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
-            </a>
-            <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank" class="ver-card sway-frame">
-                <h2>3.0</h2><div class="dl-label dl-active">DOWNLOAD</div>
-            </a>
-            <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="ver-card sway-frame">
-                <h2>3.5</h2><div class="dl-label dl-active">DOWNLOAD</div>
-            </a>
-            <div class="ver-card disabled sway-frame">
-                <h2>4.0</h2><div class="dl-label dl-wait">COMING SOON</div>
-            </div>
-            <div class="ver-card disabled sway-frame">
-                <h2>5.0</h2><div class="dl-label dl-wait">COMING SOON</div>
+        <div class="main-download-section stagger">
+            <h2 class="main-dl-title">HVXZ SYSTEM CLEAR 3.5</h2>
+            <a href="https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314" target="_blank" class="main-dl-btn" id="main-dl-btn">DOWNLOAD NOW</a>
+            
+            <div class="other-options-dropdown">
+                <div class="dropdown-label" id="other-opts-label">Other Options ▼</div>
+                <div class="dropdown-content">
+                    <a href="https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM" target="_blank">Version 1.0</a>
+                    <a href="https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c" target="_blank">Version 2.0</a>
+                    <a href="https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI" target="_blank">Version 3.0</a>
+                    <span class="disabled-ver" id="opt-v4">Version 4.0 (Coming Soon)</span>
+                    <span class="disabled-ver" id="opt-v5">Version 5.0 (Coming Soon)</span>
+                </div>
             </div>
         </div>
 
         <div class="features-row stagger">
-            <div class="feature-card sway-frame"><h3 id="f1-t">High Performance</h3><p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p></div>
-            <div class="feature-card sway-frame"><h3 id="f2-t">Privacy First</h3><p id="f2-p">Completely wipe caches and temporary logs without a trace.</p></div>
-            <div class="feature-card sway-frame"><h3 id="f3-t">Modern Engine</h3><p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p></div>
-            <div class="feature-card sway-frame"><h3 id="f4-t">Expert Design</h3><p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
+            <div class="feature-card"><h3 id="f1-t">High Performance</h3><p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p></div>
+            <div class="feature-card"><h3 id="f2-t">Privacy First</h3><p id="f2-p">Completely wipe caches and temporary logs without a trace.</p></div>
+            <div class="feature-card"><h3 id="f3-t">Modern Engine</h3><p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p></div>
+            <div class="feature-card"><h3 id="f4-t">Expert Design</h3><p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
         </div>
 
         <div class="faq-section stagger">
             <div class="faq-title" id="faq-main-title">F.A.Q</div>
-            <div class="faq-item sway-frame"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
-            <div class="faq-item sway-frame"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
+            <div class="faq-item"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
+            <div class="faq-item"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
         </div>
     </main>
 
-    <footer class="sway-frame">&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
+    <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
 
     <script>
         let targetX = window.innerWidth/2, targetY = window.innerHeight/2, currentX = targetX, currentY = targetY;
@@ -248,7 +252,9 @@
         const langData = {
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
-                dl: "DOWNLOAD", wait: "COMING SOON", faq: "F.A.Q", status: "NOT UPDATE",
+                dlNow: "DOWNLOAD NOW", otherOpts: "Other Options ▼",
+                v4Wait: "Version 4.0 (Coming Soon)", v5Wait: "Version 5.0 (Coming Soon)",
+                faq: "F.A.Q", status: "NOT UPDATE",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
@@ -258,7 +264,9 @@
             },
             zh: {
                 title: "HVXZ 系統清理器", subtitle: "進階 Windows 系統優化",
-                dl: "立即下載", wait: "敬請期待", faq: "常見問題解答", status: "停止更新",
+                dlNow: "立即下載", otherOpts: "其他版本選項 ▼",
+                v4Wait: "版本 4.0 (敬請期待)", v5Wait: "版本 5.0 (敬請期待)",
+                faq: "常見問題解答", status: "停止更新",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
@@ -273,13 +281,16 @@
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-'+lang).classList.add('active');
             
-            // 狀態列文字同步
             document.getElementById('status-bar-text').textContent = d.status;
-
             document.getElementById('main-title').textContent = d.title;
             document.getElementById('main-subtitle').textContent = d.subtitle;
-            document.querySelectorAll('.dl-active').forEach(el => el.textContent = d.dl);
-            document.querySelectorAll('.dl-wait').forEach(el => el.textContent = d.wait);
+            
+            // 新增的翻譯綁定
+            document.getElementById('main-dl-btn').textContent = d.dlNow;
+            document.getElementById('other-opts-label').textContent = d.otherOpts;
+            document.getElementById('opt-v4').textContent = d.v4Wait;
+            document.getElementById('opt-v5').textContent = d.v5Wait;
+
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;
@@ -289,17 +300,9 @@
             document.getElementById('q2-t').textContent = d.q2t; document.getElementById('q2-p').textContent = d.q2p;
         }
 
-        function initSway() {
-            document.querySelectorAll('.sway-frame').forEach(el => {
-                el.style.setProperty('--sway-duration', (Math.random()*2+4).toFixed(2)+'s');
-                el.style.setProperty('--sway-delay', (Math.random()*-5).toFixed(2)+'s');
-            });
-        }
-
         function startPage() {
             for(let i=0; i<80; i++) particles.push(new P());
             animate();
-            initSway();
             updateMouseLight();
             setTimeout(() => document.getElementById('main-ui').classList.add('animate'), 300);
         }

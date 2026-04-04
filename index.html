@@ -8,6 +8,7 @@
     <style>
         :root {
             --neon-blue: #00f2ff;
+            --warning-yellow: #ffcc00;
             --danger-red: #ff4444;
             --glass-bg: rgba(255, 255, 255, 0.02);
             --glass-border: rgba(0, 242, 255, 0.2);
@@ -17,77 +18,287 @@
             --radius-main: 20px;
         }
 
-        /* --- 基礎設定 --- */
-        html { overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--neon-blue) #050505; height: 100%; }
-        body { margin: 0; padding: 0; background-color: var(--dark-bg); color: var(--text-main); font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* --- 動畫定義 --- */
+        /* 基礎佈局優化 */
+        html { 
+            overflow-y: auto; 
+            overflow-x: hidden; 
+            scrollbar-width: thin; 
+            scrollbar-color: var(--neon-blue) #050505; 
+            height: 100%; 
+        }
+
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--dark-bg); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
+        /* 動畫渲染優化 */
         @keyframes pulse-glow { 0% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } 50% { text-shadow: 0 0 30px rgba(0,242,255,0.7); } 100% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } }
         @keyframes btn-breath { 0% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } 50% { box-shadow: 0 0 30px rgba(0,242,255,0.5); } 100% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } }
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes red-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
+        @keyframes yellow-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
 
-        /* --- 背景與特效 --- */
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
-        #mouse-light { position: fixed; inset: 0; pointer-events: none; z-index: -1; background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%); will-change: transform; }
-        .bg-overlay { position: fixed; inset: 0; z-index: -2; background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(circle at center, black, transparent 90%); opacity: 0.2; }
+        #mouse-light { 
+            position: fixed; 
+            inset: 0; 
+            pointer-events: none; 
+            z-index: -1; 
+            background: radial-gradient(450px circle at var(--light-x, 50%) var(--light-y, 50%), rgba(0, 242, 255, 0.15) 0%, rgba(0, 242, 255, 0.05) 30%, transparent 70%); 
+            will-change: transform; 
+        }
 
-        /* --- Header --- */
-        header { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 35px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 20px; margin: 25px 40px; position: sticky; top: 25px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
+        .bg-overlay { 
+            position: fixed; 
+            inset: 0; 
+            z-index: -2; 
+            background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px); 
+            background-size: 60px 60px; 
+            mask-image: radial-gradient(circle at center, black, transparent 90%); 
+            opacity: 0.2; 
+        }
+
+        /* 導航欄與語言切換 */
+        header { 
+            height: 75px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 35px; 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 20px; 
+            margin: 25px 40px; 
+            position: sticky; 
+            top: 25px; 
+            z-index: 100; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+
         .header-left { display: flex; align-items: center; gap: 25px; }
         .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
-        
-        .lang-switcher-v2 { display: flex; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 12px; padding: 4px; gap: 4px; }
-        .lang-btn { background: transparent; border: none; color: var(--text-dim); padding: 7px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .lang-btn.active { background: var(--neon-blue); color: #000; box-shadow: 0 0 15px var(--neon-blue); }
 
-        .status-dot-container { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 68, 68, 0.4); border-radius: 30px; padding: 6px; cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 14px; height: 14px; overflow: hidden; }
-        .status-dot-container:hover { width: 170px; padding: 6px 15px; }
-        .status-dot { width: 10px; height: 10px; background-color: var(--danger-red); border-radius: 50%; animation: red-pulse 2s infinite; flex-shrink: 0; }
-        .status-text { color: var(--danger-red); font-size: 0.85rem; font-weight: 800; opacity: 0; margin-left: 0; transition: 0.3s; white-space: nowrap; }
+        .lang-switcher-v2 { 
+            display: flex; 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 12px; 
+            padding: 4px; 
+            gap: 4px; 
+        }
+
+        .lang-btn { 
+            background: transparent; 
+            border: none; 
+            color: var(--text-dim); 
+            padding: 7px 16px; 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+
+        .lang-btn.active { 
+            background: var(--neon-blue); 
+            color: #000; 
+            box-shadow: 0 0 15px var(--neon-blue); 
+        }
+
+        /* 狀態懸浮標籤 - 已改為黃色警告風格 */
+        .status-dot-container { 
+            position: absolute; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            display: flex; 
+            align-items: center; 
+            background: rgba(0, 0, 0, 0.6); 
+            border: 1px solid rgba(255, 204, 0, 0.4); 
+            border-radius: 30px; 
+            padding: 6px; 
+            cursor: pointer; 
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            width: 14px; 
+            height: 14px; 
+            overflow: hidden; 
+        }
+
+        .status-dot-container:hover { width: 230px; padding: 6px 15px; }
+
+        .status-dot { 
+            width: 10px; 
+            height: 10px; 
+            background-color: var(--warning-yellow); 
+            border-radius: 50%; 
+            animation: yellow-pulse 2s infinite; 
+            flex-shrink: 0; 
+        }
+
+        .status-text { 
+            color: var(--warning-yellow); 
+            font-size: 0.85rem; 
+            font-weight: 800; 
+            opacity: 0; 
+            margin-left: 0; 
+            transition: 0.3s; 
+            white-space: nowrap; 
+        }
+
         .status-dot-container:hover .status-text { opacity: 1; margin-left: 12px; }
 
-        /* --- 社交圖示顏色修復 --- */
         .social-group { display: flex; gap: 15px; }
-        .social-link { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--glass-border); font-size: 1.2rem; transition: 0.4s; text-decoration: none; }
+        .social-link { 
+            width: 45px; 
+            height: 45px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            border: 1px solid var(--glass-border); 
+            font-size: 1.2rem; 
+            transition: 0.4s; 
+            text-decoration: none; 
+        }
+
         .link-discord { color: var(--neon-blue); background: rgba(0, 242, 255, 0.08); }
         .link-discord:hover { background: var(--neon-blue); color: #000; box-shadow: 0 0 25px var(--neon-blue); transform: translateY(-5px); }
+        
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
-        /* --- Hero --- */
-        .hero { display: flex; flex-direction: column; align-items: center; padding: 60px 20px 100px 20px; text-align: center; max-width: 1400px; margin: 0 auto; }
+        /* 主顯示區域 */
+        .hero { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 60px 20px 100px 20px; 
+            text-align: center; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+        }
+
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; animation: pulse-glow 4s infinite ease-in-out; }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
 
-        /* --- 主下載區塊 --- */
-        .main-download-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 90px; width: 100%; transition: 0.5s; }
+        /* 下載交互區域 */
+        .main-download-section { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin-bottom: 90px; 
+            width: 100%; 
+            transition: 0.5s; 
+        }
+
         .main-dl-title { font-size: 3.8rem; color: var(--neon-blue); font-weight: 900; margin: 0 0 35px 0; letter-spacing: 2px; }
-        .main-dl-btn { background: rgba(0, 242, 255, 0.05); border: 2px solid var(--neon-blue); color: var(--neon-blue); font-size: 1.6rem; font-weight: 900; padding: 22px 70px; border-radius: 20px; text-decoration: none; transition: 0.4s; letter-spacing: 3px; animation: btn-breath 3s infinite; }
-        .main-dl-btn:hover { background: var(--neon-blue); color: #000; transform: scale(1.05); box-shadow: 0 0 40px var(--neon-blue); }
+
+        .main-dl-btn { 
+            background: rgba(0, 242, 255, 0.05); 
+            border: 2px solid var(--neon-blue); 
+            color: var(--neon-blue); 
+            font-size: 1.6rem; 
+            font-weight: 900; 
+            padding: 22px 70px; 
+            border-radius: 20px; 
+            text-decoration: none; 
+            transition: 0.4s; 
+            letter-spacing: 3px; 
+            animation: btn-breath 3s infinite; 
+        }
+
+        .main-dl-btn:hover { 
+            background: var(--neon-blue); 
+            color: #000; 
+            transform: scale(1.05); 
+            box-shadow: 0 0 40px var(--neon-blue); 
+        }
+
         .main-dl-btn.disabled-btn { border-color: #444; color: #666; animation: none; cursor: not-allowed; }
-        
         .switched { animation: fade-switch 0.6s ease-out; }
 
-        /* --- 其他選項 --- */
+        /* 版本切換選單 */
         .other-options-dropdown { margin-top: 30px; position: relative; padding: 10px; }
         .dropdown-label { font-size: 1.1rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
         .dropdown-label:hover { color: var(--neon-blue); }
-        .dropdown-content { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 10, 0.98); border: 1px solid var(--glass-border); border-radius: 15px; padding: 12px; min-width: 240px; z-index: 10; flex-direction: column; gap: 8px; backdrop-filter: blur(20px); box-shadow: 0 15px 40px rgba(0,0,0,0.8); }
+
+        .dropdown-content { 
+            display: none; 
+            position: absolute; 
+            top: 100%; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(10, 10, 10, 0.98); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 15px; 
+            padding: 12px; 
+            min-width: 240px; 
+            z-index: 10; 
+            flex-direction: column; 
+            gap: 8px; 
+            backdrop-filter: blur(20px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
+        }
+
         .other-options-dropdown:hover .dropdown-content { display: flex; animation: fade-switch 0.3s forwards; }
-        .dropdown-item { color: var(--text-dim); font-size: 1.1rem; font-weight: 700; padding: 12px 20px; border-radius: 10px; transition: 0.3s; cursor: pointer; text-align: center; }
+
+        .dropdown-item { 
+            color: var(--text-dim); 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            padding: 12px 20px; 
+            border-radius: 10px; 
+            transition: 0.3s; 
+            cursor: pointer; 
+            text-align: center; 
+        }
+
         .dropdown-item:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
         .dropdown-item.disabled-ver { opacity: 0.3; cursor: not-allowed; }
 
-        /* 特色區塊 */
-        .features-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; width: 100%; margin-top: 60px; }
-        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: var(--radius-main); transition: 0.4s; text-align: left; }
-        .feature-card:hover { transform: translateY(-10px); background: rgba(0, 242, 255, 0.05); border-color: var(--neon-blue); }
+        /* 內容卡片 */
+        .features-row { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            width: 100%; 
+            margin-top: 60px; 
+        }
+
+        .feature-card { 
+            background: var(--glass-bg); 
+            border: 1px solid var(--glass-border); 
+            padding: 40px; 
+            border-radius: var(--radius-main); 
+            transition: 0.4s; 
+            text-align: left; 
+        }
+
+        .feature-card:hover { 
+            transform: translateY(-10px); 
+            background: rgba(0, 242, 255, 0.05); 
+            border-color: var(--neon-blue); 
+        }
 
         .faq-section { margin-top: 130px; width: 100%; max-width: 900px; }
         .faq-title { font-size: 4rem; font-weight: 900; margin-bottom: 60px; letter-spacing: 15px; text-align: center; color: var(--neon-blue); }
-        .faq-item { background: rgba(255, 255, 255, 0.02); border-radius: 18px; padding: 30px; margin-bottom: 20px; border-left: 5px solid var(--neon-blue); transition: 0.3s; text-align: left; }
+
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); 
+            border-radius: 18px; 
+            padding: 30px; 
+            margin-bottom: 20px; 
+            border-left: 5px solid var(--neon-blue); 
+            transition: 0.3s; 
+            text-align: left; 
+        }
+
         .faq-item:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(10px); }
 
         footer { padding: 80px 20px; text-align: center; color: #444; font-size: 0.9rem; letter-spacing: 2px; }
@@ -109,12 +320,16 @@
 
         <div class="status-dot-container">
             <div class="status-dot"></div>
-            <div class="status-text" id="status-text">NOT UPDATE</div>
+            <div class="status-text" id="status-text">Updates temporarily suspended</div>
         </div>
 
         <div class="social-group">
-            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://www.youtube.com/channel/UCi4bECzVhccgoCbBIlTKX7g" target="_blank" class="social-link link-youtube">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+            <a href="https://discord.gg/MCbDxuufSU" target="_blank" class="social-link link-discord">
+                <i class="fa-brands fa-discord"></i>
+            </a>
         </div>
     </header>
 
@@ -140,28 +355,52 @@
         </div>
 
         <div class="features-row">
-            <div class="feature-card"><h3 id="f1-t">High Performance</h3><p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p></div>
-            <div class="feature-card"><h3 id="f2-t">Privacy First</h3><p id="f2-p">Completely wipe caches and temporary logs without a trace.</p></div>
-            <div class="feature-card"><h3 id="f3-t">Modern Engine</h3><p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p></div>
-            <div class="feature-card"><h3 id="f4-t">Expert Design</h3><p id="f4-p">HVXZ Team brings 2 years of professional UI/UX design experience.</p></div>
+            <div class="feature-card">
+                <h3 id="f1-t">High Performance</h3>
+                <p id="f1-p">Engineered for speed, removing deep system clutters instantly.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f2-t">Privacy First</h3>
+                <p id="f2-p">Completely wipe caches and temporary logs without a trace.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f3-t">Modern Engine</h3>
+                <p id="f3-p">Native WPF-inspired design with a fluid high-tech interface.</p>
+            </div>
+            <div class="feature-card">
+                <h3 id="f4-t">Expert Design</h3>
+                <p id="f4-p">HVXZ Team brings 2 years of professional UI/UX experience.</p>
+            </div>
         </div>
 
         <div class="faq-section">
             <div class="faq-title" id="faq-title">F.A.Q</div>
-            <div class="faq-item"><h4 id="q1-t">Is it safe to use?</h4><p id="q1-p">Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.</p></div>
-            <div class="faq-item"><h4 id="q2-t">Which systems are supported?</h4><p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p></div>
+            <div class="faq-item">
+                <h4 id="q1-t">Is it safe to use?</h4>
+                <p id="q1-p">Yes. HVXZ System Clear only targets temporary folders and cache that are safe to delete.</p>
+            </div>
+            <div class="faq-item">
+                <h4 id="q2-t">Which systems are supported?</h4>
+                <p id="q2-p">Our software is optimized for Windows 10 and Windows 11 (x64 architectures).</p>
+            </div>
         </div>
     </main>
 
-    <footer>&copy; 2026 HVXZ. LICENSED UNDER MIT.</footer>
+    <footer>&copy; 2026 HVXZ | h-s-c.vercel.app</footer>
 
     <script>
-        // --- 1. 動態粒子系統 ---
+        // 渲染引擎配置
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
+
+        function resize() { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resize); 
+        resize();
+
         class Particle {
             constructor() { this.init(); }
             init() {
@@ -171,57 +410,73 @@
                 this.speed = Math.random() * 0.5 + 0.2;
                 this.opacity = Math.random() * 0.5 + 0.1;
             }
-            update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
+            update() { 
+                this.y += this.speed; 
+                if (this.y > canvas.height) this.y = -10; 
+            }
             draw() {
                 ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); 
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                ctx.fill();
             }
         }
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
 
-        // --- 2. 滑鼠光暈平滑延遲 ---
+        // 交互光影邏輯
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
-        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        window.addEventListener('mousemove', (e) => { 
+            mouseX = e.clientX; 
+            mouseY = e.clientY; 
+        });
+
         function updateMouse() {
-            curX += (mouseX - curX) * 0.1; curY += (mouseY - curY) * 0.1;
+            curX += (mouseX - curX) * 0.1; 
+            curY += (mouseY - curY) * 0.1;
             const ml = document.getElementById('mouse-light');
-            if(ml) { ml.style.setProperty('--light-x', curX + 'px'); ml.style.setProperty('--light-y', curY + 'px'); }
+            if(ml) { 
+                ml.style.setProperty('--light-x', curX + 'px'); 
+                ml.style.setProperty('--light-y', curY + 'px'); 
+            }
             requestAnimationFrame(updateMouse);
         }
 
-        // --- 3. 核心邏輯與語言 ---
+        // 業務與語法引擎
         let currentLang = 'en';
         let currentVer = '3.5';
+
         const versions = {
             '1.0': 'https://mega.nz/file/cUk1TBqD#qkZ-6KpEqzDC4YWeyKSlqSz0t9RfNkiTDFHwd7QNOwM',
             '2.0': 'https://mega.nz/file/wF1libYL#e7aBt5BlsV08CbhZIespMWQflFSvNqDJPm4QWOvR87c',
             '3.0': 'https://mega.nz/file/FI0BhTKK#3i3gsrKwJgrTF_FQI3oZVbOTOZDGC7EUyRx9xuALuWI',
             '3.5': 'https://mega.nz/file/9Q9BVYrS#3lGEDcQA1hRRFy_GU8YUugyB2MmgTD5BI2N27gsc314',
-            '4.0': null, '5.0': null
+            '4.0': null, 
+            '5.0': null
         };
 
         const langDict = {
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
                 dl: "DOWNLOAD NOW", other: "Other Options ▼", wait: "COMING SOON",
-                status: "NOT UPDATE", faq: "F.A.Q",
+                status: "Updates temporarily suspended", faq: "F.A.Q",
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
-                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX design experience.",
-                q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary files and cache folders that are safe to delete.",
+                f4t: "Expert Design", f4p: "HVXZ Team brings 2 years of professional UI/UX experience.",
+                q1t: "Is it safe to use?", q1p: "Yes. HVXZ System Clear only targets temporary folders and cache that are safe to delete.",
                 q2t: "Which systems are supported?", q2p: "Our software is optimized for Windows 10 and Windows 11 (x64 architectures)."
             },
             zh: {
                 title: "HVXZ 系統清理器", subtitle: "進階 WINDOWS 系統優化",
                 dl: "立即下載", other: "其他版本選項 ▼", wait: "敬請期待",
-                status: "停止更新", faq: "常見問題解答",
+                status: "更新暫時停止", faq: "常見問題解答",
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
@@ -243,7 +498,7 @@
         function switchVersion(v) {
             const container = document.getElementById('dl-container');
             container.classList.remove('switched');
-            void container.offsetWidth; // 觸發重繪
+            void container.offsetWidth; // 強制回流觸發動畫
             currentVer = v;
             refreshUI();
             container.classList.add('switched');
@@ -258,7 +513,6 @@
             document.getElementById('faq-title').textContent = d.faq;
             document.getElementById('ver-title').textContent = `HVXZ SYSTEM CLEAR ${currentVer}`;
             
-            // 更新下拉選單文字
             document.getElementById('opt-35').textContent = d.v35;
             document.getElementById('opt-30').textContent = d.v30;
             document.getElementById('opt-20').textContent = d.v20;
@@ -277,6 +531,7 @@
                 btn.classList.add('disabled-btn');
             }
 
+            // 更新特性與 FAQ
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;

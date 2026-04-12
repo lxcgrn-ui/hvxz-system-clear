@@ -18,6 +18,7 @@
             --radius-main: 20px;
         }
 
+        /* 基礎佈局優化 */
         html { 
             overflow-y: auto; 
             overflow-x: hidden; 
@@ -37,13 +38,13 @@
             flex-direction: column; 
         }
 
+        /* 動畫渲染優化 */
         @keyframes pulse-glow { 0% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } 50% { text-shadow: 0 0 30px rgba(0,242,255,0.7); } 100% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } }
         @keyframes btn-breath { 0% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } 50% { box-shadow: 0 0 30px rgba(0,242,255,0.5); } 100% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } }
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes red-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
+        @keyframes yellow-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
 
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
-        
         #mouse-light { 
             position: fixed; 
             inset: 0; 
@@ -63,6 +64,7 @@
             opacity: 0.2; 
         }
 
+        /* 導航欄與語言切換 */
         header { 
             height: 75px; 
             display: flex; 
@@ -110,6 +112,7 @@
             box-shadow: 0 0 15px var(--neon-blue); 
         }
 
+        /* 狀態懸浮標籤 - 已改為黃色警告風格 */
         .status-dot-container { 
             position: absolute; 
             left: 50%; 
@@ -117,7 +120,7 @@
             display: flex; 
             align-items: center; 
             background: rgba(0, 0, 0, 0.6); 
-            border: 1px solid rgba(255, 68, 68, 0.4); 
+            border: 1px solid rgba(255, 204, 0, 0.4); 
             border-radius: 30px; 
             padding: 6px; 
             cursor: pointer; 
@@ -132,14 +135,14 @@
         .status-dot { 
             width: 10px; 
             height: 10px; 
-            background-color: var(--danger-red); 
+            background-color: var(--warning-yellow); 
             border-radius: 50%; 
-            animation: red-pulse 2s infinite; 
+            animation: yellow-pulse 2s infinite; 
             flex-shrink: 0; 
         }
 
         .status-text { 
-            color: var(--danger-red); 
+            color: var(--warning-yellow); 
             font-size: 0.85rem; 
             font-weight: 800; 
             opacity: 0; 
@@ -170,6 +173,7 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
+        /* 主顯示區域 */
         .hero { 
             display: flex; 
             flex-direction: column; 
@@ -183,6 +187,7 @@
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; animation: pulse-glow 4s infinite ease-in-out; }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
 
+        /* 下載交互區域 */
         .main-download-section { 
             display: flex; 
             flex-direction: column; 
@@ -218,6 +223,7 @@
         .main-dl-btn.disabled-btn { border-color: #444; color: #666; animation: none; cursor: not-allowed; }
         .switched { animation: fade-switch 0.6s ease-out; }
 
+        /* 版本切換選單 */
         .other-options-dropdown { margin-top: 30px; position: relative; padding: 10px; }
         .dropdown-label { font-size: 1.1rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
         .dropdown-label:hover { color: var(--neon-blue); }
@@ -256,6 +262,7 @@
         .dropdown-item:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
         .dropdown-item.disabled-ver { opacity: 0.3; cursor: not-allowed; }
 
+        /* 內容卡片 */
         .features-row { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -313,7 +320,7 @@
 
         <div class="status-dot-container">
             <div class="status-dot"></div>
-            <div class="status-text" id="status-text">NOT UPDATE(停止更新)</div>
+            <div class="status-text" id="status-text">Updates temporarily suspended</div>
         </div>
 
         <div class="social-group">
@@ -382,6 +389,7 @@
     <footer>&copy; 2026 HVXZ | h-s-c.vercel.app</footer>
 
     <script>
+        // 渲染引擎配置
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -420,6 +428,7 @@
             requestAnimationFrame(animate);
         }
 
+        // 交互光影邏輯
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
         window.addEventListener('mousemove', (e) => { 
             mouseX = e.clientX; 
@@ -437,6 +446,7 @@
             requestAnimationFrame(updateMouse);
         }
 
+        // 業務與語法引擎
         let currentLang = 'en';
         let currentVer = '3.5';
 
@@ -453,7 +463,7 @@
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
                 dl: "DOWNLOAD NOW", other: "Other Options ▼", wait: "COMING SOON",
-                status: "NOT UPDATE(停止更新)", faq: "F.A.Q",
+                status: "Updates temporarily suspended", faq: "F.A.Q",
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
@@ -466,7 +476,7 @@
             zh: {
                 title: "HVXZ 系統清理器", subtitle: "進階 WINDOWS 系統優化",
                 dl: "立即下載", other: "其他版本選項 ▼", wait: "敬請期待",
-                status: "NOT UPDATE(停止更新)", faq: "常見問題解答",
+                status: "更新暫時停止", faq: "常見問題解答",
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
@@ -488,7 +498,7 @@
         function switchVersion(v) {
             const container = document.getElementById('dl-container');
             container.classList.remove('switched');
-            void container.offsetWidth; 
+            void container.offsetWidth; // 強制回流觸發動畫
             currentVer = v;
             refreshUI();
             container.classList.add('switched');
@@ -521,6 +531,7 @@
                 btn.classList.add('disabled-btn');
             }
 
+            // 更新特性與 FAQ
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;

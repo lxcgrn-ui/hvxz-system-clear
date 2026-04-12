@@ -40,9 +40,10 @@
         @keyframes pulse-glow { 0% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } 50% { text-shadow: 0 0 30px rgba(0,242,255,0.7); } 100% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } }
         @keyframes btn-breath { 0% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } 50% { box-shadow: 0 0 30px rgba(0,242,255,0.5); } 100% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } }
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes yellow-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
+        @keyframes red-pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 68, 68, 0); } }
 
         #particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: -1.5; }
+        
         #mouse-light { 
             position: fixed; 
             inset: 0; 
@@ -80,18 +81,7 @@
         }
 
         .header-left { display: flex; align-items: center; gap: 25px; }
-        
-        /* 標誌樣式優化 */
-        .BrandLogo { 
-            height: 45px; 
-            width: auto; 
-            filter: drop-shadow(0 0 8px var(--neon-blue));
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .BrandLogo:hover {
-            filter: drop-shadow(0 0 15px var(--neon-blue));
-            transform: scale(1.05);
-        }
+        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
 
         .lang-switcher-v2 { 
             display: flex; 
@@ -127,7 +117,7 @@
             display: flex; 
             align-items: center; 
             background: rgba(0, 0, 0, 0.6); 
-            border: 1px solid rgba(255, 204, 0, 0.4); 
+            border: 1px solid rgba(255, 68, 68, 0.4); 
             border-radius: 30px; 
             padding: 6px; 
             cursor: pointer; 
@@ -142,14 +132,14 @@
         .status-dot { 
             width: 10px; 
             height: 10px; 
-            background-color: var(--warning-yellow); 
+            background-color: var(--danger-red); 
             border-radius: 50%; 
-            animation: yellow-pulse 2s infinite; 
+            animation: red-pulse 2s infinite; 
             flex-shrink: 0; 
         }
 
         .status-text { 
-            color: var(--warning-yellow); 
+            color: var(--danger-red); 
             font-size: 0.85rem; 
             font-weight: 800; 
             opacity: 0; 
@@ -314,7 +304,7 @@
 
     <header>
         <div class="header-left">
-            <img src="https://private-user-images.githubusercontent.com/228394830/577006293-b53643b8-97ee-4a1c-aa4a-5e176338166f.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzU5NTM1MDIsIm5iZiI6MTc3NTk1MzIwMiwicGF0aCI6Ii8yMjgzOTQ4MzAvNTc3MDA2MjkzLWI1MzY0M2I4LTk3ZWUtNGExYy1hYTRhLTVlMTc2MzM4MTY2Zi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNDEyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDQxMlQwMDIwMDJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wMzk0ZDg5Y2I5NGUxMmRkMmMyYmEyNjkwMmMzYzE5ZjRjZmUxYTU5OTMwM2Q1YjVlZTA0ZDk4MzJjYTJlYWY5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZwbmcifQ.2anNvNATD7Ood9JvbCyaAskLVUxNZAcQvYQrJ_1MvyQ" class="BrandLogo" alt="HVXZ Logo">
+            <div class="h-brand">H</div>
             <div class="lang-switcher-v2">
                 <button class="lang-btn active" id="btn-en" onclick="setLanguage('en')">EN</button>
                 <button class="lang-btn" id="btn-zh" onclick="setLanguage('zh')">繁中</button>
@@ -323,7 +313,7 @@
 
         <div class="status-dot-container">
             <div class="status-dot"></div>
-            <div class="status-text" id="status-text">Updates temporarily suspended</div>
+            <div class="status-text" id="status-text">NOT UPDATE(停止更新)</div>
         </div>
 
         <div class="social-group">
@@ -463,7 +453,7 @@
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
                 dl: "DOWNLOAD NOW", other: "Other Options ▼", wait: "COMING SOON",
-                status: "Updates temporarily suspended", faq: "F.A.Q",
+                status: "NOT UPDATE(停止更新)", faq: "F.A.Q",
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
@@ -476,7 +466,7 @@
             zh: {
                 title: "HVXZ 系統清理器", subtitle: "進階 WINDOWS 系統優化",
                 dl: "立即下載", other: "其他版本選項 ▼", wait: "敬請期待",
-                status: "更新暫時停止", faq: "常見問題解答",
+                status: "NOT UPDATE(停止更新)", faq: "常見問題解答",
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",

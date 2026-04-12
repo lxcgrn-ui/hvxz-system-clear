@@ -18,7 +18,6 @@
             --radius-main: 20px;
         }
 
-        /* 基礎佈局優化 */
         html { 
             overflow-y: auto; 
             overflow-x: hidden; 
@@ -38,7 +37,6 @@
             flex-direction: column; 
         }
 
-        /* 動畫渲染優化 */
         @keyframes pulse-glow { 0% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } 50% { text-shadow: 0 0 30px rgba(0,242,255,0.7); } 100% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } }
         @keyframes btn-breath { 0% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } 50% { box-shadow: 0 0 30px rgba(0,242,255,0.5); } 100% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } }
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
@@ -64,7 +62,6 @@
             opacity: 0.2; 
         }
 
-        /* 導航欄與語言切換 */
         header { 
             height: 75px; 
             display: flex; 
@@ -83,7 +80,18 @@
         }
 
         .header-left { display: flex; align-items: center; gap: 25px; }
-        .h-brand { font-size: 26px; font-weight: 900; color: var(--neon-blue); text-shadow: 0 0 15px var(--neon-blue); }
+        
+        /* 標誌樣式優化 */
+        .BrandLogo { 
+            height: 45px; 
+            width: auto; 
+            filter: drop-shadow(0 0 8px var(--neon-blue));
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .BrandLogo:hover {
+            filter: drop-shadow(0 0 15px var(--neon-blue));
+            transform: scale(1.05);
+        }
 
         .lang-switcher-v2 { 
             display: flex; 
@@ -112,7 +120,6 @@
             box-shadow: 0 0 15px var(--neon-blue); 
         }
 
-        /* 狀態懸浮標籤 - 已改為黃色警告風格 */
         .status-dot-container { 
             position: absolute; 
             left: 50%; 
@@ -173,7 +180,6 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
-        /* 主顯示區域 */
         .hero { 
             display: flex; 
             flex-direction: column; 
@@ -187,7 +193,6 @@
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; animation: pulse-glow 4s infinite ease-in-out; }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
 
-        /* 下載交互區域 */
         .main-download-section { 
             display: flex; 
             flex-direction: column; 
@@ -223,7 +228,6 @@
         .main-dl-btn.disabled-btn { border-color: #444; color: #666; animation: none; cursor: not-allowed; }
         .switched { animation: fade-switch 0.6s ease-out; }
 
-        /* 版本切換選單 */
         .other-options-dropdown { margin-top: 30px; position: relative; padding: 10px; }
         .dropdown-label { font-size: 1.1rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
         .dropdown-label:hover { color: var(--neon-blue); }
@@ -262,7 +266,6 @@
         .dropdown-item:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
         .dropdown-item.disabled-ver { opacity: 0.3; cursor: not-allowed; }
 
-        /* 內容卡片 */
         .features-row { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -311,7 +314,7 @@
 
     <header>
         <div class="header-left">
-            <div class="h-brand">H</div>
+            <img src="https://private-user-images.githubusercontent.com/228394830/577006293-b53643b8-97ee-4a1c-aa4a-5e176338166f.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzU5NTM1MDIsIm5iZiI6MTc3NTk1MzIwMiwicGF0aCI6Ii8yMjgzOTQ4MzAvNTc3MDA2MjkzLWI1MzY0M2I4LTk3ZWUtNGExYy1hYTRhLTVlMTc2MzM4MTY2Zi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwNDEyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDQxMlQwMDIwMDJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wMzk0ZDg5Y2I5NGUxMmRkMmMyYmEyNjkwMmMzYzE5ZjRjZmUxYTU5OTMwM2Q1YjVlZTA0ZDk4MzJjYTJlYWY5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9aW1hZ2UlMkZwbmcifQ.2anNvNATD7Ood9JvbCyaAskLVUxNZAcQvYQrJ_1MvyQ" class="BrandLogo" alt="HVXZ Logo">
             <div class="lang-switcher-v2">
                 <button class="lang-btn active" id="btn-en" onclick="setLanguage('en')">EN</button>
                 <button class="lang-btn" id="btn-zh" onclick="setLanguage('zh')">繁中</button>
@@ -389,7 +392,6 @@
     <footer>&copy; 2026 HVXZ | h-s-c.vercel.app</footer>
 
     <script>
-        // 渲染引擎配置
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -428,7 +430,6 @@
             requestAnimationFrame(animate);
         }
 
-        // 交互光影邏輯
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
         window.addEventListener('mousemove', (e) => { 
             mouseX = e.clientX; 
@@ -446,7 +447,6 @@
             requestAnimationFrame(updateMouse);
         }
 
-        // 業務與語法引擎
         let currentLang = 'en';
         let currentVer = '3.5';
 
@@ -498,7 +498,7 @@
         function switchVersion(v) {
             const container = document.getElementById('dl-container');
             container.classList.remove('switched');
-            void container.offsetWidth; // 強制回流觸發動畫
+            void container.offsetWidth; 
             currentVer = v;
             refreshUI();
             container.classList.add('switched');
@@ -531,7 +531,6 @@
                 btn.classList.add('disabled-btn');
             }
 
-            // 更新特性與 FAQ
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;

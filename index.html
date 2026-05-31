@@ -255,7 +255,6 @@
         .dropdown-item:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
         .dropdown-item.disabled-ver { opacity: 0.3; cursor: not-allowed; }
 
-        /* 新增：PowerShell 下載區塊樣式 */
         .ps-download-section {
             display: flex;
             flex-direction: column;
@@ -329,6 +328,13 @@
 
         .ps-copy-btn:active {
             transform: translateY(0);
+        }
+
+        .ps-note {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 1px;
         }
 
         .features-row { 
@@ -433,6 +439,7 @@
             <button class="ps-copy-btn" id="ps-copy-btn" onclick="copyPsCommand()">
                 <i class="fa-regular fa-copy"></i> <span id="ps-copy-text">COPY SCRIPT</span>
             </button>
+            <div class="ps-note" id="ps-note">Remember to run PowerShell as an administrator.</div>
         </div>
 
         <div class="features-row">
@@ -552,7 +559,7 @@
                 status: "Updates temporarily suspended", faq: "F.A.Q",
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
-                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "COPY SCRIPT", psCopied: "COPIED!",
+                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "COPY SCRIPT", psCopied: "COPIED!", psNote: "Remember to run PowerShell as an administrator.",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
@@ -566,7 +573,7 @@
                 status: "更新暫時停止", faq: "常見問題解答",
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
-                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "複製腳本", psCopied: "已複製！",
+                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "複製腳本", psCopied: "已複製！", psNote: "請記得以系統管理員身分執行 PowerShell。",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
@@ -647,6 +654,7 @@
 
             document.getElementById('ps-title').textContent = d.psTitle;
             document.getElementById('ps-copy-text').textContent = d.psCopy;
+            document.getElementById('ps-note').textContent = d.psNote;
 
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;

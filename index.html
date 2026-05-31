@@ -18,7 +18,6 @@
             --radius-main: 20px;
         }
 
-        /* 基礎佈局優化 */
         html { 
             overflow-y: auto; 
             overflow-x: hidden; 
@@ -38,7 +37,6 @@
             flex-direction: column; 
         }
 
-        /* 動畫渲染優化 */
         @keyframes pulse-glow { 0% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } 50% { text-shadow: 0 0 30px rgba(0,242,255,0.7); } 100% { text-shadow: 0 0 10px rgba(0,242,255,0.3); } }
         @keyframes btn-breath { 0% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } 50% { box-shadow: 0 0 30px rgba(0,242,255,0.5); } 100% { box-shadow: 0 0 10px rgba(0,242,255,0.2); } }
         @keyframes fade-switch { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
@@ -64,7 +62,6 @@
             opacity: 0.2; 
         }
 
-        /* 導航欄與語言切換 */
         header { 
             height: 75px; 
             display: flex; 
@@ -112,7 +109,6 @@
             box-shadow: 0 0 15px var(--neon-blue); 
         }
 
-        /* 狀態懸浮標籤 - 已改為黃色警告風格 */
         .status-dot-container { 
             position: absolute; 
             left: 50%; 
@@ -173,7 +169,6 @@
         .link-youtube { color: #ff0000; background: rgba(255, 0, 0, 0.08); border-color: rgba(255, 0, 0, 0.3); }
         .link-youtube:hover { background: #ff0000; color: #fff; box-shadow: 0 0 25px #ff0000; transform: translateY(-5px); }
 
-        /* 主顯示區域 */
         .hero { 
             display: flex; 
             flex-direction: column; 
@@ -187,12 +182,11 @@
         h1 { font-size: 4.8rem; margin: 0; font-weight: 800; letter-spacing: 12px; animation: pulse-glow 4s infinite ease-in-out; }
         .subtitle { font-size: 1.3rem; color: var(--text-dim); margin: 20px 0 70px 0; letter-spacing: 5px; }
 
-        /* 下載交互區域 */
         .main-download-section { 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            margin-bottom: 90px; 
+            margin-bottom: 60px; 
             width: 100%; 
             transition: 0.5s; 
         }
@@ -223,7 +217,6 @@
         .main-dl-btn.disabled-btn { border-color: #444; color: #666; animation: none; cursor: not-allowed; }
         .switched { animation: fade-switch 0.6s ease-out; }
 
-        /* 版本切換選單 */
         .other-options-dropdown { margin-top: 30px; position: relative; padding: 10px; }
         .dropdown-label { font-size: 1.1rem; color: var(--text-dim); cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
         .dropdown-label:hover { color: var(--neon-blue); }
@@ -262,7 +255,82 @@
         .dropdown-item:hover { background: rgba(0, 242, 255, 0.1); color: var(--neon-blue); }
         .dropdown-item.disabled-ver { opacity: 0.3; cursor: not-allowed; }
 
-        /* 內容卡片 */
+        /* 新增：PowerShell 下載區塊樣式 */
+        .ps-download-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 90px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .ps-title {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .ps-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .ps-option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .ps-option-btn:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--neon-blue);
+        }
+
+        .ps-option-btn.selected {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        .ps-copy-btn {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 1px;
+        }
+
+        .ps-copy-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .ps-copy-btn:active {
+            transform: translateY(0);
+        }
+
         .features-row { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -354,6 +422,19 @@
             </div>
         </div>
 
+        <div class="ps-download-section">
+            <div class="ps-title" id="ps-title">Download PowerShell, HVXZ, and clear the system.</div>
+            <div class="ps-options-grid">
+                <button class="ps-option-btn" id="ps-btn-1.0" onclick="selectPsVersion('1.0')">Version 1.0</button>
+                <button class="ps-option-btn" id="ps-btn-2.0" onclick="selectPsVersion('2.0')">Version 2.0</button>
+                <button class="ps-option-btn" id="ps-btn-3.0" onclick="selectPsVersion('3.0')">Version 3.0</button>
+                <button class="ps-option-btn selected" id="ps-btn-3.5" onclick="selectPsVersion('3.5')">Version 3.5</button>
+            </div>
+            <button class="ps-copy-btn" id="ps-copy-btn" onclick="copyPsCommand()">
+                <i class="fa-regular fa-copy"></i> <span id="ps-copy-text">COPY SCRIPT</span>
+            </button>
+        </div>
+
         <div class="features-row">
             <div class="feature-card">
                 <h3 id="f1-t">High Performance</h3>
@@ -389,7 +470,6 @@
     <footer>&copy; 2026 HVXZ | h-s-c.vercel.app</footer>
 
     <script>
-        // 渲染引擎配置
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -428,7 +508,6 @@
             requestAnimationFrame(animate);
         }
 
-        // 交互光影邏輯
         let mouseX = 0, mouseY = 0, curX = 0, curY = 0;
         window.addEventListener('mousemove', (e) => { 
             mouseX = e.clientX; 
@@ -446,9 +525,9 @@
             requestAnimationFrame(updateMouse);
         }
 
-        // 業務與語法引擎
         let currentLang = 'en';
         let currentVer = '3.5';
+        let currentPsVer = '3.5';
 
         const versions = {
             '1.0': 'https://raw.githubusercontent.com/lxcgrn-ui/download/main/hvxz%201.0.exe',
@@ -459,6 +538,13 @@
             '5.0': null
         };
 
+        const psScripts = {
+            '1.0': '$ProgressPreference = \'SilentlyContinue\'; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/lxcgrn-ui/download/main/hvxz%201.0.exe" -OutFile "$([Environment]::GetFolderPath(\'Desktop\'))\\hvxz 1.0.exe" -ErrorAction SilentlyContinue',
+            '2.0': '$ProgressPreference = \'SilentlyContinue\'; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/lxcgrn-ui/download/main/hvzx%202.0.exe" -OutFile "$([Environment]::GetFolderPath(\'Desktop\'))\\hvzx 2.0.exe" -ErrorAction SilentlyContinue',
+            '3.0': '$ProgressPreference = \'SilentlyContinue\'; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/lxcgrn-ui/download/main/hvxz%20system%20clear%203.0.exe" -OutFile "$([Environment]::GetFolderPath(\'Desktop\'))\\hvxz system clear 3.0.exe" -ErrorAction SilentlyContinue',
+            '3.5': '$ProgressPreference = \'SilentlyContinue\'; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/lxcgrn-ui/download/main/hvxz%20system%20clear%203.5.exe" -OutFile "$([Environment]::GetFolderPath(\'Desktop\'))\\hvxz system clear 3.5.exe" -ErrorAction SilentlyContinue'
+        };
+
         const langDict = {
             en: {
                 title: "HVXZ SYSTEM CLEAR", subtitle: "ADVANCED WINDOWS OPTIMIZATION",
@@ -466,6 +552,7 @@
                 status: "Updates temporarily suspended", faq: "F.A.Q",
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
+                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "COPY SCRIPT", psCopied: "COPIED!",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
@@ -479,6 +566,7 @@
                 status: "更新暫時停止", faq: "常見問題解答",
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
+                psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "複製腳本", psCopied: "已複製！",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
@@ -498,10 +586,36 @@
         function switchVersion(v) {
             const container = document.getElementById('dl-container');
             container.classList.remove('switched');
-            void container.offsetWidth; // 強制回流觸發動畫
+            void container.offsetWidth; 
             currentVer = v;
             refreshUI();
             container.classList.add('switched');
+        }
+
+        function selectPsVersion(v) {
+            currentPsVer = v;
+            document.querySelectorAll('.ps-option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`ps-btn-${v}`).classList.add('selected');
+            document.getElementById('ps-copy-text').textContent = langDict[currentLang].psCopy;
+            document.getElementById('ps-copy-btn').style.background = 'rgba(0, 242, 255, 0.1)';
+            document.getElementById('ps-copy-btn').style.color = 'var(--neon-blue)';
+        }
+
+        function copyPsCommand() {
+            const script = psScripts[currentPsVer];
+            navigator.clipboard.writeText(script).then(() => {
+                const btnText = document.getElementById('ps-copy-text');
+                const btn = document.getElementById('ps-copy-btn');
+                btnText.textContent = langDict[currentLang].psCopied;
+                btn.style.background = 'var(--neon-blue)';
+                btn.style.color = '#000';
+                
+                setTimeout(() => {
+                    btnText.textContent = langDict[currentLang].psCopy;
+                    btn.style.background = 'rgba(0, 242, 255, 0.1)';
+                    btn.style.color = 'var(--neon-blue)';
+                }, 2000);
+            });
         }
 
         function refreshUI() {
@@ -531,7 +645,9 @@
                 btn.classList.add('disabled-btn');
             }
 
-            // 更新特性與 FAQ
+            document.getElementById('ps-title').textContent = d.psTitle;
+            document.getElementById('ps-copy-text').textContent = d.psCopy;
+
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
             document.getElementById('f3-t').textContent = d.f3t; document.getElementById('f3-p').textContent = d.f3p;

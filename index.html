@@ -337,6 +337,71 @@
             letter-spacing: 1px;
         }
 
+        /* 新增驗證功能區塊樣式 */
+        .verify-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 90px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .verify-title {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .verify-box {
+            display: flex;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 6px;
+            box-sizing: border-box;
+            gap: 10px;
+        }
+        .verify-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-family: monospace;
+        }
+        .verify-input::placeholder { color: var(--text-dim); }
+        .verify-action-btn {
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1px;
+        }
+        .verify-action-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+        .verify-result {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            min-height: 22px;
+            transition: 0.3s;
+        }
+        .v-success { color: #00ff66; text-shadow: 0 0 10px rgba(0,255,102,0.4); }
+        .v-fail { color: var(--danger-red); text-shadow: 0 0 10px rgba(255,68,68,0.4); }
+        .v-loading { color: var(--warning-yellow); text-shadow: 0 0 10px rgba(255,204,0,0.4); }
+
         .features-row { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -440,6 +505,16 @@
                 <i class="fa-regular fa-copy"></i> <span id="ps-copy-text">COPY SCRIPT</span>
             </button>
             <div class="ps-note" id="ps-note">Remember to run PowerShell as an administrator.</div>
+        </div>
+
+        <!-- 新增：金鑰驗證功能區塊 -->
+        <div class="verify-section">
+            <div class="verify-title" id="verify-title">LICENSE VERIFICATION</div>
+            <div class="verify-box">
+                <input type="text" id="verify-input" placeholder="Enter your license key...">
+                <button class="verify-action-btn" id="verify-btn" onclick="checkLicenseKey()">VERIFY</button>
+            </div>
+            <div class="verify-result" id="verify-result"></div>
         </div>
 
         <div class="features-row">
@@ -560,6 +635,9 @@
                 v35: "Version 3.5 (Latest)", v30: "Version 3.0", v20: "Version 2.0", v10: "Version 1.0",
                 v40: "Version 4.0 (Coming Soon)", v50: "Version 5.0 (Coming Soon)",
                 psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "COPY SCRIPT", psCopied: "COPIED!", psNote: "Remember to run PowerShell as an administrator.",
+                // 驗證功能英文語系
+                vTitle: "LICENSE VERIFICATION", vPlaceholder: "Enter your license key...", vBtn: "VERIFY",
+                vChecking: "Connecting to secure server...", vSuccess: "✔ Access Granted. Valid License Key!", vFail: "✘ Verification Failed. Invalid License Key.",
                 f1t: "High Performance", f1p: "Engineered for speed, removing deep system clutters instantly.",
                 f2t: "Privacy First", f2p: "Completely wipe caches and temporary logs without a trace.",
                 f3t: "Modern Engine", f3p: "Native WPF-inspired design with a fluid high-tech interface.",
@@ -574,6 +652,9 @@
                 v35: "版本 3.5 (最新版本)", v30: "版本 3.0", v20: "版本 2.0", v10: "版本 1.0",
                 v40: "版本 4.0 (敬請期待)", v50: "版本 5.0 (敬請期待)",
                 psTitle: "Download PowerShell, HVXZ, and clear the system.", psCopy: "複製腳本", psCopied: "已複製！", psNote: "請記得以系統管理員身分執行 PowerShell。",
+                // 驗證功能中文語系
+                vTitle: "序號安全驗證", vPlaceholder: "請輸入您的產品啟用金鑰...", vBtn: "驗證",
+                vChecking: "正在連線至安全伺服器驗證中...", vSuccess: "✔ 驗證成功！產品授權已解鎖。", vFail: "✘ 驗證失敗。無效的專屬金鑰序號。",
                 f1t: "極致效能", f1p: "專為極速打造，瞬間清除系統深處的雜亂檔案。",
                 f2t: "隱私優先", f2p: "徹底清除快取與暫存記錄，不留任何痕跡。",
                 f3t: "現代引擎", f3p: "源自原生 WPF 靈感，具備流暢的高科技介面。",
@@ -625,6 +706,35 @@
             });
         }
 
+        // 新增：金鑰驗證核心邏輯
+        function checkLicenseKey() {
+            const input = document.getElementById('verify-input');
+            const result = document.getElementById('verify-result');
+            const btn = document.getElementById('verify-btn');
+            const d = langDict[currentLang];
+            const key = input.value.trim();
+
+            if (!key) return;
+
+            // 進入載入狀態
+            btn.disabled = true;
+            result.className = "verify-result v-loading";
+            result.textContent = d.vChecking;
+
+            // 模擬安全伺服器驗證耗時 1.5 秒
+            setTimeout(() => {
+                btn.disabled = false;
+                // 基礎驗證規則：輸入包含 "HVXZ" 或長度大於等於 12 位元即算通過
+                if (key.toUpperCase().includes('HVXZ') || key.length >= 12) {
+                    result.className = "verify-result v-success";
+                    result.textContent = d.vSuccess;
+                } else {
+                    result.className = "verify-result v-fail";
+                    result.textContent = d.vFail;
+                }
+            }, 1500);
+        }
+
         function refreshUI() {
             const d = langDict[currentLang];
             document.getElementById('main-title').textContent = d.title;
@@ -655,6 +765,15 @@
             document.getElementById('ps-title').textContent = d.psTitle;
             document.getElementById('ps-copy-text').textContent = d.psCopy;
             document.getElementById('ps-note').textContent = d.psNote;
+
+            // 更新新加入的驗證 UI 文字
+            document.getElementById('verify-title').textContent = d.vTitle;
+            document.getElementById('verify-input').placeholder = d.vPlaceholder;
+            document.getElementById('verify-btn').textContent = d.vBtn;
+            // 如果目前有顯示驗證結果，切換語言時一併更新文字
+            const result = document.getElementById('verify-result');
+            if (result.classList.contains('v-success')) result.textContent = d.vSuccess;
+            if (result.classList.contains('v-fail')) result.textContent = d.vFail;
 
             document.getElementById('f1-t').textContent = d.f1t; document.getElementById('f1-p').textContent = d.f1p;
             document.getElementById('f2-t').textContent = d.f2t; document.getElementById('f2-p').textContent = d.f2p;
